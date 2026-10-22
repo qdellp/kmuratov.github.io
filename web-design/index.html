@@ -494,7 +494,8 @@ button { cursor: var(--cur-pointer); }
 .demo-wire { padding: 0; overflow: hidden; }
 .wire-compare { position: relative; height: 340px; }
 .wire-layer { position: absolute; inset: 0; padding: 22px; display: flex; flex-direction: column; gap: 12px; }
-.wire-ui { background: #f6f5fb; color: #15132a; }
+/* the light layer only shows right of the split: under the dark sketch its edges bled through as a thin frame */
+.wire-ui { background: #f6f5fb; color: #15132a; clip-path: inset(0 0 0 var(--split)); }
 .wire-sketch { background: #111327; clip-path: inset(0 calc(100% - var(--split)) 0 0); background-image: linear-gradient(rgba(190, 184, 255, .07) 1px, transparent 1px), linear-gradient(90deg, rgba(190, 184, 255, .07) 1px, transparent 1px); background-size: 16px 16px; }
 .wui-top, .wsk-top { display: flex; justify-content: space-between; align-items: center; }
 .wui-top b { font: 700 18px/1 var(--display); letter-spacing: -.04em; }
