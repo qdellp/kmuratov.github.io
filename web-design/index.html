@@ -440,12 +440,12 @@ button { cursor: var(--cur-pointer); }
 .problem-swirl > .swirl { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
 .swirl-card { position: absolute; left: 50%; top: 50%; width: calc(var(--w, 1) * clamp(170px, 19vw, 280px)); height: auto; border-radius: 16px; box-shadow: 0 24px 60px rgba(0, 0, 0, .5); will-change: transform, opacity, filter; user-select: none; }
 .problem-swirl > .swirl-copy { z-index: 2; }
-.swirl-copy { align-items: center; text-align: center; max-width: 460px; padding: 34px 30px; border-radius: 28px; background: radial-gradient(closest-side, rgba(14, 14, 15, .92), rgba(14, 14, 15, .7) 70%, transparent); }
+.swirl-copy { align-items: center; text-align: center; max-width: 380px; }
 .swirl-copy p { margin-inline: auto; }
 @media (max-width: 900px) {
   .problem-swirl { min-height: 600px; }
   .swirl-card { width: calc(var(--w, 1) * 150px); }
-  .swirl-copy { padding: 24px 12px; }
+  .swirl-copy { max-width: 260px; }
 }
 .problem-demo { position: relative; align-self: center; border-radius: 20px; background: rgba(6, 6, 6, .55); border: 1px solid var(--line); padding: 22px; min-height: 340px; }
 
@@ -1103,9 +1103,7 @@ html::-webkit-scrollbar { display: none; }
           <div class="swirl" id="swirl" aria-hidden="true"></div>
           <div class="problem-copy swirl-copy">
             <h3>Собрать интерфейс из компонентов</h3>
-            <p>Проектирую экраны из повторяемых блоков: выбор параметров, статусы, карточки, графики. Каждый компонент работает в разных сценариях и не ломается в соседних экранах.</p>
-            <span class="problem-hint">Наведите, чтобы остановить</span>
-            <p class="problem-note">Фрагменты интерфейсов из коммерческих проектов, названия не раскрываются.</p>
+            <p>Повторяемые блоки, которые работают в разных сценариях.</p>
           </div>
         </article>
 
@@ -2188,7 +2186,10 @@ window.PRODUCT_PROJECTS = [
     const article = box.closest('.problem');
     const PERIOD = 24, TURNS = .85; // seconds for one card to travel the whole spiral; turns it makes
     let t = 0, last = 0, speed = 1, hover = false, visible = false, raf = 0, W = 0, H = 0;
-    const size = () => { W = box.clientWidth; H = box.clientHeight; };
+    // cards start on a ring that clears the copy in the middle, so the text never covers them
+    const copy = article.querySelector('.swirl-copy');
+    let rIn = 0;
+    const size = () => { W = box.clientWidth; H = box.clientHeight; const cw = copy.offsetWidth, ch = copy.offsetHeight; rIn = Math.max((cw / 2 + 140) / 1.12, (ch / 2 + 110) / .74); };
     size(); addEventListener('resize', size);
     article.addEventListener('pointerenter', e => { if (e.pointerType === 'mouse') hover = true; });
     article.addEventListener('pointerleave', () => { hover = false; });
@@ -2197,12 +2198,12 @@ window.PRODUCT_PROJECTS = [
       cards.forEach(c => {
         const u = (c.phase + t / PERIOD) % 1;
         // opening spiral: slow and tight near the centre, wide and fast near the edge
-        const ease = u * u * (1.4 - .4 * u), r = R * (.06 + 1.02 * ease), a = -Math.PI / 2 + c.arm * Math.PI * 2 / 3 + u * TURNS * Math.PI * 2;
+        const ease = u * u * (1.4 - .4 * u), r = rIn + (R * 1.05 - rIn) * ease, a = -Math.PI / 2 + c.arm * Math.PI * 2 / 3 + u * TURNS * Math.PI * 2;
         const x = Math.cos(a) * r * 1.12, y = Math.sin(a) * r * .74;
-        const s = .28 + 1.05 * ease, fade = clamp(u / .14) * clamp((1 - u) / .12);
-        const blur = (1 - clamp(u / .3)) * 7 + clamp((u - .78) / .22) * 5;
+        const s = .62 + .6 * ease, fade = clamp(u / .1) * clamp((1 - u) / .12);
+        const blur = (1 - clamp(u / .12)) * 6 + clamp((u - .8) / .2) * 5;
         c.el.style.transform = `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px) translate(-50%, -50%) rotate(${(Math.cos(a) * 12).toFixed(2)}deg) scale(${s.toFixed(3)})`;
-        c.el.style.opacity = (fade * (.35 + .65 * clamp(u / .4))).toFixed(3);
+        c.el.style.opacity = fade.toFixed(3);
         c.el.style.filter = blur > .2 ? `blur(${blur.toFixed(1)}px)` : '';
         c.el.style.zIndex = String(Math.round(u * n));
       });
