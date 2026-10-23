@@ -523,11 +523,19 @@ button { cursor: var(--cur-pointer); }
 .wire-compare { position: relative; height: 340px; }
 /* the real screen and the wireframe built from the same layout, inside a phone outline */
 .demo-wire.problem-demo { display: grid; place-items: center; padding: clamp(16px, 2vw, 28px); background: rgba(255, 255, 255, .02); }
-.wire-compare.wire-phone { height: clamp(440px, 40vw, 590px); aspect-ratio: 402 / 874; border-radius: clamp(26px, 2.4vw, 38px); overflow: hidden; box-shadow: 0 0 0 6px #1d1d1e, 0 30px 80px rgba(0, 0, 0, .5); }
+.wire-compare.wire-phone { height: clamp(440px, 40vw, 590px); aspect-ratio: 402 / 874; border-radius: clamp(26px, 2.4vw, 38px); overflow: hidden; box-shadow: 0 30px 80px rgba(0, 0, 0, .45); }
 .wire-shot { position: absolute; inset: 0; display: block; width: 100%; height: 100%; user-select: none; -webkit-user-drag: none; }
 .wire-phone .wire-ui, .wire-phone .wire-sketch { background: none; padding: 0; }
 .wire-phone .wire-tag { bottom: 18px; }
 .demo-wire.problem-demo { grid-auto-flow: row; gap: 16px; }
+/* the phone outline frames these demos by itself: no panel behind it */
+.problem-demo:is(.demo-wire, .demo-order, .demo-video) { background: none; border: 0; padding: 0; }
+/* text and phone each centred in an equal half of the card */
+@media (min-width: 901px) {
+  .problem:has(> .demo-wire, > .demo-order, > .demo-video) { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: center; }
+  .problem:has(> .demo-wire, > .demo-order, > .demo-video) > .problem-copy { justify-self: center; max-width: 440px; }
+  .problem-demo:is(.demo-wire, .demo-order, .demo-video) { justify-self: center; }
+}
 .wire-shot { object-fit: cover; object-position: top; transition: opacity .22s var(--ease-out); }
 .wire-phone.is-swapping .wire-shot { opacity: 0; }
 .wire-pager { display: flex; align-items: center; gap: 14px; }
@@ -574,12 +582,12 @@ button { cursor: var(--cur-pointer); }
 /* Action result: real event cards and the quick menu of the same app, on its teal background */
 /* Motion prototype: the screen recording in a phone outline */
 .demo-video { display: grid; place-items: center; }
-.video-phone { height: clamp(440px, 40vw, 590px); aspect-ratio: 520 / 1136; border-radius: clamp(26px, 2.4vw, 38px); overflow: hidden; background: #dfe9e7; box-shadow: 0 0 0 6px #1d1d1e, 0 30px 80px rgba(0, 0, 0, .5); }
+.video-phone { height: clamp(440px, 40vw, 590px); aspect-ratio: 520 / 1136; border-radius: clamp(26px, 2.4vw, 38px); overflow: hidden; background: #dfe9e7; box-shadow: 0 30px 80px rgba(0, 0, 0, .45); }
 .video-phone video { display: block; width: 100%; height: 100%; object-fit: cover; }
 @media (max-width: 900px) { .video-phone { height: min(560px, 120vw); } }
 /* Action result: a real menu screen in a phone; the menu bar is the bottom of the same picture */
 .demo-order { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; }
-.ord-phone { position: relative; height: clamp(440px, 40vw, 590px); aspect-ratio: 402 / 874; border-radius: clamp(26px, 2.4vw, 38px); overflow: hidden; background: #fff9f1; box-shadow: 0 0 0 6px #1d1d1e, 0 30px 80px rgba(0, 0, 0, .5); }
+.ord-phone { position: relative; height: clamp(440px, 40vw, 590px); aspect-ratio: 402 / 874; border-radius: clamp(26px, 2.4vw, 38px); overflow: hidden; background: #fff9f1; box-shadow: 0 30px 80px rgba(0, 0, 0, .45); }
 .ord-screen, .ord-nav { position: absolute; left: 0; right: 0; overflow: hidden; }
 .ord-screen { top: 0; height: calc(744 / 874 * 100%); }
 .ord-nav { top: calc(744 / 874 * 100%); height: calc(130 / 874 * 100%); }
