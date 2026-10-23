@@ -584,7 +584,7 @@ button { cursor: var(--cur-pointer); }
 .ord-add:focus-visible { outline: 2px solid #221f20; outline-offset: 1px; }
 .ord-add.is-tap { animation: ord-tap .35s var(--ease-out); }
 @keyframes ord-tap { 0% { box-shadow: 0 0 0 0 rgba(255, 72, 45, .55); } 100% { box-shadow: 0 0 0 14px rgba(255, 72, 45, 0); } }
-.ord-pill { position: absolute; left: 50%; top: calc(727 / 874 * 100%); display: flex; align-items: center; gap: 10px; padding: 7px 8px 7px 16px; border-radius: 99px; background: #221f20; color: #fff; font: 600 12px/1 var(--text); text-transform: uppercase; white-space: nowrap; box-shadow: 0 12px 30px rgba(34, 31, 32, .35); opacity: 0; transform: translate(-50%, 16px) scale(.92); pointer-events: none; transition: opacity .35s var(--ease-out), transform .5s var(--ease-spring); }
+.ord-pill { position: absolute; left: 50%; top: calc(712 / 874 * 100%); display: flex; align-items: center; gap: 10px; padding: 7px 8px 7px 16px; border-radius: 99px; background: #221f20; color: #fff; font: 600 12px/1 var(--text); text-transform: uppercase; white-space: nowrap; box-shadow: 0 12px 30px rgba(34, 31, 32, .35); opacity: 0; transform: translate(-50%, 16px) scale(.92); pointer-events: none; transition: opacity .35s var(--ease-out), transform .5s var(--ease-spring); }
 .ord-pill.is-on { opacity: 1; transform: translate(-50%, 0) scale(1); }
 .ord-pill.no-anim { transition: none; }
 .ord-pill b { color: #ff482d; font-weight: 700; }
@@ -1152,8 +1152,8 @@ html::-webkit-scrollbar { display: none; }
           </div>
           <div class="problem-demo demo-motion demo-order" data-demo="motion">
             <div class="ord-phone" id="ord-phone">
-              <div class="ord-screen"><img class="ord-shot" src="../assets/417fe7bf0706ec59.svg" alt="" draggable="false"></div>
-              <div class="ord-nav"><img class="ord-shot" src="../assets/417fe7bf0706ec59.svg" alt="" draggable="false"></div>
+              <div class="ord-screen"><img class="ord-shot" src="../assets/ed8f20b695611a23.svg" alt="" draggable="false"></div>
+              <div class="ord-nav"><img class="ord-shot" src="../assets/ed8f20b695611a23.svg" alt="" draggable="false"></div>
               <button type="button" class="ord-add" data-add data-photo="355" style="--y:432" aria-label="Добавить какао в заказ"></button><button type="button" class="ord-add" data-add data-photo="482" style="--y:559" aria-label="Добавить латте с солёной карамелью в заказ"></button><button type="button" class="ord-add" data-add data-photo="609" style="--y:686" aria-label="Добавить матча-латте в заказ"></button>
               <div class="ord-pill" id="ord-pill" aria-live="polite"><span>your Order</span><b id="ord-total">0 SAR</b><em id="motion-count">0</em></div>
             </div>
@@ -1679,7 +1679,7 @@ window.PRODUCT_PROJECTS = [
     const orbtBg = 'linear-gradient(160deg, #0a1a44, #123d9e)';
     const ndaWorks = [
       { src: '../assets/2bc5cca5856ad2a0.svg', w: .62 },
-      { src: '../assets/ca90d88feabd9987.svg', w: .6 },
+      { src: '../assets/4a9f70d6c100758f.svg', w: .6 },
       { src: '../assets/949e5dea9d0ef86b.svg', w: .62 },
       { src: '../assets/7485a745b12fcbdc.svg', w: 1 },
       { src: '../assets/7103ec0785b5db97.svg', w: .95, bg: orbtBg },
@@ -2382,7 +2382,7 @@ window.PRODUCT_PROJECTS = [
   // Several real screens, each with the wireframe built from its own layout; arrows and dots page through them
   const wireScreens = [
     ['../assets/cbf92d4d4e998fdb.svg', '../assets/b181aebbeb3f15fe.svg'],
-    ['../assets/417fe7bf0706ec59.svg', '../assets/7fec87a89470ecce.svg'],
+    ['../assets/ed8f20b695611a23.svg', '../assets/7fec87a89470ecce.svg'],
     ['../assets/64b3be2cc83f6e3a.svg', '../assets/f1f087b33fa81d03.svg'],
     ['../assets/55ce541e0ec9101e.svg', '../assets/c58dfc96074eedcc.svg']
   ];
@@ -2432,7 +2432,7 @@ window.PRODUCT_PROJECTS = [
       document.body.append(fly);
       const pillOn = ordPill.classList.contains('is-on'), t = ordPill.getBoundingClientRect();
       const tx = (pillOn ? t.left + t.width * .18 : box.left + box.width / 2) - (box.left + 66 * k);
-      const ty = (pillOn ? t.top + t.height / 2 : box.top + 748 * k) - (box.top + (py + 55) * k);
+      const ty = (pillOn ? t.top + t.height / 2 : box.top + 733 * k) - (box.top + (py + 55) * k);
       fly.animate([
         { transform: 'translate(0, 0) scale(1)', opacity: 1 },
         { transform: `translate(${tx * .55}px, ${ty * .45 - 60 * k}px) scale(.55)`, opacity: 1, offset: .55 },
