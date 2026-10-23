@@ -437,14 +437,19 @@ button { cursor: var(--cur-pointer); }
 @keyframes ping { 70%, 100% { box-shadow: 0 0 0 10px transparent; } }
 /* Component swirl: a full-width card, the copy in the middle, interface pieces spiral out around it */
 .problem-swirl { grid-template-columns: minmax(0, 1fr); place-items: center; min-height: clamp(560px, 62vw, 760px); overflow: hidden; }
-.problem-swirl > .swirl { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
-.swirl-card { position: absolute; left: 50%; top: 50%; width: calc(var(--w, 1) * clamp(170px, 19vw, 280px)); height: auto; border-radius: 16px; box-shadow: 0 24px 60px rgba(0, 0, 0, .5); will-change: transform, opacity, filter; user-select: none; }
+.problem-swirl > .swirl { position: absolute; inset: 0; z-index: 1; pointer-events: none; } /* above the card grain */
+.swirl-card { position: absolute; left: 50%; top: 50%; width: calc(var(--nw) / 370 * clamp(170px, 19vw, 280px)); height: auto; will-change: transform, opacity, filter; user-select: none; } /* the vector pieces keep their own corners; the shadow follows their outline (set in product.js) */
+/* pieces whose fill came from the screen behind them */
+.swirl-card.is-cream, .swirl-card.is-white, .swirl-card.is-photo { box-sizing: content-box; padding: 4%; border-radius: 22px; }
+.swirl-card.is-photo { padding: 0; border-radius: 14px; }
+.swirl-card.is-cream { background: #fff9f1; }
+.swirl-card.is-white { background: #fff; }
 .problem-swirl > .swirl-copy { z-index: 2; }
 .swirl-copy { align-items: center; text-align: center; max-width: 380px; }
 .swirl-copy p { margin-inline: auto; }
 @media (max-width: 900px) {
   .problem-swirl { min-height: 600px; }
-  .swirl-card { width: calc(var(--w, 1) * 150px); }
+  .swirl-card { width: calc(var(--nw) / 370 * 150px); }
   .swirl-copy { max-width: 260px; }
 }
 .problem-demo { position: relative; align-self: center; border-radius: 20px; background: rgba(6, 6, 6, .55); border: 1px solid var(--line); padding: 22px; min-height: 340px; }
@@ -1647,8 +1652,8 @@ window.PRODUCT_PROJECTS = [
       { src: '../assets/4abd3c5f755dfca1.webp', w: 1 },
       { src: '../assets/39674824f4d0a7bf.webp', w: .95 },
       { src: '../assets/06253316c238106e.webp', w: .5 },
-      { src: '../assets/ca2a1af0cef05692.webp', w: .7 },
-      { src: '../assets/a80a849c5c1548ab.webp', w: .9 }
+      { src: '../assets/dbe3fc73b4489890.svg', w: .7 },
+      { src: '../assets/5fa8dd70b1b4157d.svg', w: .9 }
     ];
     // interleave, so the unnamed screens spread evenly around the sphere
     ndaWorks.forEach((wk, i) => works.splice(Math.min(works.length, 1 + i * 2), 0, wk));
@@ -2164,35 +2169,33 @@ window.PRODUCT_PROJECTS = [
   const problemCards = $$('.problem', ptrack);
   function updateProblems() {}
 
-  // Component swirl: pieces of NDA interfaces leave the centre along an opening spiral, growing,
-  // speeding up and blurring on the way out, then fade past the edge and start again. Hover pauses it.
+  // Component swirl: vector pieces of NDA interfaces leave a ring around the copy along an opening
+  // spiral, growing, speeding up and blurring on the way out, then fade past the edge and start again.
   (() => {
     const box = $('#swirl'); if (!box) return;
+    // [file, width in the layout (px at 1:1), card without its own fill gets one]
     const parts = [
-      ['../assets/9ceee6088a3407b8.webp', 1], ['../assets/ca2a1af0cef05692.webp', .62], ['../assets/e333ad7f87299ac0.webp', 1],
-      ['../assets/9a0302474293c99f.webp', 1], ['../assets/3429935be2b153c7.webp', .7], ['../assets/d5e1988c54c6882e.webp', 1],
-      ['../assets/c228b10812dff3d3.webp', 1], ['../assets/80ef09fcc83e1013.webp', .72], ['../assets/594baf9582ed2452.webp', 1],
-      ['../assets/a7a7d87af815f142.webp', .66], ['../assets/c0d292ba847e6463.webp', .95], ['../assets/f35f43d9ddd44b1f.webp', 1],
-      ['../assets/82f1ff3f5a3c1a71.webp', 1], ['../assets/bbb9d9b217657b31.webp', .9], ['../assets/a80a849c5c1548ab.webp', .78],
-      ['../assets/ac986c26889ce457.webp', 1], ['../assets/5b9034addbb1fc6a.webp', 1], ['../assets/b891b3d4c548af8d.webp', .95]
+      ['../assets/f59fc209e24c985e.svg', 370], ['../assets/dbe3fc73b4489890.svg', 343], ['../assets/f6a8e51c75702de9.svg', 370],
+      ['../assets/059689a21bec8788.svg', 370], ['../assets/e90ca495b0642deb.svg', 299], ['../assets/22027a860d6047a8.svg', 370],
+      ['../assets/c3620c9eead6aece.svg', 402], ['../assets/2c29f635c04160df.webp', 398, 'photo'], ['../assets/db165a439ce2d73b.svg', 352],
+      ['../assets/f61b57ea17c6f05f.svg', 201], ['../assets/6f95931b758ebbbc.svg', 343], ['../assets/737997190394104f.svg', 370, 'cream'],
+      ['../assets/d27acf2e212b3d25.svg', 386, 'white'], ['../assets/5fa8dd70b1b4157d.svg', 420], ['../assets/0172da4a70bab0b8.svg', 180]
     ];
-    const cards = parts.map(([src, w], i) => {
+    const cards = parts.map(([src, w, fill], i) => {
       const el = document.createElement('img');
-      el.className = 'swirl-card'; el.src = src; el.alt = ''; el.draggable = false; el.style.setProperty('--w', w);
+      el.className = 'swirl-card' + (fill ? ' is-' + fill : ''); el.src = src; el.alt = ''; el.draggable = false; el.style.setProperty('--nw', w);
       // three arms, 120° apart; the cards of an arm are spread evenly along it
       const arm = i % 3, per = Math.ceil(parts.length / 3);
       box.append(el); return { el, arm, phase: (Math.floor(i / 3) + arm / 3) / per };
     });
     const article = box.closest('.problem');
-    const PERIOD = 24, TURNS = .85; // seconds for one card to travel the whole spiral; turns it makes
-    let t = 0, last = 0, speed = 1, hover = false, visible = false, raf = 0, W = 0, H = 0;
+    const PERIOD = 44, TURNS = .85; // seconds for one card to travel the whole spiral; turns it makes
+    let t = 0, last = 0, visible = false, raf = 0, W = 0, H = 0;
     // cards start on a ring that clears the copy in the middle, so the text never covers them
     const copy = article.querySelector('.swirl-copy');
     let rIn = 0;
     const size = () => { W = box.clientWidth; H = box.clientHeight; const cw = copy.offsetWidth, ch = copy.offsetHeight; rIn = Math.max((cw / 2 + 140) / 1.12, (ch / 2 + 110) / .74); };
     size(); addEventListener('resize', size);
-    article.addEventListener('pointerenter', e => { if (e.pointerType === 'mouse') hover = true; });
-    article.addEventListener('pointerleave', () => { hover = false; });
     function draw() {
       const R = Math.hypot(W, H) / 2, n = cards.length;
       cards.forEach(c => {
@@ -2204,15 +2207,14 @@ window.PRODUCT_PROJECTS = [
         const blur = (1 - clamp(u / .12)) * 6 + clamp((u - .8) / .2) * 5;
         c.el.style.transform = `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px) translate(-50%, -50%) rotate(${(Math.cos(a) * 12).toFixed(2)}deg) scale(${s.toFixed(3)})`;
         c.el.style.opacity = fade.toFixed(3);
-        c.el.style.filter = blur > .2 ? `blur(${blur.toFixed(1)}px)` : '';
+        c.el.style.filter = (blur > .2 ? `blur(${blur.toFixed(1)}px) ` : '') + 'drop-shadow(0 16px 26px rgba(0, 0, 0, .45))';
         c.el.style.zIndex = String(Math.round(u * n));
       });
     }
     function frame(now) {
       raf = 0; if (!visible) return;
       const dt = last ? Math.min(.05, (now - last) / 1000) : 0; last = now;
-      speed += ((hover ? 0 : 1) - speed) * (1 - Math.exp(-dt * 4));
-      t += dt * speed; draw();
+      t += dt; draw();
       raf = requestAnimationFrame(frame);
     }
     if (reduced) { t = PERIOD * .35; draw(); return; }
