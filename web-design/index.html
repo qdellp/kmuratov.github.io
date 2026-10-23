@@ -440,7 +440,8 @@ button { cursor: var(--cur-pointer); }
 .problem-swirl > .swirl { position: absolute; inset: 0; z-index: 1; pointer-events: none; } /* above the card grain */
 .swirl-card { position: absolute; left: 50%; top: 50%; width: calc(var(--nw) / 370 * clamp(170px, 19vw, 280px)); height: auto; will-change: transform, opacity, filter; user-select: none; } /* the vector pieces keep their own corners; the shadow follows their outline (set in product.js) */
 /* pieces whose fill came from the screen behind them */
-.swirl-card.is-cream, .swirl-card.is-white, .swirl-card.is-photo { box-sizing: content-box; padding: 4%; border-radius: 22px; }
+/* the padding follows the card's own width (a % padding would follow the whole swirl) */
+.swirl-card.is-cream, .swirl-card.is-white, .swirl-card.is-photo { --cw: calc(var(--nw) / 370 * clamp(170px, 19vw, 280px)); box-sizing: content-box; padding: calc(var(--cw) * .045); border-radius: calc(var(--cw) * .07); }
 .swirl-card.is-photo { padding: 0; border-radius: 14px; }
 .swirl-card.is-cream { background: #fff9f1; }
 .swirl-card.is-white { background: #fff; }
@@ -450,6 +451,7 @@ button { cursor: var(--cur-pointer); }
 @media (max-width: 900px) {
   .problem-swirl { min-height: 600px; }
   .swirl-card { width: calc(var(--nw) / 370 * 150px); }
+  .swirl-card.is-cream, .swirl-card.is-white, .swirl-card.is-photo { --cw: calc(var(--nw) / 370 * 150px); }
   .swirl-copy { max-width: 260px; }
 }
 .problem-demo { position: relative; align-self: center; border-radius: 20px; background: rgba(6, 6, 6, .55); border: 1px solid var(--line); padding: 22px; min-height: 340px; }
@@ -920,13 +922,13 @@ button { cursor: var(--cur-pointer); }
 .orbit-threads-back { z-index: 1; } .orbit-cards-back { z-index: 1; }
 .orbit-threads-front { z-index: 3; } .orbit-cards-front { z-index: 4; }
 .orbit-cards { position: absolute; inset: 0; pointer-events: none; }
-.orbit-card { position: absolute; left: 0; top: 0; padding: 0; border: 1px solid rgba(255, 255, 255, .14); border-radius: 10px; overflow: hidden; background: #0c0c0c; box-shadow: 0 18px 40px rgba(0, 0, 0, .45); pointer-events: auto; will-change: transform, opacity; transition: border-color .35s var(--ease-out), box-shadow .35s var(--ease-out); }
+.orbit-card { position: absolute; left: 0; top: 0; padding: 0; border: 0; border-radius: 10px; overflow: hidden; background: transparent; box-shadow: 0 18px 40px rgba(0, 0, 0, .45); pointer-events: auto; will-change: transform, opacity; transition: border-color .35s var(--ease-out), box-shadow .35s var(--ease-out); }
 .orbit-cards-back .orbit-card { pointer-events: none; }
 .orbit-card img { display: block; width: 100%; height: auto; pointer-events: none; }
-.orbit-card:hover { border-color: rgba(140, 233, 229, .55); box-shadow: 0 18px 50px rgba(111, 92, 255, .38); }
+.orbit-card:hover { box-shadow: 0 18px 50px rgba(111, 92, 255, .38); }
 /* unnamed NDA screens: just pictures, nothing to open */
 .orbit-card.is-static { cursor: var(--cur-default); }
-.orbit-card.is-static:hover { border-color: rgba(255, 255, 255, .14); box-shadow: 0 18px 40px rgba(0, 0, 0, .45); }
+.orbit-card.is-static:hover { box-shadow: 0 18px 40px rgba(0, 0, 0, .45); }
 @media (max-width: 900px) { .hero-stage { position: relative; } .orbit { left: calc(-1 * var(--gutter)); right: calc(-1 * var(--gutter)); } }
 .hero-title { position: relative; z-index: 3; }
 
@@ -1715,7 +1717,10 @@ window.PRODUCT_PROJECTS = [
         const sx = cx + v[0] * R, sy = cy - v[1] * R;
         const px = cx + v[0] * R * k * 1.05, py = cy - v[1] * R * k * YS / .78;
         const scale = .66 + depth * .34;
-        it.card.style.transform = `translate(${px.toFixed(1)}px, ${py.toFixed(1)}px) translate(-50%, -50%) scale(${scale.toFixed(3)})`;
+        // the card turns with the sphere's surface under it: right of centre it faces right, above it
+        // leans back; cards behind the sphere mirror the angle so they never show their back
+        const ry = clamp(Math.atan2(v[0], Math.abs(v[2]) + .35) * 57.3 * .75, -48, 48), rx = clamp(Math.asin(clamp(v[1], -1, 1)) * 57.3 * .55, -30, 30);
+        it.card.style.transform = `translate(${px.toFixed(1)}px, ${py.toFixed(1)}px) translate(-50%, -50%) perspective(700px) rotateY(${ry.toFixed(1)}deg) rotateX(${rx.toFixed(1)}deg) scale(${scale.toFixed(3)})`;
         it.card.style.opacity = (.35 + depth * .65).toFixed(3);
         it.card.style.zIndex = Math.round(depth * 100);
         it.line.setAttribute('d', `M${sx.toFixed(1)} ${sy.toFixed(1)} L${px.toFixed(1)} ${py.toFixed(1)}`);
@@ -1925,11 +1930,22 @@ window.PRODUCT_PROJECTS = [
     galleryCount.textContent = `${String(k + 1).padStart(2, '0')} / ${String(shown.length).padStart(2, '0')}`;
     galleryCaption.textContent = p.caption || p.kind || '';
   }
+  // First visit: the row comes in from the right, fast, and slows down onto the first card (Jet.ai)
+  const galleryIntro = { on: false, done: reduced, t0: 0, from: -7, dur: 1700 };
+  new IntersectionObserver(([e]) => {
+    if (!e.isIntersecting || galleryIntro.done) return;
+    galleryIntro.done = galleryIntro.on = true; galleryIntro.t0 = performance.now();
+    g.pos = g.prev = galleryIntro.from; g.vel = 0; g.target = null;
+  }, { threshold: .35 }).observe(stage);
   function updateGallery() {
     if (reduced) return;
     const r = stage.getBoundingClientRect();
     if (r.bottom < 0 || r.top > innerHeight) return;
-    if (!g.drag) {
+    if (galleryIntro.on) {
+      const p = clamp((performance.now() - galleryIntro.t0) / galleryIntro.dur);
+      if (g.drag || p >= 1) { galleryIntro.on = false; if (!g.drag) g.pos = 0; }
+      else g.pos = galleryIntro.from * Math.pow(1 - p, 5); // ease-out quint: quick start, long slow finish
+    } else if (!g.drag) {
       if (g.target !== null) {
         g.pos = lerp(g.pos, g.target, .1);
         if (Math.abs(g.target - g.pos) < .002) { g.pos = g.target; g.target = null; }
@@ -2003,6 +2019,7 @@ window.PRODUCT_PROJECTS = [
     }
     function start() {
       timer = 0; if (done) return;
+      if (galleryIntro.on) { timer = setTimeout(start, 300); return; } // let the row arrive first
       const plane = $('.gallery-card.is-front .gallery-plane'); if (!plane) return;
       const r = plane.getBoundingClientRect(); grab = { x: r.left + r.width * .55, y: r.top + r.height * .45 };
       t0 = performance.now(); point(grab.x - 190, grab.y + 150); cursor.classList.add('is-visible');
@@ -2181,7 +2198,7 @@ window.PRODUCT_PROJECTS = [
       ['../assets/059689a21bec8788.svg', 370], ['../assets/e90ca495b0642deb.svg', 299], ['../assets/22027a860d6047a8.svg', 370],
       ['../assets/c3620c9eead6aece.svg', 402], ['../assets/2c29f635c04160df.webp', 398, 'photo'], ['../assets/db165a439ce2d73b.svg', 352],
       ['../assets/f61b57ea17c6f05f.svg', 201], ['../assets/6f95931b758ebbbc.svg', 343], ['../assets/737997190394104f.svg', 370, 'cream'],
-      ['../assets/d27acf2e212b3d25.svg', 386, 'white'], ['../assets/5fa8dd70b1b4157d.svg', 420], ['../assets/0172da4a70bab0b8.svg', 180]
+      ['../assets/4d6496abf1ebc859.svg', 386, 'white'], ['../assets/5fa8dd70b1b4157d.svg', 420], ['../assets/0172da4a70bab0b8.svg', 180]
     ];
     const cards = parts.map(([src, w, fill], i) => {
       const el = document.createElement('img');
