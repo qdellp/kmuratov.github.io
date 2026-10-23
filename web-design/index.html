@@ -312,51 +312,45 @@ button { cursor: var(--cur-pointer); }
 .project-filters button:hover { color: var(--paper); border-color: var(--line-strong); }
 .project-filters button[aria-pressed="true"] { color: var(--ink); background: var(--paper); border-color: var(--paper); }
 .project-filters sup { font-size: 10px; margin-left: 3px; opacity: .6; }
-.project-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
-@media (min-width: 901px) {
-  .project-row:nth-child(odd of :not(.is-hidden)) { border-right: 1px solid var(--line); }
-  .project-row:nth-child(odd of :not(.is-hidden)) .project-open { padding-right: clamp(16px, 2vw, 28px); }
-  .project-row:nth-child(even of :not(.is-hidden)) .project-open { padding-left: clamp(16px, 2vw, 28px); }
+
+/* Gallery: a pinned stage; the cards stand in a 3D row placed by product.js from the scroll */
+.project-gallery { position: relative; margin-inline: calc(var(--gutter) * -1); }
+.gallery-stage { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; perspective: 2000px; }
+.gallery-stage .project-filters { position: absolute; z-index: 200; left: var(--gutter); top: 96px; margin: 0; }
+.gallery-track { list-style: none; margin: 0; padding: 0; position: absolute; left: 50%; top: 54%; width: 0; height: 0; transform-style: preserve-3d; }
+.gallery-card { position: absolute; left: 0; top: 0; width: clamp(220px, 23vw, 340px); will-change: transform, opacity; }
+.gallery-card.is-hidden { pointer-events: none; }
+.gallery-open { display: block; width: 100%; padding: 0; border: 0; background: none; text-align: left; }
+.gallery-label { display: flex; align-items: flex-end; gap: 10px; height: 34px; margin-bottom: 14px; font-size: 34px; }
+.gallery-label img { height: var(--logo-h, .7em); width: auto; display: block; filter: brightness(0) invert(.92); }
+.gallery-label em { flex: none; margin-left: auto; padding: 4px 10px; border-radius: 999px; background: rgba(255, 255, 255, .08); font: 400 12px/1.4 var(--text); font-style: normal; color: var(--paper); white-space: nowrap; }
+.gallery-wordmark { min-width: 0; font: 700 .5em/1.05 var(--display); letter-spacing: -.02em; color: var(--paper); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.gallery-plane { position: relative; display: block; aspect-ratio: 1224 / 1252; border-radius: 14px; overflow: hidden; background: var(--ink-3); box-shadow: 0 40px 90px rgba(0, 0, 0, .55); transition: opacity .45s var(--ease-out), filter .45s var(--ease-out); }
+.gallery-plane .cover-logo { padding: 18%; }
+.gallery-track:has(.gallery-open:hover) .gallery-card:not(:hover) .gallery-plane { opacity: .55; filter: saturate(.6); }
+.gallery-open:focus-visible { outline: none; }
+.gallery-open:focus-visible .gallery-plane { outline: 2px solid var(--paper); outline-offset: 4px; }
+.gallery-info { position: absolute; z-index: 200; left: var(--gutter); right: var(--gutter); bottom: clamp(24px, 6vh, 64px); max-width: 36ch; pointer-events: none; }
+.gallery-count { display: block; margin-bottom: 10px; font: 600 13px/1 var(--text); letter-spacing: .04em; color: var(--muted); }
+.gallery-caption { margin: 0 0 14px; font-size: 16px; line-height: 1.45; color: var(--paper); }
+.gallery-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.gallery-tags span { font-size: 12px; padding: 4px 10px; border-radius: 999px; border: 1px solid var(--line-strong); color: var(--muted); }
+@media (max-width: 900px) {
+  .gallery-stage .project-filters { top: 84px; right: var(--gutter); }
+  .gallery-track { top: 50%; }
+  .gallery-card { width: min(58vw, 240px); }
+  .gallery-label { height: 28px; font-size: 28px; margin-bottom: 10px; }
+  .gallery-caption { font-size: 14px; }
 }
-.project-row:nth-child(-n + 2 of :not(.is-hidden)) { border-top: 1px solid var(--line); }
-@media (max-width: 900px) { .project-list { grid-template-columns: minmax(0, 1fr); } .project-row:nth-child(-n + 2 of :not(.is-hidden)) { border-top: 0; } .project-row:nth-child(1 of :not(.is-hidden)) { border-top: 1px solid var(--line); } }
-.project-row { display: flex; border-bottom: 1px solid var(--line); transition: opacity .4s var(--ease-out); }
-.project-row > .project-open { flex: 1; height: auto; }
-.project-row.is-hidden { display: none; }
-.project-list.is-hovering .project-row:not(.is-active) { opacity: .38; }
-.project-open { position: relative; width: 100%; display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 24px; padding: clamp(18px, 2.2vw, 30px) 4px; border: 0; background: transparent; text-align: left; overflow: hidden; isolation: isolate; }
-.project-open::before { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(90deg, var(--paper) 0%, var(--paper) 50%, rgba(238, 238, 238, .55) 80%, rgba(238, 238, 238, 0) 100%); transform: scaleX(0); transform-origin: left; transition: transform .55s var(--ease-out); }
-.project-row.is-active .project-open::before, .project-open:focus-visible::before { transform: scaleX(1); }
-.project-name { min-width: 0; display: flex; align-items: center; gap: 16px; font: 700 clamp(28px, 3.6vw, 60px)/1 var(--display); letter-spacing: -.025em; transition: transform .55s var(--ease-out), letter-spacing .55s var(--ease-out); }
-.project-name img { height: var(--logo-h, .8em); width: auto; display: block; filter: brightness(0) invert(.92); opacity: .82; transition: filter .45s cubic-bezier(.22,1,.36,1), opacity .45s cubic-bezier(.22,1,.36,1); }
-.project-row:is(:focus-within:has(:focus-visible), .is-active) .project-name img { filter: brightness(0); opacity: 1; }
-.project-row:is(:focus-within:has(:focus-visible), .is-active) .project-name img[data-hover="color"] { filter: none; }
-.project-name img[data-tone="keep"] { filter: grayscale(1); }
-.logo-swap { position: relative; display: block; }
-.project-name .logo-swap img.logo-hover { position: absolute; left: 0; top: 0; height: 100%; width: auto; filter: none; opacity: 0; }
-.project-row:is(:focus-within:has(:focus-visible), .is-active) .logo-swap.has-hover img.project-logo { opacity: 0; }
-.project-row:is(:focus-within:has(:focus-visible), .is-active) .project-name .logo-swap img.logo-hover { opacity: 1; filter: none; }
-.project-row:is(:focus-within:has(:focus-visible), .is-active) .project-name img[data-tone="keep"] { filter: grayscale(1) invert(1); }
-.project-name { color: var(--paper); transition: transform .55s var(--ease-out), letter-spacing .55s var(--ease-out), color .45s var(--ease-out); }
-.project-row.is-active .project-name { color: var(--ink); }
-.project-wordmark { min-width: 0; font-size: .32em; line-height: 1.15; letter-spacing: -.03em; white-space: normal; color: rgba(238, 238, 238, .86); transition: color .45s var(--ease-out); }
-.project-row:is(:focus-within:has(:focus-visible), .is-active) .project-wordmark { color: var(--ink); }
-.project-row.is-active .project-name, .project-row.is-active .project-caption { transform: translateX(12px); }
-.project-tags { display: flex; gap: 6px; }
-.project-tags span { font-size: 12px; padding: 4px 9px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); white-space: nowrap; transition: color .45s var(--ease-out), border-color .45s var(--ease-out), background-color .45s var(--ease-out); }
-/* on the white hover fill the tags turn dark so they stay readable */
-.project-row.is-active .project-tags span { color: #000; background: rgba(0, 0, 0, .12); border-color: transparent; }
-/* Desktop: taller rows, larger logos and tags */
-@media (min-width: 901px) {
-  .project-open { padding: clamp(26px, 2.9vw, 42px) 4px; }
-  .project-name { font-size: clamp(34px, 4.4vw, 74px); }
-  .project-tags { gap: 8px; }
-  .project-tags span { font-size: 14px; padding: 6px 13px; }
+/* No scroll-driven motion: a plain grid of the same cards */
+@media (prefers-reduced-motion: reduce) {
+  .gallery-stage { position: static; height: auto; overflow: visible; perspective: none; padding: 0 var(--gutter); }
+  .gallery-stage .project-filters { position: static; margin-bottom: 24px; }
+  .gallery-track { position: static; width: auto; height: auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 32px 20px; }
+  .gallery-card { position: static; width: auto; transform: none !important; opacity: 1 !important; }
+  .gallery-card.is-hidden { display: none; }
+  .gallery-info { display: none; }
 }
-.project-float { position: fixed; left: 0; top: 0; z-index: 40; width: 340px; aspect-ratio: 4 / 3; pointer-events: none; opacity: 0; transform: translate3d(-50%, -50%, 0); transition: opacity .3s; }
-.project-float.is-visible { opacity: 1; }
-.project-float-inner { width: 100%; height: 100%; border-radius: 18px; overflow: hidden; box-shadow: 0 30px 80px rgba(0, 0, 0, .55); transform: scale(.7) rotate(var(--rot, 0deg)); transition: transform .5s var(--ease-out); }
-.project-float.is-visible .project-float-inner { transform: scale(1) rotate(var(--rot, 0deg)); }
 
 /* Generated cover */
 .cover { position: relative; width: 100%; height: 100%; overflow: hidden; background: var(--grain-soft) 0 0 / 180px, radial-gradient(120% 90% at 0% 0%, var(--c1), transparent 60%), radial-gradient(100% 100% at 100% 100%, var(--c2), transparent 60%), #131313; background-blend-mode: overlay, normal, normal, normal; }
@@ -651,7 +645,6 @@ button { cursor: var(--cur-pointer); }
 @media (max-width: 1100px) {
   .header-nav { display: none; }
   .brand-group { margin-right: auto; }
-  .project-open { grid-template-columns: minmax(0, 1fr) auto; }
 }
 @media (max-width: 900px) {
   .hero { grid-template-columns: 1fr; grid-template-rows: auto auto auto auto auto; padding-top: 104px; }
@@ -669,10 +662,6 @@ button { cursor: var(--cur-pointer); }
   .browser { width: min(100%, 380px); }
   .flow-node { width: 132px; padding: 10px; }
   .section-head { grid-template-columns: 1fr; gap: 18px; }
-  .project-tags { order: 3; margin-top: 12px; flex-wrap: wrap; }
-  .project-caption { order: 2; }
-  .project-open { grid-template-columns: minmax(0, 1fr); }
-  .project-float { display: none; }
   .problems { height: auto; }
   .problems-track { flex-direction: column; width: auto; transform: none !important; padding-top: 32px; }
   .problem { width: auto; grid-template-columns: 1fr; }
@@ -731,14 +720,6 @@ button { cursor: var(--cur-pointer); }
   .problems { height: auto; }
   .problems-track { flex-direction: column; width: auto; transform: none !important; }
   .problem { width: auto; }
-}
-
-/* Project list on small screens: no thumbnails, larger logos */
-.project-thumb { display: none; }
-@media (max-width: 900px) {
-  .project-name { font-size: 46px; }
-  .project-open { padding-block: 26px; padding-inline-start: 16px; }
-  .project-row.is-active .project-name, .project-row.is-active .project-caption { transform: none; }
 }
 
 /* ---------- Responsive demo: one layout, desktop and mobile ---------- */
@@ -844,9 +825,6 @@ button { cursor: var(--cur-pointer); }
 .problem-case { align-self: flex-start; margin-top: 18px; padding: 10px 16px; border: 0; border-radius: 100px; background: rgba(255, 255, 255, .08); color: var(--paper); font: inherit; font-size: 14px; transition: background-color .3s var(--ease-out); }
 .problem-case:hover { background: rgba(255, 255, 255, .16); }
 
-/* ---------- Project list: contribution caption ---------- */
-.project-caption { grid-column: 1 / -1; margin-top: 10px; max-width: 58ch; font: 400 15px/1.45 var(--text); letter-spacing: 0; color: var(--muted); transition: color .45s var(--ease-out), transform .55s var(--ease-out); }
-.project-row.is-active .project-caption { color: rgba(12, 12, 12, .72); }
 
 /* ---------- How I work ---------- */
 .approach .section-head { margin-bottom: clamp(32px, 4vw, 56px); }
@@ -871,18 +849,13 @@ button { cursor: var(--cur-pointer); }
 @media (max-width: 900px) {
   .wire-block { grid-template-columns: 1fr; }
   .hero-btn { padding: 11px 16px; font-size: 14px; }
-  .project-caption { font-size: 14px; margin-top: 8px; }
 }
 
 .sheet-detail ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; }
 .sheet-detail li { position: relative; padding-left: 18px; color: #d7d7d7; font-size: 15px; line-height: 1.55; }
 .sheet-detail li::before { content: ''; position: absolute; left: 2px; top: .7em; width: 6px; height: 6px; border-radius: 50%; background: var(--dim); }
-.project-status { position: absolute; right: 4px; bottom: 14px; padding: 4px 10px; border-radius: 999px; background: rgba(255, 255, 255, .08); color: var(--paper); font: 400 12px/1.4 var(--text); letter-spacing: 0; transition: background-color .45s var(--ease-out), color .45s var(--ease-out); }
-.project-row.is-active .project-status { background: rgba(255, 255, 255, .14); color: var(--paper); }
-@media (max-width: 900px) { .project-status { right: 0; bottom: 26px; padding: 5px 10px; } .project-open:has(.project-status) .project-tags { padding-right: 112px; } }
 @media (max-width: 600px) { .sheet-title-text { font-size: .5em; overflow-wrap: break-word; hyphens: auto; } }
 
-@media (min-width: 901px) { .project-row:nth-child(odd of :not(.is-hidden)) .project-status { right: clamp(16px, 2vw, 28px); } }
 
 /* Responsive demo: Safari-style window bar on desktop, folds away on the phone */
 .rs-chrome { display: flex; align-items: center; gap: 12px; height: 38px; margin: -16px -16px 14px; padding: 0 14px; background: #e9e9e9; border-bottom: 1px solid #dcdcdc; overflow: hidden; opacity: 1; transition: height .65s cubic-bezier(.22, 1, .36, 1), margin .65s cubic-bezier(.22, 1, .36, 1), opacity .3s var(--ease-out); }
@@ -1034,9 +1007,17 @@ html::-webkit-scrollbar { display: none; }
     <div class="section-head">
       <h2 id="projects-title" data-split-title>Проекты</h2>
     </div>
-    <div class="project-filters" id="project-filters" role="group" aria-label="Фильтр проектов"></div>
-    <ul class="project-list" id="project-list"></ul>
-    <div class="project-float" id="project-float" aria-hidden="true"><div class="project-float-inner" id="project-float-inner"></div></div>
+    <div class="project-gallery" id="project-gallery">
+      <div class="gallery-stage">
+        <div class="project-filters" id="project-filters" role="group" aria-label="Фильтр проектов"></div>
+        <ul class="gallery-track" id="project-list"></ul>
+        <div class="gallery-info" aria-live="polite">
+          <span class="gallery-count" id="gallery-count"></span>
+          <p class="gallery-caption" id="gallery-caption"></p>
+          <span class="gallery-tags" id="gallery-tags"></span>
+        </div>
+      </div>
+    </div>
   </section>
 
   <!-- APPROACH IN ACTION -->
@@ -1823,16 +1804,54 @@ window.PRODUCT_PROJECTS = [
     if (p.coverMode === 'logo') { const lg = p.coverLogo || p.logo; return `<div class="cover is-logo" style="${style}${p.coverBg ? `;background:${p.coverBg}` : ''}"><span class="cover-logo">${lg ? `<img src="${esc(lg)}" alt="">` : esc(p.name)}</span></div>`; }
     return `<div class="cover" style="${style}"><span class="cover-mark">${mark}</span><div class="cover-device ${isPhoneFirst(p) ? 'is-phone' : 'is-web'}"><i></i><i></i><i></i><i></i></div></div>`;
   }
+  // Gallery: the covers stand in a 3D row that runs off to the upper right; scrolling the pinned
+  // section walks the row toward the viewer. Each card carries the project logo above its cover.
+  const logoHTML = p => p.logo
+    ? `<img class="project-logo" src="${esc(p.logo)}" alt=""${p.logoScale ? ` data-scale="${p.logoScale}"` : ''}>`
+    : `<span class="gallery-wordmark">${esc(p.name)}</span>`;
   list.innerHTML = projects.map((p, i) => `
-    <li class="project-row" data-index="${i}" style="--c1:${p.colors[0]};--c2:${p.colors[1]}">
-      <button type="button" class="project-open" aria-haspopup="dialog">
-        <span class="project-name"><span class="project-thumb" aria-hidden="true">${coverHTML(p)}</span>${p.logo ? `<span class="logo-swap${p.logoHoverSrc ? ' has-hover' : ''}"><img class="project-logo" src="${esc(p.logo)}" alt="${esc(p.name)}"${p.logoScale ? ` data-scale="${p.logoScale}"` : ''}${p.logoHover === 'color' ? ' data-hover="color"' : ''}${p.logoTone === 'keep' ? ' data-tone="keep"' : ''}>${p.logoHoverSrc ? `<img class="logo-hover" src="${esc(p.logoHoverSrc)}" alt="" aria-hidden="true">` : ''}</span>` : `<span class="project-wordmark">${esc(p.name)}</span>`}</span>
-        <span class="project-tags">${p.tags.map(t => `<span>${esc(t)}</span>`).join('')}</span>
-        ${p.caption ? `<span class="project-caption">${esc(p.caption)}</span>` : ''}
-        ${p.status ? `<span class="project-status">${esc(p.status)}</span>` : ''}
+    <li class="gallery-card" data-index="${i}">
+      <button type="button" class="gallery-open" aria-haspopup="dialog" aria-label="${esc(p.name)}: открыть проект">
+        <span class="gallery-label" aria-hidden="true">${logoHTML(p)}${p.status ? `<em>${esc(p.status)}</em>` : ''}</span>
+        <span class="gallery-plane">${coverHTML(p)}</span>
       </button>
     </li>`).join('');
-  const rows = $$('.project-row', list);
+  const rows = $$('.gallery-card', list);
+  const gallery = $('#project-gallery'), galleryCount = $('#gallery-count'), galleryCaption = $('#gallery-caption'), galleryTags = $('#gallery-tags');
+  // each card's current place in the row, eased toward its target every frame
+  const cardPos = rows.map((_, i) => ({ o: i, a: 1 }));
+  let shown = rows.map((_, i) => i), shownIndex = -1;
+  const scrollStep = () => innerHeight * .5;
+  function sizeGallery() { gallery.style.height = reduced ? '' : `${(shown.length - 1) * scrollStep() + innerHeight}px`; }
+  sizeGallery(); addEventListener('resize', sizeGallery);
+  // which card the scroll has reached, as a float: 0 = first shown card in front
+  const galleryProgress = () => clamp(-gallery.getBoundingClientRect().top / scrollStep(), 0, Math.max(0, shown.length - 1));
+  const scrollToCard = (k, behavior = 'smooth') => scrollTo({ top: scrollY + gallery.getBoundingClientRect().top + k * scrollStep() + 1, behavior: reduced ? 'instant' : behavior });
+  function showInfo(k) {
+    if (k === shownIndex) return; shownIndex = k;
+    const p = projects[shown[k]]; if (!p) return;
+    galleryCount.textContent = `${String(k + 1).padStart(2, '0')} / ${String(shown.length).padStart(2, '0')}`;
+    galleryCaption.textContent = p.caption || p.kind || '';
+    galleryTags.innerHTML = p.tags.map(t => `<span>${esc(t)}</span>`).join('');
+  }
+  function updateGallery() {
+    if (reduced) return;
+    const r = gallery.getBoundingClientRect();
+    if (r.bottom < -200 || r.top > innerHeight + 200) return;
+    const w = rows[0].offsetWidth, h = rows[0].offsetHeight, p = galleryProgress();
+    // the same spacing as the reference: 0.71 card widths right, 0.24 up and 0.9 back per step
+    const sx = w * .71, sy = -w * .244, sz = -w * .906, k = reduced ? 1 : .14;
+    rows.forEach((row, i) => {
+      const at = shown.indexOf(i), c = cardPos[i];
+      const target = at < 0 ? c.o : at - p, alpha = at < 0 ? 0 : clamp(1 + (at - p) * 1.1) * clamp(1 - (at - p - 5) / 2);
+      c.o = lerp(c.o, target, k); c.a = lerp(c.a, alpha, k);
+      row.style.transform = `translate3d(${(c.o * sx - w / 2).toFixed(1)}px, ${(c.o * sy - h * .42).toFixed(1)}px, ${(c.o * sz).toFixed(1)}px) rotateY(-50deg)`;
+      row.style.opacity = c.a.toFixed(3);
+      row.style.zIndex = String(100 - Math.round(c.o * 10));
+      row.classList.toggle('is-front', at > -1 && Math.abs(at - p) < .5);
+    });
+    showInfo(Math.round(p));
+  }
 
   // Filters come from the published cards only; categories may overlap, empty ones are not shown.
   const tagCounts = {};
@@ -1844,40 +1863,22 @@ window.PRODUCT_PROJECTS = [
     const b = e.target.closest('[data-filter]'); if (!b) return;
     $$('[data-filter]', filters).forEach(x => x.setAttribute('aria-pressed', String(x === b)));
     const tag = b.dataset.filter;
-    let k = 0;
-    rows.forEach(row => {
-      const show = tag === 'Все' || projects[row.dataset.index].tags.includes(tag);
-      row.classList.toggle('is-hidden', !show);
-      if (show && !reduced) row.animate([{ opacity: 0, transform: 'translateY(16px)' }, { opacity: 1, transform: 'none' }], { duration: 600, delay: k++ * 45, easing: 'cubic-bezier(.22,1,.36,1)', fill: 'backwards' });
-    });
+    rows.forEach(row => row.classList.toggle('is-hidden', !(tag === 'Все' || projects[row.dataset.index].tags.includes(tag))));
+    shown = rows.filter(r => !r.classList.contains('is-hidden')).map(r => +r.dataset.index);
+    shownIndex = -1; sizeGallery();
+    // back to the first card of the new set if the row was already scrolled
+    if (gallery.getBoundingClientRect().top < 0) scrollToCard(0, 'instant');
   });
 
-  const float = $('#project-float'), floatInner = $('#project-float-inner');
-  const fl = { x: innerWidth / 2, y: innerHeight / 2, rot: 0, on: false };
-  let activeRow = null;
   rows.forEach(row => {
-    const btn = row.querySelector('.project-open');
-    const p = projects[row.dataset.index];
-    const enter = () => {
-      if (activeRow === row) return;
-      activeRow?.classList.remove('is-active');
-      activeRow = row; row.classList.add('is-active'); list.classList.add('is-hovering');
-    };
-    row.addEventListener('pointerenter', e => { if (e.pointerType !== 'touch') enter(); });
-    // Touch: the row lights up while the finger is on it, like hover on desktop
-    row.addEventListener('pointerdown', e => { if (e.pointerType === 'touch') enter(); });
-    const release = e => { if (e.pointerType === 'touch' && activeRow === row) setTimeout(() => { if (activeRow === row && !sheet.open) clearActive(); }, 180); };
-    row.addEventListener('pointerup', release); row.addEventListener('pointercancel', release); row.addEventListener('pointerleave', release);
-    btn.addEventListener('focus', () => { if (btn.matches(':focus-visible')) enter(); });
+    const btn = row.querySelector('.gallery-open');
     btn.addEventListener('click', () => openSheet(+row.dataset.index, btn));
+    // keyboard: a focused card is brought to the front
+    btn.addEventListener('focus', () => { if (btn.matches(':focus-visible')) { const k = shown.indexOf(+row.dataset.index); if (k > -1) scrollToCard(k); } });
   });
   // Logos get the same visual weight: equal area, so a wide wordmark is lower and a compact one taller.
   const sizeLogo = img => { const a = (img.naturalWidth || 1) / (img.naturalHeight || 1), k = +img.dataset.scale || 1; img.style.setProperty('--logo-h', (k * Math.min(.86, Math.max(.4, .62 * Math.sqrt(3.5 / a)))).toFixed(3) + 'em'); };
   $$('.project-logo', list).forEach(img => { if (img.complete) sizeLogo(img); else img.addEventListener('load', () => sizeLogo(img), { once: true }); });
-  const clearActive = () => { activeRow?.classList.remove('is-active'); activeRow = null; list.classList.remove('is-hovering'); float.classList.remove('is-visible'); fl.on = false; };
-  list.addEventListener('pointerleave', clearActive);
-  list.addEventListener('focusout', e => { if (!list.contains(e.relatedTarget)) clearActive(); });
-
   // Sheet
   const sheet = $('#project-sheet');
   let sheetIndex = 0, sheetTrigger = null;
@@ -1939,7 +1940,7 @@ window.PRODUCT_PROJECTS = [
   moreHint.addEventListener('click', () => sheetCard.scrollBy({ top: sheetCard.clientHeight * .7, behavior: 'smooth' }));
   function openSheet(i, trigger) {
     sheetTrigger = trigger; fillSheet(i);
-    sheet.showModal(); fitCover(); clearActive(); raiseCursor();
+    sheet.showModal(); fitCover(); raiseCursor();
     if (!swipeHinted && !reduced && matchMedia('(max-width: 900px)').matches) {
       swipeHinted = true;
       setTimeout(() => {
@@ -2501,14 +2502,7 @@ void main(){
       if (mqX <= -half) mqX += half; if (mqX > 0) mqX -= half;
       track.style.transform = `translate3d(${mqX.toFixed(1)}px,0,0) skewX(${clamp(-velocity * .25, -10, 10).toFixed(2)}deg)`;
     }
-    // project preview
-    if (fl.on) {
-      const nx = lerp(fl.x, pointer.x, .16);
-      fl.rot = lerp(fl.rot, clamp((nx - fl.x) * .6, -12, 12), .12);
-      fl.x = nx; fl.y = lerp(fl.y, pointer.y, .16);
-      float.style.transform = `translate3d(${fl.x + 40}px, ${fl.y}px, 0) translate(0, -50%)`;
-      floatInner.style.setProperty('--rot', fl.rot.toFixed(2) + 'deg');
-    } else { fl.x = pointer.x; fl.y = pointer.y; }
+    updateGallery();
     // cursor
     if (root.classList.contains('has-cursor')) {
       dot.style.transform = `translate3d(${pointer.x}px,${pointer.y}px,0)`;
