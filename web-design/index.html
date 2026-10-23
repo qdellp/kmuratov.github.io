@@ -846,8 +846,6 @@ button { cursor: var(--cur-pointer); }
 
 /* ---------- Approach in action: notes and links ---------- */
 .problem-note { margin-top: 18px !important; font-size: 13px; color: var(--dim) !important; max-width: 46ch; }
-.problem-case { align-self: flex-start; margin-top: 18px; padding: 10px 16px; border: 0; border-radius: 100px; background: rgba(255, 255, 255, .08); color: var(--paper); font: inherit; font-size: 14px; transition: background-color .3s var(--ease-out); }
-.problem-case:hover { background: rgba(255, 255, 255, .16); }
 
 
 /* ---------- How I work ---------- */
@@ -1058,7 +1056,6 @@ html::-webkit-scrollbar { display: none; }
             <p>Прорабатываю, как интерфейс сообщает о действиях агента, когда запрашивает уточнение и где пользователь может вмешаться.</p>
             <span class="problem-hint">Переключите уровень самостоятельности</span>
             <p class="problem-note">Условный пример уровней самостоятельности. Не является демонстрацией выпущенной функции Jet.ai.</p>
-            <button type="button" class="problem-case" data-open-project="Jet.ai">Кейс Jet.ai →</button>
           </div>
           <div class="problem-demo demo-agent" data-demo="agent">
             <div class="agent-head"><span class="agent-avatar"><i></i></span><b>Агент собирает экран</b><em id="agent-state">Работает</em></div>
@@ -1081,7 +1078,6 @@ html::-webkit-scrollbar { display: none; }
             <p>Сохраняю логику продукта при переходе между устройствами. Адаптирую навигацию, плотность информации и поведение компонентов под доступное пространство.</p>
             <span class="problem-hint">Переключите устройство</span>
             <p class="problem-note">На десктопе карточки идут в три колонки, поиск в одной строке с заголовком. На мобильном сетка перестраивается в две колонки, поиск уходит в отдельную строку.</p>
-            <button type="button" class="problem-case" data-open-project="Моя Бронь">Кейс «Моя Бронь» →</button>
           </div>
           <div class="problem-demo demo-responsive" data-demo="responsive">
             <div class="rs-stage" id="rs-stage">
@@ -2158,11 +2154,6 @@ window.PRODUCT_PROJECTS = [
   };
   card.addEventListener('pointerup', endSwipe); card.addEventListener('pointercancel', endSwipe);
   sheet.addEventListener('click', e => { if (e.target === sheet) sheet.close(); });
-  // Demo blocks link to the matching case
-  $$('[data-open-project]').forEach(b => b.addEventListener('click', () => {
-    const i = projects.findIndex(p => p.name === b.dataset.openProject);
-    if (i >= 0) openSheet(i, b);
-  }));
   sheet.addEventListener('close', () => sheetTrigger?.focus({ preventScroll: true }));
   const sheetBars = [attachScrollbar(sheet.querySelector('.sheet-body'), $('#sheet-frame'), 'sheet-scroll'), attachScrollbar($('#sheet-card'), $('#sheet-frame'), 'sheet-scroll')];
 
