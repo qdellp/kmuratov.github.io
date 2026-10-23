@@ -436,6 +436,7 @@ button { cursor: var(--cur-pointer); }
 .problem-hint::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--tone); box-shadow: 0 0 0 0 var(--tone); animation: ping 2s ease-out infinite; }
 @keyframes ping { 70%, 100% { box-shadow: 0 0 0 10px transparent; } }
 /* Component swirl: a full-width card, the copy in the middle, interface pieces spiral out around it */
+.problem { min-height: clamp(560px, 52vw, 760px); } /* every card about as tall as the swirl */
 .problem-swirl { grid-template-columns: minmax(0, 1fr); place-items: center; min-height: clamp(560px, 62vw, 760px); overflow: hidden; }
 .problem-swirl > .swirl { position: absolute; inset: 0; z-index: 1; pointer-events: none; } /* above the card grain */
 .swirl-card { position: absolute; left: 50%; top: 50%; width: calc(var(--nw) / 370 * clamp(170px, 19vw, 280px)); height: auto; will-change: transform, opacity, filter; user-select: none; } /* the vector pieces keep their own corners; the shadow follows their outline (set in product.js) */
@@ -520,6 +521,12 @@ button { cursor: var(--cur-pointer); }
 /* Demo: wireframe compare */
 .demo-wire { padding: 0; overflow: hidden; }
 .wire-compare { position: relative; height: 340px; }
+/* the real screen and the wireframe built from the same layout, inside a phone outline */
+.demo-wire.problem-demo { display: grid; place-items: center; padding: clamp(16px, 2vw, 28px); background: rgba(255, 255, 255, .02); }
+.wire-compare.wire-phone { height: clamp(460px, 44vw, 640px); aspect-ratio: 402 / 874; border-radius: clamp(26px, 2.4vw, 38px); overflow: hidden; box-shadow: 0 0 0 6px #1d1d1e, 0 30px 80px rgba(0, 0, 0, .5); }
+.wire-shot { position: absolute; inset: 0; display: block; width: 100%; height: 100%; user-select: none; -webkit-user-drag: none; }
+.wire-phone .wire-ui, .wire-phone .wire-sketch { background: none; padding: 0; }
+.wire-phone .wire-tag { bottom: 18px; }
 .wire-layer { position: absolute; inset: 0; padding: 22px; display: flex; flex-direction: column; gap: 12px; }
 /* the light layer only shows right of the split: under the dark sketch its edges bled through as a thin frame */
 .wire-ui { background: #f6f6f6; color: #151515; clip-path: inset(0 0 0 var(--split)); }
@@ -553,26 +560,28 @@ button { cursor: var(--cur-pointer); }
 .wire-tag-r { right: 12px; background: #151515; color: #fff; }
 
 /* Demo: motion */
-.demo-motion { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; align-content: center; }
-.motion-shop { display: grid; gap: 10px; }
-.motion-item { display: grid; grid-template-columns: auto 1fr auto; grid-template-rows: auto auto; column-gap: 12px; align-items: center; text-align: left; padding: 12px; border-radius: 14px; border: 1px solid var(--line); background: rgba(238, 238, 238, .04); transition: border-color .2s, transform .2s; }
-.motion-item:hover { border-color: var(--line-strong); }
-.motion-item:active { transform: scale(.97); }
-.motion-item i { grid-row: span 2; width: 40px; height: 40px; border-radius: 12px; background: var(--c); }
-.motion-item b { font-size: 14px; font-weight: 600; }
-.motion-item span { font-size: 12px; color: var(--muted); }
-.motion-item em { grid-row: 1 / span 2; grid-column: 3; font-style: normal; width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; background: #7be0a6; color: var(--ink); font-size: 18px; }
-.motion-cart { padding: 14px; border-radius: 14px; background: rgba(123, 224, 166, .08); border: 1px solid rgba(123, 224, 166, .25); min-height: 220px; display: grid; grid-template-columns: 1fr auto; align-content: start; gap: 10px; }
-.motion-cart > span { font-size: 13px; color: var(--muted); }
-.motion-cart > b { min-width: 26px; height: 26px; padding: 0 8px; border-radius: 99px; background: #7be0a6; color: var(--ink); font-size: 13px; display: grid; place-items: center; }
-.motion-cart > b.is-bump { animation: bump .5s var(--ease-spring); }
 @keyframes bump { 40% { transform: scale(1.45); } }
-.motion-cart ul { grid-column: 1 / -1; list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
-.motion-cart li { display: flex; align-items: center; gap: 8px; font-size: 12px; padding: 7px 9px; border-radius: 9px; background: rgba(238, 238, 238, .06); }
-.motion-cart li i { width: 16px; height: 16px; border-radius: 5px; background: var(--c); }
-.motion-cart li.is-new { animation: item-in .6s var(--ease-spring); }
 @keyframes item-in { from { opacity: 0; transform: translateY(-14px) scale(.85); } }
-.motion-fly { position: fixed; z-index: 60; width: 40px; height: 40px; border-radius: 12px; pointer-events: none; }
+/* Action result: real event cards and the quick menu of the same app, on its teal background */
+.demo-events { display: flex; flex-direction: column; justify-content: center; gap: 18px; --k: 1.45; }
+.ev-screen { display: grid; gap: calc(10px * var(--k)); justify-items: start; padding: calc(16px * var(--k)); border-radius: 28px; background: radial-gradient(120% 90% at 20% 0%, #2f6662, transparent 60%), linear-gradient(170deg, #1e4744, #0d2624); }
+.ev-label { font: 600 calc(11px * var(--k))/1 var(--text); color: #fff; }
+.ev-row, .ev-menu { display: flex; flex-wrap: wrap; gap: calc(8px * var(--k)); }
+.ev-card { padding: 0; border: 0; background: none; border-radius: calc(30px * var(--k)); cursor: var(--cur-pointer); transition: filter .3s var(--ease-out); }
+.ev-card:hover { filter: brightness(1.12); }
+.ev-card:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+.ev-card img, .ev-btn img { display: block; height: calc(var(--h) * var(--k)); width: auto; user-select: none; -webkit-user-drag: none; }
+.ev-row .ev-card:first-child img { --h: 84px; } .ev-row .ev-card:last-child img { --h: 60px; } .ev-btn img { --h: 38px; }
+.ev-row { align-items: center; }
+.ev-btn { position: relative; display: block; }
+.ev-badge { position: absolute; top: -7px; right: 4px; min-width: 22px; height: 22px; padding: 0 6px; border-radius: 99px; background: #007981; color: #fff; font: 600 12px/22px var(--text); text-align: center; font-variant-numeric: tabular-nums; }
+.ev-badge.is-bump { animation: bump .5s var(--ease-spring); }
+.ev-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.ev-bar .motion-reset { border-color: rgba(255, 255, 255, .22); color: var(--paper); }
+.ev-bar .motion-reset:hover:not(:disabled) { background: var(--paper); color: var(--ink); }
+@media (max-width: 900px) { .demo-events { --k: 1.05; } }
+@media (max-width: 420px) { .demo-events { --k: .9; } }
+.motion-fly { position: fixed; z-index: 60; height: auto; pointer-events: none; transform-origin: 0 50%; will-change: transform, opacity; }
 .motion-switch { grid-column: 1 / -1; display: inline-flex; align-items: center; gap: 10px; font-size: 13px; color: var(--muted); cursor: var(--cur-pointer); justify-self: start; }
 .motion-switch input { position: absolute; opacity: 0; }
 .motion-switch span { width: 38px; height: 22px; border-radius: 99px; background: var(--dim); position: relative; transition: background-color .3s; }
@@ -742,6 +751,7 @@ button { cursor: var(--cur-pointer); }
   .sheet-meta { grid-template-columns: 1fr 1fr; gap: 14px 24px; }
   .site-footer { flex-direction: column; }
   .wire-compare { height: 300px; }
+  .wire-compare.wire-phone { height: min(560px, 120vw); }
   .tile { padding: 20px; border-radius: 22px; }
   .problem { padding: 20px; border-radius: 22px; }
   .problem-demo { padding: 16px; }
@@ -781,6 +791,14 @@ button { cursor: var(--cur-pointer); }
 .rs-tile i { display: block; aspect-ratio: 4 / 3; border-radius: 8px; background: var(--grain-soft) 0 0 / 180px, radial-gradient(circle at 30% 35%, var(--c1), transparent 55%), linear-gradient(135deg, var(--c1), var(--c2)); background-blend-mode: overlay, normal, normal, normal; margin-bottom: 4px; }
 .rs-tile b { font: 700 12px/1.1 var(--display); letter-spacing: -.015em; }
 .rs-tile span { font-size: 10px; color: #6b6787; }
+/* real components: the frame takes the product's navy, tiles are the exported pieces themselves */
+.rs-frame:has(.rs-grid.is-real) { background: linear-gradient(160deg, #0a1a44, #123d9e); }
+.rs-grid.is-real { gap: 12px; align-items: start; }
+.rs-grid.is-real .rs-tile { display: block; width: 100%; height: auto; padding: 0; border-radius: 0; background: none; box-shadow: none; user-select: none; -webkit-user-drag: none; }
+.rs-grid.is-real .rs-wide { grid-column: span 2; }
+.rs-frame.is-mobile .rs-grid.is-real { grid-template-columns: minmax(0, 1fr); gap: 8px; }
+.rs-frame.is-mobile .rs-grid.is-real .rs-wide { grid-column: auto; }
+.rs-url-blank { display: block; width: 46%; height: 6px; border-radius: 3px; background: #dcdcdc; }
 .rs-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
 .seg { display: inline-flex; padding: 3px; border-radius: 99px; border: 1px solid var(--line); }
 .seg button { border: 0; background: transparent; padding: 7px 14px; border-radius: 99px; font-size: 13px; color: var(--muted); transition: background-color .3s var(--ease-out), color .3s var(--ease-out); }
@@ -788,7 +806,6 @@ button { cursor: var(--cur-pointer); }
 .rs-label { font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
 
 /* ---------- Cart reset ---------- */
-.motion-cart { grid-template-columns: 1fr auto auto; }
 .motion-reset { padding: 4px 10px; border-radius: 99px; border: 1px solid rgba(123, 224, 166, .35); background: transparent; font-size: 12px; color: #7be0a6; transition: opacity .3s var(--ease-out), background-color .3s var(--ease-out), color .3s var(--ease-out); }
 .motion-reset:hover:not(:disabled) { background: #7be0a6; color: var(--ink); }
 .motion-reset:disabled { opacity: .35; cursor: var(--cur-default); }
@@ -1088,15 +1105,13 @@ html::-webkit-scrollbar { display: none; }
             <h3>Адаптировать сценарий под экран</h3>
             <p>Сохраняю логику продукта при переходе между устройствами. Адаптирую навигацию, плотность информации и поведение компонентов под доступное пространство.</p>
             <span class="problem-hint">Переключите устройство</span>
-            <p class="problem-note">На десктопе карточки идут в три колонки, поиск в одной строке с заголовком. На мобильном сетка перестраивается в две колонки, поиск уходит в отдельную строку.</p>
+            <p class="problem-note">Компоненты из коммерческого проекта, название не раскрывается. На десктопе показатели идут в три колонки, на телефоне в одну, порядок и смысл блоков сохраняются.</p>
           </div>
           <div class="problem-demo demo-responsive" data-demo="responsive">
             <div class="rs-stage" id="rs-stage">
               <div class="rs-frame" id="rs-frame">
-                <div class="rs-chrome" aria-hidden="true"><span class="rs-lights"><i></i><i></i><i></i></span><span class="rs-nav">‹ ›</span><span class="rs-url"><svg viewBox="0 0 10 12" width="8" height="10"><path d="M2 5V3.5a3 3 0 0 1 6 0V5" fill="none" stroke="currentColor" stroke-width="1.4"/><rect x="1" y="5" width="8" height="6.5" rx="1.5" fill="currentColor"/></svg>discover.travel</span><span class="rs-nav rs-nav-end">⟳</span></div>
-                <div class="rs-top"><b>Discover</b><span class="rs-search">Search trips</span><i></i></div>
-                <div class="rs-chips"><em class="on">All</em><em>Stays</em><em>Food</em><em>Tours</em></div>
-                <div class="rs-grid" id="rs-grid"><div class="rs-tile" style="--c1:#ffd36e;--c2:#ff8a5b"><i></i><b>Lisbon</b><span>3 days</span></div><div class="rs-tile" style="--c1:#ff9bd2;--c2:#6f5cff"><i></i><b>Kyoto</b><span>5 days</span></div><div class="rs-tile" style="--c1:#8ce9e5;--c2:#3b5bff"><i></i><b>Oslo</b><span>2 days</span></div><div class="rs-tile" style="--c1:#7be0a6;--c2:#1f8f62"><i></i><b>Tbilisi</b><span>4 days</span></div><div class="rs-tile" style="--c1:#b3a9ff;--c2:#6f5cff"><i></i><b>Porto</b><span>3 days</span></div><div class="rs-tile" style="--c1:#ffb020;--c2:#ff5b5b"><i></i><b>Seoul</b><span>6 days</span></div></div>
+                <div class="rs-chrome" aria-hidden="true"><span class="rs-lights"><i></i><i></i><i></i></span><span class="rs-nav">‹ ›</span><span class="rs-url"><svg viewBox="0 0 10 12" width="8" height="10"><path d="M2 5V3.5a3 3 0 0 1 6 0V5" fill="none" stroke="currentColor" stroke-width="1.4"/><rect x="1" y="5" width="8" height="6.5" rx="1.5" fill="currentColor"/></svg><i class="rs-url-blank"></i></span><span class="rs-nav rs-nav-end">⟳</span></div>
+                <div class="rs-grid is-real" id="rs-grid"><img class="rs-tile" src="../assets/e90ca495b0642deb.svg" alt=""><img class="rs-tile" src="../assets/ef55c9a90693866d.svg" alt=""><img class="rs-tile" src="../assets/8062aff9e0beabd4.svg" alt=""><img class="rs-tile rs-wide" src="../assets/6f95931b758ebbbc.svg" alt=""><img class="rs-tile" src="../assets/5fa8dd70b1b4157d.svg" alt=""></div>
               </div>
             </div>
             <div class="rs-bar">
@@ -1118,41 +1133,40 @@ html::-webkit-scrollbar { display: none; }
           <div class="problem-copy">
             <h3>Объяснить результат действия</h3>
             <p>Использую анимацию, чтобы показать изменение состояния и связь между действием пользователя и результатом. Готовлю демонстрации поведения интерфейса для обсуждения с командой.</p>
-            <span class="problem-hint">Добавьте товар с анимацией и без, затем очистите корзину</span>
-            <p class="problem-note">Сравнивается обратная связь интерфейса с анимацией и без неё, а не измеренная эффективность продукта.</p>
+            <span class="problem-hint">Нажмите на событие с анимацией и без неё</span>
+            <p class="problem-note">Компоненты из коммерческого проекта, название не раскрывается. Сравнивается обратная связь с анимацией и без неё.</p>
           </div>
-          <div class="problem-demo demo-motion" data-demo="motion">
-            <div class="motion-shop">
-              <button type="button" class="motion-item" data-add><i style="--c:#ffb020"></i><b>Sneakers</b><span>$120</span><em>+</em></button>
-              <button type="button" class="motion-item" data-add><i style="--c:#8ce9e5"></i><b>Backpack</b><span>$80</span><em>+</em></button>
+          <div class="problem-demo demo-motion demo-events" data-demo="motion">
+            <div class="ev-screen">
+              <span class="ev-label">Soon</span>
+              <div class="ev-row">
+                <button type="button" class="ev-card" data-add aria-label="Добавить событие в билеты"><img src="../assets/5f4be5d028e60f71.svg" alt="" draggable="false"></button>
+                <button type="button" class="ev-card" data-add aria-label="Добавить событие в билеты"><img src="../assets/70370aa5c72eac41.svg" alt="" draggable="false"></button>
+              </div>
+              <span class="ev-label">Quick menu</span>
+              <div class="ev-menu">
+                <span class="ev-btn" id="motion-target"><img src="../assets/9aee9e9a5ae8bef6.svg" alt="" draggable="false"><b class="ev-badge" id="motion-count" aria-live="polite">3</b></span>
+                <span class="ev-btn"><img src="../assets/8d2c55ecfddaf8d4.svg" alt="" draggable="false"></span>
+              </div>
             </div>
-            <div class="motion-cart"><span>Корзина</span><b id="motion-count">0</b><button type="button" class="motion-reset" id="motion-reset" disabled>Очистить</button><ul id="motion-list"></ul></div>
-            <label class="motion-switch"><input type="checkbox" id="motion-toggle" checked><span></span>С анимацией</label>
+            <div class="ev-bar">
+              <label class="motion-switch"><input type="checkbox" id="motion-toggle" checked><span></span>С анимацией</label>
+              <button type="button" class="motion-reset" id="motion-reset" disabled>Сбросить</button>
+            </div>
           </div>
         </article>
 
         <article class="problem" style="--tone:#ffd36e">
           <div class="problem-copy">
             <h3>От вайрфрейма к интерфейсу</h3>
-            <p>Сначала проверяю структуру и сценарий на вайрфрейме, затем переношу решение в визуальную систему.</p>
+            <p>Сначала проверяю структуру и сценарий на вайрфрейме, затем переношу решение в визуальную систему. Каждый блок интерфейса стоит там же, где его место на вайрфрейме.</p>
             <span class="problem-hint">Двигайте разделитель</span>
-            <p class="problem-note">Условный пример.</p>
+            <p class="problem-note">Экран из коммерческого проекта, название не раскрывается.</p>
           </div>
           <div class="problem-demo demo-wire" data-demo="wire">
-            <div class="wire-compare" id="wire-compare" style="--split:52%">
-              <div class="wire-layer wire-ui">
-                <div class="wui-top"><b>Dashboard</b><i></i></div>
-                <div class="wui-kpis"><span><small>Revenue</small><b>$48.2k</b></span><span><small>Users</small><b>12 840</b></span></div>
-                <div class="wui-chart"><i style="--h:40%"></i><i style="--h:62%"></i><i style="--h:48%"></i><i style="--h:80%"></i><i style="--h:66%"></i><i style="--h:92%"></i></div>
-                <div class="wui-row"><i></i><span></span><em>Paid</em></div>
-                <div class="wui-row"><i></i><span></span><em>Due</em></div>
-              </div>
-              <div class="wire-layer wire-sketch">
-                <div class="wsk-top"><span></span><i></i></div>
-                <div class="wsk-kpis"><span></span><span></span></div>
-                <div class="wsk-chart"><i></i></div>
-                <div class="wsk-row"></div><div class="wsk-row"></div>
-              </div>
+            <div class="wire-compare wire-phone" id="wire-compare" style="--split:52%">
+              <img class="wire-shot wire-ui" src="../assets/cbf92d4d4e998fdb.svg" alt="" draggable="false">
+              <img class="wire-shot wire-sketch" src="../assets/718bc769376c91a6.svg" alt="" draggable="false">
               <input class="wire-range" type="range" min="0" max="100" value="52" id="wire-range" aria-label="Вайрфрейм или готовый интерфейс">
               <span class="wire-handle" aria-hidden="true"></span>
               <span class="wire-tag wire-tag-l">Вайрфрейм</span><span class="wire-tag wire-tag-r">Интерфейс</span>
@@ -2300,6 +2314,8 @@ window.PRODUCT_PROJECTS = [
       rsStage.classList.remove('is-measuring');
     };
     measureStage();
+    // the tiles are pictures: measure again once each one knows its height
+    rsTiles.forEach(t => { if (t.tagName === 'IMG' && !t.complete) t.addEventListener('load', measureStage, { once: true }); });
     let rsW = innerWidth;
     addEventListener('resize', () => { if (innerWidth !== rsW) { rsW = innerWidth; measureStage(); } });
     document.fonts?.ready.then(measureStage);
@@ -2313,7 +2329,7 @@ window.PRODUCT_PROJECTS = [
       rsFrame.classList.toggle('is-mobile', mobile);
       const frameLast = rsFrame.getBoundingClientRect();
       const last = rsTiles.map(t => t.getBoundingClientRect());
-      rsLabel.textContent = mobile ? '2 колонки' : '3 колонки';
+      rsLabel.textContent = mobile ? '1 колонка' : '3 колонки';
       if (reduced) return;
       const timing = { duration: 650, easing: 'cubic-bezier(.22,1,.36,1)' };
       rsAnims.push(rsFrame.animate([{ width: frameFirst.width + 'px' }, { width: frameLast.width + 'px' }], timing));
@@ -2349,45 +2365,33 @@ window.PRODUCT_PROJECTS = [
   const wire = $('#wire-compare'), wireRange = $('#wire-range');
   if (wire) wireRange.addEventListener('input', () => wire.style.setProperty('--split', wireRange.value + '%'));
 
-  // Demo: motion
-  const motionList = $('#motion-list'), motionCount = $('#motion-count'), motionToggle = $('#motion-toggle');
-  let cartCount = 0;
+  // Demo: action result. A tapped event card flies into "My Tickets" and the counter bumps;
+  // with the animation off the counter just changes, so the two kinds of feedback can be compared.
+  const motionCount = $('#motion-count'), motionToggle = $('#motion-toggle'), motionTarget = $('#motion-target'), motionReset = $('#motion-reset');
+  const TICKETS = 3;
+  let tickets = TICKETS;
+  const bump = () => { motionCount.classList.remove('is-bump'); void motionCount.offsetWidth; motionCount.classList.add('is-bump'); };
+  const setTickets = n => { tickets = n; motionCount.textContent = n; motionReset.disabled = n === TICKETS; };
   $$('[data-add]').forEach(btn => btn.addEventListener('click', () => {
-    const swatch = btn.querySelector('i'), color = swatch.style.getPropertyValue('--c'), name = btn.querySelector('b').textContent;
-    const add = () => {
-      cartCount++; motionCount.textContent = cartCount;
-      const li = document.createElement('li');
-      li.innerHTML = `<i style="--c:${color}"></i>${esc(name)}`;
-      if (motionToggle.checked && !reduced) { li.className = 'is-new'; motionCount.classList.remove('is-bump'); void motionCount.offsetWidth; motionCount.classList.add('is-bump'); }
-      motionList.prepend(li);
-      while (motionList.children.length > 4) motionList.lastElementChild.remove();
-    };
-    if (!motionToggle.checked || reduced) { add(); return; }
-    const a = swatch.getBoundingClientRect(), b = motionCount.getBoundingClientRect();
-    const fly = document.createElement('span'); fly.className = 'motion-fly'; fly.style.background = color;
-    fly.style.left = a.left + 'px'; fly.style.top = a.top + 'px'; document.body.append(fly);
-    const dx = b.left + b.width / 2 - (a.left + a.width / 2), dy = b.top + b.height / 2 - (a.top + a.height / 2);
+    const animate = motionToggle.checked && !reduced;
+    if (!animate) { setTickets(tickets + 1); return; }
+    const a = btn.getBoundingClientRect(), b = motionTarget.getBoundingClientRect();
+    const fly = btn.querySelector('img').cloneNode(); fly.className = 'motion-fly';
+    Object.assign(fly.style, { left: a.left + 'px', top: a.top + 'px', width: a.width + 'px' });
+    document.body.append(fly);
+    // a short dip of the card itself says "taken", then the copy arcs over to the target
+    btn.animate([{ transform: 'scale(1)' }, { transform: 'scale(.94)' }, { transform: 'scale(1)' }], { duration: 260, easing: 'cubic-bezier(.3,0,.2,1)' });
+    const dx = b.left + b.width * .22 - a.left, dy = b.top + b.height / 2 - (a.top + a.height / 2);
     fly.animate([
-      { transform: 'translate(0,0) scale(1)', borderRadius: '12px' },
-      { transform: `translate(${dx * .5}px,${dy * .5 - 80}px) scale(.8) rotate(90deg)`, offset: .5 },
-      { transform: `translate(${dx}px,${dy}px) scale(.3) rotate(180deg)`, borderRadius: '50%' }
-    ], { duration: 700, easing: 'cubic-bezier(.5,0,.3,1)' }).finished.then(() => { fly.remove(); add(); });
+      { transform: 'translate(0, 0) scale(1)', opacity: 1 },
+      { transform: `translate(${dx * .5}px, ${dy * .5 - 70}px) scale(.62)`, opacity: 1, offset: .55 },
+      { transform: `translate(${dx}px, ${dy}px) scale(.18)`, opacity: .2 }
+    ], { duration: 680, easing: 'cubic-bezier(.5,0,.3,1)' }).finished.then(() => {
+      fly.remove(); setTickets(tickets + 1); bump();
+      motionTarget.animate([{ transform: 'scale(1)' }, { transform: 'scale(1.05)' }, { transform: 'scale(1)' }], { duration: 360, easing: 'cubic-bezier(.3,1.6,.5,1)' });
+    });
   }));
-
-  // Cart reset: items leave one by one, the counter settles back to zero.
-  const motionReset = $('#motion-reset');
-  const syncReset = () => { motionReset.disabled = cartCount === 0; };
-  new MutationObserver(syncReset).observe(motionList, { childList: true });
-  motionReset.addEventListener('click', async () => {
-    const items = [...motionList.children];
-    if (!items.length) return;
-    motionReset.disabled = true;
-    if (!reduced) await Promise.all(items.map((li, i) => li.animate([{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'translateX(18px) scale(.94)' }], { duration: 320, delay: i * 50, easing: 'cubic-bezier(.4,0,.2,1)', fill: 'forwards' }).finished));
-    motionList.replaceChildren();
-    cartCount = 0; motionCount.textContent = '0';
-    if (!reduced) { motionCount.classList.remove('is-bump'); void motionCount.offsetWidth; motionCount.classList.add('is-bump'); }
-    syncReset();
-  });
+  motionReset.addEventListener('click', () => { setTickets(TICKETS); if (motionToggle.checked && !reduced) bump(); });
 
   /* ---------- Directions ---------- */
   $$('.wg-columns i').forEach((c, i) => c.style.setProperty('--i', i));
