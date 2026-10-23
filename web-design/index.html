@@ -676,6 +676,10 @@ button { cursor: var(--cur-pointer); }
   .hero-title { grid-row: 3; }
   .hero-copy { grid-row: 4; }
   .hero-title { margin-top: 0; }
+  /* phones: the text sits right on the brightest part of the glow, so the glow fades to graphite under it
+     (the sphere above keeps its colour) and the lede is lighter */
+  .hero::after { height: 62%; background: linear-gradient(transparent, rgba(14, 14, 15, .82) 32%, rgba(14, 14, 15, .9) 70%, var(--ink)); }
+  .hero-lede { color: #d4d4d4; }
   .browser { width: min(100%, 440px); }
   .phone { width: min(150px, 38vw); padding: 34px 12px 12px; border-radius: 30px; }
   .app-title { font-size: 16px; margin: 8px 0 10px; }
