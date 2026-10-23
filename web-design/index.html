@@ -343,8 +343,9 @@ button { cursor: var(--cur-pointer); }
 .project-row:is(:focus-within:has(:focus-visible), .is-active) .project-wordmark { color: var(--ink); }
 .project-row.is-active .project-name, .project-row.is-active .project-caption { transform: translateX(12px); }
 .project-tags { display: flex; gap: 6px; }
-.project-tags span { font-size: 12px; padding: 4px 9px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); white-space: nowrap; transition: color .45s var(--ease-out), border-color .45s var(--ease-out); }
-.project-row.is-active .project-tags span { color: var(--paper); border-color: var(--line-strong); }
+.project-tags span { font-size: 12px; padding: 4px 9px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); white-space: nowrap; transition: color .45s var(--ease-out), border-color .45s var(--ease-out), background-color .45s var(--ease-out); }
+/* on the white hover fill the tags turn dark so they stay readable */
+.project-row.is-active .project-tags span { color: #000; background: rgba(0, 0, 0, .12); border-color: transparent; }
 /* Desktop: taller rows, larger logos and tags */
 @media (min-width: 901px) {
   .project-open { padding: clamp(26px, 2.9vw, 42px) 4px; }
