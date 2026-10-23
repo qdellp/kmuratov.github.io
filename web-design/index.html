@@ -310,11 +310,11 @@ button { cursor: var(--cur-pointer); }
 
 /* Gallery: the cards stand in a 3D row placed by product.js; drag sideways to move it */
 .project-gallery { position: relative; margin-inline: calc(var(--gutter) * -1); }
-/* the row sits on the bottom of the stage, so heading and the whole front card fit on one screen */
+/* the stage is sized from the card, not the window: the front card always starts --row-top below the heading */
 .projects .section-head { margin-bottom: 0; }
-.gallery-stage { --card-w: clamp(300px, 30vw, 460px); --card-h: calc(var(--card-w) * 1.023 + 60px); position: relative; height: clamp(560px, calc(100vh - 190px), 780px); overflow-x: clip; overflow-y: visible; contain: layout; perspective: 2000px; touch-action: pan-y; cursor: var(--cur-grab); user-select: none; -webkit-user-select: none; }
+.gallery-stage { --card-w: clamp(300px, min(30vw, (100vh - 380px) / 1.03), 460px); --card-h: calc(var(--card-w) * 1.023 + 60px); --row-top: 140px; --row-bottom: 28px; position: relative; height: calc(var(--row-top) + var(--card-h) + var(--row-bottom)); overflow-x: clip; overflow-y: visible; contain: layout; perspective: 2000px; touch-action: pan-y; cursor: var(--cur-grab); user-select: none; -webkit-user-select: none; }
 .gallery-stage.is-dragging, .gallery-stage.is-dragging .gallery-open { cursor: var(--cur-grabbing); }
-.gallery-track { list-style: none; margin: 0; padding: 0; position: absolute; left: 46%; top: calc(100% - 28px - var(--card-h) / 2); width: 0; height: 0; transform-style: preserve-3d; }
+.gallery-track { list-style: none; margin: 0; padding: 0; position: absolute; left: 46%; top: calc(var(--row-top) + var(--card-h) / 2); width: 0; height: 0; transform-style: preserve-3d; }
 .gallery-card { position: absolute; left: 0; top: 0; width: var(--card-w); will-change: transform, opacity; }
 .gallery-card img { -webkit-user-drag: none; }
 .gallery-open { display: block; width: 100%; padding: 0; border: 0; background: none; text-align: left; cursor: var(--cur-grab); }
@@ -334,9 +334,8 @@ button { cursor: var(--cur-pointer); }
 /* always three lines tall, so the counter and caption never shift when a caption is longer */
 .gallery-caption { margin: 0; min-height: calc(1.45em * 3); font-size: 16px; line-height: 1.45; color: var(--paper); display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
 @media (max-width: 900px) {
-  .gallery-stage { --card-w: min(74vw, 330px); height: clamp(540px, calc(100svh - 150px), 720px); }
-  /* phones: the caption sits under the front card */
-  .gallery-track { top: calc(100% - 120px - var(--card-h) / 2); }
+  /* phones: a lower row rises less; the caption sits under the front card */
+  .gallery-stage { --card-w: min(74vw, 330px); --row-top: 96px; --row-bottom: 124px; }
   .gallery-label { height: 36px; font-size: 36px; margin-bottom: 12px; }
   .gallery-caption { font-size: 14px; }
 }
