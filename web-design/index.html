@@ -394,6 +394,15 @@ button { cursor: var(--cur-pointer); }
 .sheet-nav svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 .project-sheet::backdrop { background: rgba(4, 4, 4, .7); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
 @keyframes sheet-in { from { opacity: 0; transform: translateY(40px) scale(.96); } }
+/* opened from a gallery card: the popup stays in place and fades in around the flying cover */
+.project-sheet.from-card[open] { animation: none; }
+.project-sheet.from-card[open] > :not(.sheet-fly) { animation: sheet-fade .5s var(--ease-out); }
+.project-sheet.from-card[open]::backdrop { animation: sheet-fade .5s var(--ease-out); }
+@keyframes sheet-fade { from { opacity: 0; } }
+.project-sheet.is-flying .sheet-cover { visibility: hidden; }
+.sheet-fly { position: fixed; inset: 0; z-index: 10; perspective: 2000px; pointer-events: none; }
+.sheet-fly-card { position: absolute; left: 0; top: 0; overflow: hidden; transform-origin: 0 0; background: var(--ink-3); box-shadow: 0 40px 90px rgba(0, 0, 0, .55); will-change: transform; }
+.sheet-fly-card .cover { width: 100%; height: 100%; }
 .sheet-cover { min-height: 420px; }
 .sheet-body { position: relative; padding: 40px 34px; display: flex; flex-direction: column; overflow: auto; }
 .sheet-close { position: absolute; z-index: 3; top: 16px; right: 16px; width: 40px; height: 40px; border-radius: 50%; border: 0; background: rgba(255, 255, 255, .08); color: var(--paper); font-size: 22px; line-height: 1; transition: background-color .3s var(--ease-out); }
@@ -426,6 +435,18 @@ button { cursor: var(--cur-pointer); }
 .problem-hint { margin-top: 26px; display: inline-flex; align-items: center; gap: 10px; font-size: 13px; color: var(--tone); }
 .problem-hint::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--tone); box-shadow: 0 0 0 0 var(--tone); animation: ping 2s ease-out infinite; }
 @keyframes ping { 70%, 100% { box-shadow: 0 0 0 10px transparent; } }
+/* Component swirl: a full-width card, the copy in the middle, interface pieces spiral out around it */
+.problem-swirl { grid-template-columns: minmax(0, 1fr); place-items: center; min-height: clamp(560px, 62vw, 760px); overflow: hidden; }
+.problem-swirl > .swirl { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+.swirl-card { position: absolute; left: 50%; top: 50%; width: calc(var(--w, 1) * clamp(170px, 19vw, 280px)); height: auto; border-radius: 16px; box-shadow: 0 24px 60px rgba(0, 0, 0, .5); will-change: transform, opacity, filter; user-select: none; }
+.problem-swirl > .swirl-copy { z-index: 2; }
+.swirl-copy { align-items: center; text-align: center; max-width: 460px; padding: 34px 30px; border-radius: 28px; background: radial-gradient(closest-side, rgba(14, 14, 15, .92), rgba(14, 14, 15, .7) 70%, transparent); }
+.swirl-copy p { margin-inline: auto; }
+@media (max-width: 900px) {
+  .problem-swirl { min-height: 600px; }
+  .swirl-card { width: calc(var(--w, 1) * 150px); }
+  .swirl-copy { padding: 24px 12px; }
+}
 .problem-demo { position: relative; align-self: center; border-radius: 20px; background: rgba(6, 6, 6, .55); border: 1px solid var(--line); padding: 22px; min-height: 340px; }
 
 /* Demo: agent */
@@ -896,6 +917,9 @@ button { cursor: var(--cur-pointer); }
 .orbit-cards-back .orbit-card { pointer-events: none; }
 .orbit-card img { display: block; width: 100%; height: auto; pointer-events: none; }
 .orbit-card:hover { border-color: rgba(140, 233, 229, .55); box-shadow: 0 18px 50px rgba(111, 92, 255, .38); }
+/* unnamed NDA screens: just pictures, nothing to open */
+.orbit-card.is-static { cursor: var(--cur-default); }
+.orbit-card.is-static:hover { border-color: rgba(255, 255, 255, .14); box-shadow: 0 18px 40px rgba(0, 0, 0, .45); }
 @media (max-width: 900px) { .hero-stage { position: relative; } .orbit { left: calc(-1 * var(--gutter)); right: calc(-1 * var(--gutter)); } }
 .hero-title { position: relative; z-index: 3; }
 
@@ -1072,6 +1096,16 @@ html::-webkit-scrollbar { display: none; }
               <div class="seg" role="group" aria-label="Устройство"><button type="button" aria-pressed="true" data-rs="desktop">Десктоп</button><button type="button" aria-pressed="false" data-rs="mobile">Мобильный</button></div>
               <span class="rs-label" id="rs-label">3 колонки</span>
             </div>
+          </div>
+        </article>
+
+        <article class="problem problem-swirl" style="--tone:#b3a9ff">
+          <div class="swirl" id="swirl" aria-hidden="true"></div>
+          <div class="problem-copy swirl-copy">
+            <h3>Собрать интерфейс из компонентов</h3>
+            <p>Проектирую экраны из повторяемых блоков: выбор параметров, статусы, карточки, графики. Каждый компонент работает в разных сценариях и не ломается в соседних экранах.</p>
+            <span class="problem-hint">Наведите, чтобы остановить</span>
+            <p class="problem-note">Фрагменты интерфейсов из коммерческих проектов, названия не раскрываются.</p>
           </div>
         </article>
 
@@ -1609,6 +1643,17 @@ window.PRODUCT_PROJECTS = [
       { src: '../assets/ae135a59817e3419.webp', project: 'QueryPal', w: 1.2 },
       { src: '../assets/9b3a4b3557ffb03d.webp', project: 'Моя Бронь', w: 1.25 }
     ];
+    // Screens from NDA work: shown without a name, caption or link to a project
+    const ndaWorks = [
+      { src: '../assets/0d4223205fa99587.webp', w: .62 },
+      { src: '../assets/4abd3c5f755dfca1.webp', w: 1 },
+      { src: '../assets/39674824f4d0a7bf.webp', w: .95 },
+      { src: '../assets/06253316c238106e.webp', w: .5 },
+      { src: '../assets/ca2a1af0cef05692.webp', w: .7 },
+      { src: '../assets/a80a849c5c1548ab.webp', w: .9 }
+    ];
+    // interleave, so the unnamed screens spread evenly around the sphere
+    ndaWorks.forEach((wk, i) => works.splice(Math.min(works.length, 1 + i * 2), 0, wk));
     const NS = 'http://www.w3.org/2000/svg';
     const backCards = $('#orbit-cards-back'), frontCards = $('#orbit-cards-front');
     const backLines = $('#orbit-threads-back'), frontLines = $('#orbit-threads-front');
@@ -1618,9 +1663,9 @@ window.PRODUCT_PROJECTS = [
     const items = works.map((wk, i) => {
       const y = (1 - (i + .5) * 2 / works.length) * .78, r = Math.sqrt(1 - y * y), a = i * Math.PI * (3 - Math.sqrt(5));
       const card = document.createElement('button');
-      card.type = 'button'; card.tabIndex = -1; card.className = 'orbit-card';
+      card.type = 'button'; card.tabIndex = -1; card.className = 'orbit-card' + (wk.project ? '' : ' is-static');
       card.innerHTML = `<img src="${wk.src}" alt="" draggable="false">`;
-      card.addEventListener('click', () => { const i = projects.findIndex(p => p.name === wk.project); if (i >= 0) openSheet(i, card); });
+      if (wk.project) card.addEventListener('click', () => { const i = projects.findIndex(p => p.name === wk.project); if (i >= 0) openSheet(i, card); });
       card.addEventListener('pointerenter', () => { hoverPause = true; });
       card.addEventListener('pointerleave', () => { hoverPause = false; });
       const line = document.createElementNS(NS, 'path'), dot = document.createElementNS(NS, 'circle');
@@ -1892,11 +1937,12 @@ window.PRODUCT_PROJECTS = [
     if (g.drag) g.vel = lerp(g.vel, v, .4);
     const w = rows[0].offsetWidth, h = rows[0].offsetHeight;
     // softer turn than the reference (32° instead of 50°), so the spacing opens up to match
-    const sx = w * 1.08, sy = -w * .2, sz = -w * .9, amp = w * 1.6;
+    const sx = w * 1.08, sy = -w * .2, sz = -w * .9, amp = w * 3;
     rows.forEach((row, i) => {
       const o = offsetOf(i), a = clamp((o + 1) / .7) * clamp((6.5 - o) / 1.5);
       alpha[i] = Math.abs(a - alpha[i]) < .01 ? a : lerp(alpha[i], a, .14);
-      const l = -amp * v * Math.sin(o * 1.1 - 1.2);
+      // the harder the throw, the further the cards ride up or down (capped so a card never leaves the stage)
+      const l = clamp(-amp * v * Math.sin(o * 1.1 - 1.2), -h * .45, h * .45);
       lift[i] = Math.abs(l - lift[i]) < .05 ? l : lerp(lift[i], l, .12);
       const tf = `translate3d(${(o * sx - w / 2).toFixed(1)}px, ${(o * sy - h / 2 + lift[i]).toFixed(1)}px, ${(o * sz).toFixed(1)}px) rotateY(-32deg)`;
       if (row.style.transform !== tf) row.style.transform = tf; // a row at rest is left alone
@@ -2026,9 +2072,37 @@ window.PRODUCT_PROJECTS = [
   function syncMore() { moreHint.classList.toggle('is-hidden', sheetCard.scrollTop > 8 || sheetCard.scrollHeight <= sheetCard.clientHeight + 8); }
   sheetCard.addEventListener('scroll', syncMore, { passive: true });
   moreHint.addEventListener('click', () => sheetCard.scrollBy({ top: sheetCard.clientHeight * .7, behavior: 'smooth' }));
+  // Opening from a gallery card: a copy of the cover starts exactly where the card stands in the 3D row
+  // (same perspective, same transform), straightens and grows into the popup's cover while the rest
+  // of the popup fades in. The copy lives inside the dialog, since an open dialog covers everything else.
+  function flyFromCard(plane) {
+    const li = plane.closest('.gallery-card'), stageEl = li.closest('.gallery-stage'), track = li.parentElement;
+    const cover = $('#sheet-cover'), to = cover.getBoundingClientRect();
+    if (!to.width || !to.height) return;
+    const tp = track.getBoundingClientRect(), sr = stageEl.getBoundingClientRect();
+    const w = li.offsetWidth, ox = w / 2, oy = li.offsetHeight / 2, top = plane.offsetTop, ph = plane.offsetHeight;
+    const layer = document.createElement('div'); layer.className = 'sheet-fly';
+    layer.style.perspectiveOrigin = `${sr.left + sr.width / 2}px ${sr.top + sr.height / 2}px`;
+    const fly = document.createElement('div'); fly.className = 'sheet-fly-card'; fly.innerHTML = plane.innerHTML;
+    Object.assign(fly.style, { width: w + 'px', height: ph + 'px' });
+    layer.append(fly); sheet.append(layer);
+    const wideCover = to.left < innerWidth / 2 && to.height > to.width * .8;
+    const from = `translate(${tp.left + ox}px, ${tp.top + oy}px) ${li.style.transform} translate(${-ox}px, ${top - oy}px)`;
+    const end = `translate(${to.left}px, ${to.top}px) scale(${to.width / w}, ${to.height / ph})`;
+    sheet.classList.add('is-flying'); plane.style.visibility = 'hidden';
+    const anim = fly.animate([
+      { transform: from, borderRadius: '14px' },
+      { transform: end, borderRadius: wideCover ? `${26 * w / to.width}px 0 0 ${26 * w / to.width}px` : `${26 * w / to.width}px ${26 * w / to.width}px 0 0` }
+    ], { duration: 720, easing: 'cubic-bezier(.22, 1, .36, 1)' });
+    const land = () => { sheet.classList.remove('is-flying'); layer.remove(); plane.style.visibility = ''; };
+    anim.finished.then(land, land);
+  }
   function openSheet(i, trigger) {
     sheetTrigger = trigger; fillSheet(i);
+    const plane = !reduced && trigger?.closest?.('.gallery-card')?.querySelector('.gallery-plane');
+    sheet.classList.toggle('from-card', !!plane);
     sheet.showModal(); fitCover(); raiseCursor();
+    if (plane && sheet.querySelector('#sheet-cover img, #sheet-cover .cover')) flyFromCard(plane);
     if (!swipeHinted && !reduced && matchMedia('(max-width: 900px)').matches) {
       swipeHinted = true;
       setTimeout(() => {
@@ -2096,6 +2170,59 @@ window.PRODUCT_PROJECTS = [
   const ptrack = $('#problems-track');
   const problemCards = $$('.problem', ptrack);
   function updateProblems() {}
+
+  // Component swirl: pieces of NDA interfaces leave the centre along an opening spiral, growing,
+  // speeding up and blurring on the way out, then fade past the edge and start again. Hover pauses it.
+  (() => {
+    const box = $('#swirl'); if (!box) return;
+    const parts = [
+      ['../assets/9ceee6088a3407b8.webp', 1], ['../assets/ca2a1af0cef05692.webp', .62], ['../assets/e333ad7f87299ac0.webp', 1],
+      ['../assets/9a0302474293c99f.webp', 1], ['../assets/3429935be2b153c7.webp', .7], ['../assets/d5e1988c54c6882e.webp', 1],
+      ['../assets/c228b10812dff3d3.webp', 1], ['../assets/80ef09fcc83e1013.webp', .72], ['../assets/594baf9582ed2452.webp', 1],
+      ['../assets/a7a7d87af815f142.webp', .66], ['../assets/c0d292ba847e6463.webp', .95], ['../assets/f35f43d9ddd44b1f.webp', 1],
+      ['../assets/82f1ff3f5a3c1a71.webp', 1], ['../assets/bbb9d9b217657b31.webp', .9], ['../assets/a80a849c5c1548ab.webp', .78],
+      ['../assets/ac986c26889ce457.webp', 1], ['../assets/5b9034addbb1fc6a.webp', 1], ['../assets/b891b3d4c548af8d.webp', .95]
+    ];
+    const cards = parts.map(([src, w], i) => {
+      const el = document.createElement('img');
+      el.className = 'swirl-card'; el.src = src; el.alt = ''; el.draggable = false; el.style.setProperty('--w', w);
+      // three arms, 120° apart; the cards of an arm are spread evenly along it
+      const arm = i % 3, per = Math.ceil(parts.length / 3);
+      box.append(el); return { el, arm, phase: (Math.floor(i / 3) + arm / 3) / per };
+    });
+    const article = box.closest('.problem');
+    const PERIOD = 24, TURNS = .85; // seconds for one card to travel the whole spiral; turns it makes
+    let t = 0, last = 0, speed = 1, hover = false, visible = false, raf = 0, W = 0, H = 0;
+    const size = () => { W = box.clientWidth; H = box.clientHeight; };
+    size(); addEventListener('resize', size);
+    article.addEventListener('pointerenter', e => { if (e.pointerType === 'mouse') hover = true; });
+    article.addEventListener('pointerleave', () => { hover = false; });
+    function draw() {
+      const R = Math.hypot(W, H) / 2, n = cards.length;
+      cards.forEach(c => {
+        const u = (c.phase + t / PERIOD) % 1;
+        // opening spiral: slow and tight near the centre, wide and fast near the edge
+        const ease = u * u * (1.4 - .4 * u), r = R * (.06 + 1.02 * ease), a = -Math.PI / 2 + c.arm * Math.PI * 2 / 3 + u * TURNS * Math.PI * 2;
+        const x = Math.cos(a) * r * 1.12, y = Math.sin(a) * r * .74;
+        const s = .28 + 1.05 * ease, fade = clamp(u / .14) * clamp((1 - u) / .12);
+        const blur = (1 - clamp(u / .3)) * 7 + clamp((u - .78) / .22) * 5;
+        c.el.style.transform = `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px) translate(-50%, -50%) rotate(${(Math.cos(a) * 12).toFixed(2)}deg) scale(${s.toFixed(3)})`;
+        c.el.style.opacity = (fade * (.35 + .65 * clamp(u / .4))).toFixed(3);
+        c.el.style.filter = blur > .2 ? `blur(${blur.toFixed(1)}px)` : '';
+        c.el.style.zIndex = String(Math.round(u * n));
+      });
+    }
+    function frame(now) {
+      raf = 0; if (!visible) return;
+      const dt = last ? Math.min(.05, (now - last) / 1000) : 0; last = now;
+      speed += ((hover ? 0 : 1) - speed) * (1 - Math.exp(-dt * 4));
+      t += dt * speed; draw();
+      raf = requestAnimationFrame(frame);
+    }
+    if (reduced) { t = PERIOD * .35; draw(); return; }
+    new IntersectionObserver(([e]) => { visible = e.isIntersecting; if (visible && !raf) { last = 0; size(); raf = requestAnimationFrame(frame); } }).observe(box);
+    draw();
+  })();
   const nearIO = new IntersectionObserver(entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('is-near'); }), { threshold: .35 });
   problemCards.forEach(c => nearIO.observe(c));
 
