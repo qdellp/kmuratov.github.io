@@ -572,6 +572,11 @@ button { cursor: var(--cur-pointer); }
 @keyframes bump { 40% { transform: scale(1.45); } }
 @keyframes item-in { from { opacity: 0; transform: translateY(-14px) scale(.85); } }
 /* Action result: real event cards and the quick menu of the same app, on its teal background */
+/* Motion prototype: the screen recording in a phone outline */
+.demo-video { display: grid; place-items: center; }
+.video-phone { height: clamp(440px, 40vw, 590px); aspect-ratio: 560 / 1216; border-radius: clamp(26px, 2.4vw, 38px); overflow: hidden; background: #dfe9e7; box-shadow: 0 0 0 6px #1d1d1e, 0 30px 80px rgba(0, 0, 0, .5); }
+.video-phone video { display: block; width: 100%; height: 100%; object-fit: cover; }
+@media (max-width: 900px) { .video-phone { height: min(560px, 120vw); } }
 /* Action result: a real menu screen in a phone; the menu bar is the bottom of the same picture */
 .demo-order { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; }
 .ord-phone { position: relative; height: clamp(440px, 40vw, 590px); aspect-ratio: 402 / 874; border-radius: clamp(26px, 2.4vw, 38px); overflow: hidden; background: #fff9f1; box-shadow: 0 0 0 6px #1d1d1e, 0 30px 80px rgba(0, 0, 0, .5); }
@@ -1160,6 +1165,22 @@ html::-webkit-scrollbar { display: none; }
             <div class="ev-bar">
               <label class="motion-switch"><input type="checkbox" id="motion-toggle" checked><span></span>С анимацией</label>
               <button type="button" class="motion-reset" id="motion-reset" disabled>Сбросить</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="problem" style="--tone:#4fb3ad">
+          <div class="problem-copy">
+            <h3>Показать сценарий в движении</h3>
+            <p>Собираю анимированные прототипы ключевых переходов: как пользователь находит место на карте, открывает карточку и попадает в подробности. Ролик отвечает на вопросы разработки о поведении экранов раньше, чем они появятся.</p>
+            <p class="problem-note">Анимация экранов из коммерческого проекта, название не раскрывается.</p>
+          </div>
+          <div class="problem-demo demo-video">
+            <div class="video-phone">
+              <video id="flow-video" muted loop playsinline autoplay preload="metadata" poster="../media/flow-venue.jpg" aria-label="Анимация перехода от карты к карточке места">
+                <source src="../media/flow-venue.webm" type="video/webm">
+                <source src="../media/flow-venue.mp4" type="video/mp4">
+              </video>
             </div>
           </div>
         </article>
@@ -2384,7 +2405,9 @@ window.PRODUCT_PROJECTS = [
     ['../assets/cbf92d4d4e998fdb.svg', '../assets/b181aebbeb3f15fe.svg'],
     ['../assets/ed8f20b695611a23.svg', '../assets/7fec87a89470ecce.svg'],
     ['../assets/64b3be2cc83f6e3a.svg', '../assets/f1f087b33fa81d03.svg'],
-    ['../assets/55ce541e0ec9101e.svg', '../assets/c58dfc96074eedcc.svg']
+    ['../assets/55ce541e0ec9101e.svg', '../assets/c58dfc96074eedcc.svg'],
+    ['../assets/0f4342b3d3ae3792.svg', '../assets/f51c80e1d1952f55.svg'],
+    ['../assets/e33995a2e890809b.svg', 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAyIiBoZWlnaHQ9Ijg3NCIgdmlld0JveD0iMCAwIDQwMiA4NzQiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHN0eWxlPi5ie2ZpbGw6bm9uZTtzdHJva2U6I2JkYmRiZDtzdHJva2Utb3BhY2l0eTouNTU7c3Ryb2tlLXdpZHRoOjEuMjtzdHJva2UtZGFzaGFycmF5OjQgM30udHtmaWxsOiNiZGJkYmQ7ZmlsbC1vcGFjaXR5Oi4yMn0uaXtmaWxsOm5vbmU7c3Ryb2tlOiNiZGJkYmQ7c3Ryb2tlLW9wYWNpdHk6LjQ1O3N0cm9rZS13aWR0aDoxLjE7c3Ryb2tlLWRhc2hhcnJheToyIDJ9LnB7ZmlsbDojYmRiZGJkO2ZpbGwtb3BhY2l0eTouMDY7c3Ryb2tlOiNiZGJkYmQ7c3Ryb2tlLW9wYWNpdHk6LjQ7c3Ryb2tlLXdpZHRoOjF9PC9zdHlsZT48ZGVmcz48cGF0dGVybiBpZD0iZyIgd2lkdGg9IjE2IiBoZWlnaHQ9IjE2IiBwYXR0ZXJuVW5pdHM9InVzZXJTcGFjZU9uVXNlIj48cGF0aCBkPSJNMTYgMEgwVjE2IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS1vcGFjaXR5PSIuMDUiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSI0MDIiIGhlaWdodD0iODc0IiBmaWxsPSIjMTQxNDE1Ii8+PHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjQwMiIgaGVpZ2h0PSI4NzQiIGZpbGw9InVybCgjZykiLz48cmVjdCB4PSI0NC42IiB5PSIyNi4xIiB3aWR0aD0iMzEuOCIgaGVpZ2h0PSI3LjgiIHJ4PSIzLjkiIGNsYXNzPSJ0Ii8+PGNpcmNsZSBjeD0iODkuNSIgY3k9IjMwLjAiIHI9IjYuMCIgY2xhc3M9ImkiLz48cmVjdCB4PSIxNDAuMCIgeT0iMTIuMCIgd2lkdGg9IjEyMi4wIiBoZWlnaHQ9IjM2LjAiIHJ4PSIxOC4wIiBjbGFzcz0iYiIvPjxjaXJjbGUgY3g9IjI0NC4wIiBjeT0iMzAuMCIgcj0iNi4wIiBjbGFzcz0iaSIvPjxjaXJjbGUgY3g9IjI0NC4wIiBjeT0iMzAuMCIgcj0iNC45IiBjbGFzcz0iaSIvPjxjaXJjbGUgY3g9IjMyNy41IiBjeT0iMzAuMyIgcj0iOS42IiBjbGFzcz0iaSIvPjxjaXJjbGUgY3g9IjM1OC44IiBjeT0iMzAuMCIgcj0iMTIuMyIgY2xhc3M9ImkiLz48Y2lyY2xlIGN4PSIzNTEuNCIgY3k9IjMwLjAiIHI9IjcuMCIgY2xhc3M9ImkiLz48cmVjdCB4PSIzNTMuMiIgeT0iMjcuNiIgd2lkdGg9IjEyLjYiIGhlaWdodD0iNS4wIiByeD0iMi41IiBjbGFzcz0idCIvPjxjaXJjbGUgY3g9IjMyLjAiIGN5PSI4OC4wIiByPSI5LjAiIGNsYXNzPSJpIi8+PGNpcmNsZSBjeD0iMzIuMCIgY3k9Ijg4LjAiIHI9IjkuMCIgY2xhc3M9ImkiLz48Y2lyY2xlIGN4PSIzNjkuOCIgY3k9Ijg3LjciIHI9IjEzLjAiIGNsYXNzPSJpIi8+PGNpcmNsZSBjeD0iMzIuNSIgY3k9IjczMy4wIiByPSIxNi41IiBjbGFzcz0iaSIvPjxnIGNsYXNzPSJwIj48cmVjdCB4PSIxNi4wIiB5PSI3MTYuNSIgd2lkdGg9IjMzLjAiIGhlaWdodD0iMzMuMCIgcng9IjEwIi8+PHBhdGggZD0iTTE2LjAgNzE2LjVMNDkuMCA3NDkuNU00OS4wIDcxNi41TDE2LjAgNzQ5LjUiLz48L2c+PHJlY3QgeD0iMTcxLjAiIHk9IjcwMy4wIiB3aWR0aD0iNjAuMCIgaGVpZ2h0PSI2MC4wIiByeD0iMzAuMCIgY2xhc3M9ImIiLz48Y2lyY2xlIGN4PSIzNzAuMCIgY3k9IjczMy4wIiByPSIxNC4zIiBjbGFzcz0iaSIvPjxyZWN0IHg9IjAuMCIgeT0iNzkwLjAiIHdpZHRoPSI1MS41IiBoZWlnaHQ9IjQyLjAiIHJ4PSIyMS4wIiBjbGFzcz0iYiIvPjxyZWN0IHg9IjAuMCIgeT0iODA3LjUiIHdpZHRoPSIyNi4zIiBoZWlnaHQ9IjYuNyIgcng9IjMuMyIgY2xhc3M9InQiLz48cmVjdCB4PSI2My41IiB5PSI3OTAuMCIgd2lkdGg9Ijg0LjAiIGhlaWdodD0iNDIuMCIgcng9IjIxLjAiIGNsYXNzPSJiIi8+PHJlY3QgeD0iODguNiIgeT0iODA3LjgiIHdpZHRoPSIzMy43IiBoZWlnaHQ9IjYuNCIgcng9IjMuMiIgY2xhc3M9InQiLz48cmVjdCB4PSIxNTkuNSIgeT0iNzkwLjAiIHdpZHRoPSI4Ny4wIiBoZWlnaHQ9IjQyLjAiIHJ4PSIyMS4wIiBjbGFzcz0iYiIvPjxyZWN0IHg9IjE4NC42IiB5PSI4MDcuOCIgd2lkdGg9IjM2LjUiIGhlaWdodD0iNi40IiByeD0iMy4yIiBjbGFzcz0idCIvPjxyZWN0IHg9IjI1OC41IiB5PSI3OTAuMCIgd2lkdGg9IjEwOC4wIiBoZWlnaHQ9IjQyLjAiIHJ4PSIyMS4wIiBjbGFzcz0iYiIvPjxyZWN0IHg9IjI4NC42IiB5PSI4MDguMCIgd2lkdGg9IjU2LjMiIGhlaWdodD0iOC40IiByeD0iNC4yIiBjbGFzcz0idCIvPjwvc3ZnPg==']
   ];
   const wireDots = $('#wire-dots');
   if (wire && wireDots) {
@@ -2440,6 +2463,13 @@ window.PRODUCT_PROJECTS = [
       ], { duration: 720, easing: 'cubic-bezier(.5,0,.3,1)' }).finished.then(() => { fly.remove(); setOrder(items + 1, true); });
     }));
     motionReset.addEventListener('click', () => setOrder(0, motionToggle.checked && !reduced));
+  }
+
+  // Motion prototype: the video plays only while it is on screen (and never with reduced motion)
+  const flowVideo = $('#flow-video');
+  if (flowVideo && reduced) { flowVideo.autoplay = false; flowVideo.pause(); }
+  if (flowVideo && !reduced) {
+    new IntersectionObserver(([e]) => { if (e.isIntersecting) flowVideo.play().catch(() => {}); else flowVideo.pause(); }, { threshold: .35 }).observe(flowVideo);
   }
 
   /* ---------- Directions ---------- */
