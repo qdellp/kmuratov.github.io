@@ -610,12 +610,15 @@ button { cursor: var(--cur-pointer); }
 .process { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr); gap: 32px; padding-top: 40px; border-top: 1px solid var(--line); }
 .process-title, .skills-title { margin: 0; font: 600 clamp(22px, 2vw, 30px)/1.1 var(--display); letter-spacing: -.04em; }
 .process-steps { list-style: none; margin: 0; padding: 0; }
-.process-steps li { border-bottom: 1px solid var(--line); }
+.process-steps li { border-bottom: 1px solid var(--line); opacity: .32; transition: opacity .45s var(--ease-out); }
+.process-steps li.is-active { opacity: 1; }
+.process-steps li:not(.is-active):hover { opacity: .6; }
+@media (min-width: 901px) { .process-title { position: sticky; top: 110px; align-self: start; } }
 .process-steps button { width: 100%; display: flex; align-items: center; gap: 22px; padding: 22px 0; border: 0; background: transparent; text-align: left; }
 .step-n { width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--line-strong); display: grid; place-items: center; font: 600 15px/1 var(--display); flex: none; transition: background-color .35s, color .35s, border-color .35s; }
 .process-steps b { font: 500 clamp(20px, 2.1vw, 32px)/1.1 var(--display); letter-spacing: -.04em; color: var(--muted); transition: color .35s; }
-.process-steps button[aria-expanded="true"] .step-n { background: var(--paper); color: var(--ink); border-color: var(--paper); }
-.process-steps button[aria-expanded="true"] b, .process-steps button:hover b { color: var(--paper); }
+.process-steps li.is-active .step-n { background: var(--paper); color: var(--ink); border-color: var(--paper); }
+.process-steps li.is-active b, .process-steps button:hover b { color: var(--paper); }
 .process-steps p { margin: 0; padding: 0 0 0 66px; max-width: 60ch; color: var(--muted); display: grid; grid-template-rows: 0fr; overflow: hidden; transition: grid-template-rows .55s var(--ease-out), padding .55s var(--ease-out), opacity .4s; opacity: 0; }
 .process-steps li.is-open p { grid-template-rows: 1fr; padding-bottom: 24px; opacity: 1; }
 .process-steps p > span { min-height: 0; }
@@ -1174,7 +1177,7 @@ html::-webkit-scrollbar { display: none; }
     <p class="approach-lede">Готовлю компоненты, адаптивы и состояния для разработки, описываю поведение элементов и проверяю реализацию. Подбираю методы под задачу: от отдельного лендинга до приложения с несколькими пользовательскими сценариями.</p>
 
     <div class="process">
-      <h3 class="process-title">Этапы</h3>
+      <h3 class="process-title">Рабочие этапы</h3>
       <ol class="process-steps">
         <li><button type="button" aria-expanded="true"><span class="step-n">1</span><b>Постановка задачи</b></button><p>Разбираюсь в задаче продукта, аудитории и действиях, которые пользователь должен совершить.</p></li>
         <li><button type="button" aria-expanded="false"><span class="step-n">2</span><b>Исследование</b></button><p>Изучаю продукты конкурентов: как они решают ту же задачу, где у пользователя возникают сложности и какие решения уже стали привычными. Провожу опросы и обсуждения с фокус-группами, чтобы понять ожидания и проблемы аудитории. Собираю выводы в требования к структуре и сценариям.</p></li>
@@ -2415,14 +2418,39 @@ void main(){
     mWords.forEach((w, i) => w.classList.toggle('is-lit', i < lit));
   }
 
-  $$('.process-steps li').forEach((li, i) => {
+  // Work stages light up as they cross the middle of the screen: the step whose title has passed
+  // the line is active, the rest dim. Steps up to the active one stay open and the ones below fold,
+  // so nothing above the reader ever changes height and the page only grows or shrinks downwards.
+  // A click on a step glides the page to it.
+  const stepItems = $$('.process-steps li'), stepButtons = stepItems.map(li => li.querySelector('button'));
+  const stepLine = () => innerHeight * .5;
+  let activeStep = -1, stepGlide = -1, stepGlideEnd = 0;
+  function setStep(i) {
+    activeStep = i;
+    stepItems.forEach((x, k) => { x.classList.toggle('is-open', k <= i); x.classList.toggle('is-active', k === i); stepButtons[k].setAttribute('aria-expanded', String(k <= i)); });
+  }
+  const pickStep = () => stepButtons.reduce((a, b, k) => b.getBoundingClientRect().top <= stepLine() ? k : a, 0);
+  const stopGlide = () => { stepGlide = -1; };
+  ['wheel', 'touchstart', 'keydown'].forEach(t => addEventListener(t, stopGlide, { passive: true }));
+  function updateSteps(now) {
+    // after a click the page glides until the step title sits just above the line,
+    // aiming at its live position every frame while the steps on the way open
+    if (stepGlide > -1) {
+      const d = stepButtons[stepGlide].getBoundingClientRect().top - stepLine() + 8;
+      if (Math.abs(d) < 1 || now > stepGlideEnd) stopGlide();
+      else scrollBy({ top: reduced ? d : d * .14 + Math.sign(d) * .5, behavior: 'instant' });
+    }
+    const i = pickStep();
+    if (i !== activeStep) setStep(i);
+  }
+  stepItems.forEach((li, i) => {
     const p = li.querySelector('p'); p.innerHTML = `<span>${p.innerHTML}</span>`;
-    const b = li.querySelector('button');
-    if (i === 0) li.classList.add('is-open');
-    b.addEventListener('click', () => {
-      $$('.process-steps li').forEach(x => { const open = x === li; x.classList.toggle('is-open', open); x.querySelector('button').setAttribute('aria-expanded', String(open)); });
+    stepButtons[i].addEventListener('click', () => {
+      if (i === activeStep) return;
+      stepGlide = i; stepGlideEnd = performance.now() + 2000;
     });
   });
+  setStep(0);
 
   /* ---------- Contact orb ---------- */
   createOrb($('#contact-orb'), () => ['#6f5cff', '#8ce9e5', '#ff9bd2', '#3b5bff'], { count: 4, radius: .3, alpha: .42, anchors: [[.8, .45], [.65, .8], [.95, .2], [.4, .9]] });
@@ -2487,6 +2515,7 @@ void main(){
     }
     updateProblems();
     updateManifesto();
+    updateSteps(performance.now());
     requestAnimationFrame(frame);
   }
   requestAnimationFrame(frame);
