@@ -1647,13 +1647,14 @@ window.PRODUCT_PROJECTS = [
       { src: '../assets/9b3a4b3557ffb03d.webp', project: 'Моя Бронь', w: 1.25 }
     ];
     // Screens from NDA work: shown without a name, caption or link to a project
+    const orbtBg = 'linear-gradient(160deg, #0a1a44, #123d9e)';
     const ndaWorks = [
-      { src: '../assets/0d4223205fa99587.webp', w: .62 },
-      { src: '../assets/4abd3c5f755dfca1.webp', w: 1 },
-      { src: '../assets/39674824f4d0a7bf.webp', w: .95 },
-      { src: '../assets/06253316c238106e.webp', w: .5 },
-      { src: '../assets/dbe3fc73b4489890.svg', w: .7 },
-      { src: '../assets/5fa8dd70b1b4157d.svg', w: .9 }
+      { src: '../assets/2bc5cca5856ad2a0.svg', w: .62 },
+      { src: '../assets/7485a745b12fcbdc.svg', w: 1 },
+      { src: '../assets/7103ec0785b5db97.svg', w: .95, bg: orbtBg },
+      { src: '../assets/27a67b678d7f2c8c.svg', w: .55 },
+      { src: '../assets/dbe3fc73b4489890.svg', w: .7, bg: orbtBg },
+      { src: '../assets/5fa8dd70b1b4157d.svg', w: .9, bg: orbtBg }
     ];
     // interleave, so the unnamed screens spread evenly around the sphere
     ndaWorks.forEach((wk, i) => works.splice(Math.min(works.length, 1 + i * 2), 0, wk));
@@ -1668,6 +1669,7 @@ window.PRODUCT_PROJECTS = [
       const card = document.createElement('button');
       card.type = 'button'; card.tabIndex = -1; card.className = 'orbit-card' + (wk.project ? '' : ' is-static');
       card.innerHTML = `<img src="${wk.src}" alt="" draggable="false">`;
+      if (wk.bg) card.style.background = wk.bg; // glass cards keep the colour of the screen they sat on
       if (wk.project) card.addEventListener('click', () => { const i = projects.findIndex(p => p.name === wk.project); if (i >= 0) openSheet(i, card); });
       card.addEventListener('pointerenter', () => { hoverPause = true; });
       card.addEventListener('pointerleave', () => { hoverPause = false; });
