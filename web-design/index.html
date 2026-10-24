@@ -796,36 +796,36 @@ button { cursor: var(--cur-pointer); }
 
 /* ---------- Responsive demo: one layout, desktop and mobile ---------- */
 .demo-responsive { display: flex; flex-direction: column; gap: 14px; justify-content: center; }
-.rs-stage { display: flex; justify-content: center; height: var(--rs-h, auto); }
-.rs-frame { position: relative; width: 100%; height: 100%; padding: 16px; border-radius: 16px; background: #f6f6f6; color: #151515; overflow: hidden; transition: border-radius .65s cubic-bezier(.22, 1, .36, 1), padding .65s cubic-bezier(.22, 1, .36, 1); }
-.rs-stage.is-measuring .rs-frame { height: auto; transition: none; }
-.rs-frame { box-shadow: 0 0 0 0 #1d1d1d; transition: border-radius .65s cubic-bezier(.22, 1, .36, 1), padding .65s cubic-bezier(.22, 1, .36, 1), box-shadow .65s cubic-bezier(.22, 1, .36, 1); }
-.rs-frame.is-mobile { width: var(--rs-phone-w, 210px); border-radius: 38px; padding: 40px 10px 14px; box-shadow: 0 0 0 6px #1d1d1d, 0 0 0 7px #3b3b3b; }
-.rs-frame::before, .rs-frame::after { content: ''; position: absolute; left: 50%; z-index: 2; border-radius: 99px; background: #0b0b0b; opacity: 0; transform: translateX(-50%) scale(.6); transition: opacity .4s var(--ease-out), transform .65s cubic-bezier(.22, 1, .36, 1); pointer-events: none; }
-.rs-frame::before { top: 10px; width: 30%; height: 20px; }
-.rs-frame::after { bottom: 7px; width: 36%; height: 4px; background: #151515; }
-.rs-frame.is-mobile::before, .rs-frame.is-mobile::after { opacity: 1; transform: translateX(-50%) scale(1); transition-delay: .25s, 0s; }
-.rs-top { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
-.rs-top b { font: 700 17px/1 var(--display); letter-spacing: -.02em; }
-.rs-search { flex: 1; min-width: 0; font-size: 11px; color: #8b8b8b; padding: 7px 10px; border-radius: 99px; background: #fff; border: 1px solid #e5e5e5; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.rs-top i { width: 26px; height: 26px; flex: none; border-radius: 50%; background: var(--grain-soft) 0 0 / 180px, linear-gradient(135deg, #ffd36e, #ff5b3a); background-blend-mode: overlay, normal; }
-.rs-chips { display: flex; gap: 6px; margin-bottom: 12px; overflow: hidden; }
-.rs-chips em { font-style: normal; font-size: 11px; padding: 5px 10px; border-radius: 99px; background: #eaeaea; white-space: nowrap; }
-.rs-chips em.on { background: #151515; color: #fff; }
-.rs-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
-.rs-frame.is-mobile .rs-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
-.rs-tile { display: grid; gap: 2px; padding: 6px; border-radius: 12px; background: #fff; box-shadow: 0 4px 14px rgba(30, 20, 90, .06); transform-origin: 0 0; }
-.rs-tile i { display: block; aspect-ratio: 4 / 3; border-radius: 8px; background: var(--grain-soft) 0 0 / 180px, radial-gradient(circle at 30% 35%, var(--c1), transparent 55%), linear-gradient(135deg, var(--c1), var(--c2)); background-blend-mode: overlay, normal, normal, normal; margin-bottom: 4px; }
-.rs-tile b { font: 700 12px/1.1 var(--display); letter-spacing: -.015em; }
-.rs-tile span { font-size: 10px; color: #6b6787; }
-/* real components: the frame takes the product's navy, tiles are the exported pieces themselves */
-.rs-frame:has(.rs-grid.is-real) { background: linear-gradient(160deg, #0a1a44, #123d9e); }
-.rs-grid.is-real { gap: 12px; align-items: start; }
-.rs-grid.is-real .rs-tile { display: block; width: 100%; height: auto; padding: 0; border-radius: 0; background: none; box-shadow: none; user-select: none; -webkit-user-drag: none; }
-.rs-grid.is-real .rs-wide { grid-column: span 2; }
-.rs-frame.is-mobile .rs-grid.is-real { grid-template-columns: minmax(0, 1fr); gap: 8px; }
-.rs-frame.is-mobile .rs-grid.is-real .rs-wide { grid-column: auto; }
-.rs-url-blank { display: block; width: 46%; height: 6px; border-radius: 3px; background: #dcdcdc; }
+/* One dashboard, two real layouts. Blocks sit in design pixels of either screen; the page scales to fit,
+   so switching moves the blocks, resizes the screen and swaps each block's picture in one transition. */
+.ad-stage { display: flex; justify-content: center; align-items: center; min-width: 0; }
+.ad-screen { max-width: 100%; }
+.ad-screen { --ad-t: .8s cubic-bezier(.65, 0, .35, 1); position: relative; display: flex; flex-direction: column; overflow: hidden; border-radius: 12px; background: #01051c; box-shadow: 0 30px 80px rgba(0, 0, 0, .45), 0 0 0 1px rgba(255, 255, 255, .07); transition: width var(--ad-t), height var(--ad-t), border-radius var(--ad-t); }
+.ad-screen.is-mobile { border-radius: 30px; }
+.ad-bar { position: relative; flex: none; height: 26px; background: #151a2b; transition: background-color var(--ad-t); }
+.ad-screen.is-mobile .ad-bar { background: #01051c; }
+.ad-browser, .ad-status { position: absolute; inset: 0; display: flex; align-items: center; transition: opacity .35s var(--ease-out); }
+.ad-browser { gap: 5px; padding: 0 10px; }
+.ad-browser i { width: 7px; height: 7px; border-radius: 50%; background: #ff5f57; }
+.ad-browser i:nth-child(2) { background: #febc2e; }
+.ad-browser i:nth-child(3) { background: #28c840; }
+.ad-browser b { position: absolute; left: 50%; width: 38%; height: 13px; border-radius: 5px; background: rgba(255, 255, 255, .08); transform: translateX(-50%); }
+.ad-status { justify-content: space-between; padding: 2px 20px 0; opacity: 0; color: #fff; }
+.ad-status em { font: 600 9px/1 var(--display); font-style: normal; letter-spacing: .02em; }
+.ad-status em + em { font-size: 5px; letter-spacing: .1em; }
+.ad-status::before { content: ''; position: absolute; left: 50%; top: 6px; width: 42px; height: 13px; border-radius: 99px; background: #000; transform: translateX(-50%); }
+.ad-screen.is-mobile .ad-browser { opacity: 0; }
+.ad-screen.is-mobile .ad-status { opacity: 1; transition-delay: .35s; }
+.ad-view { position: relative; flex: 1; overflow: hidden; }
+.ad-page { position: absolute; left: 0; top: 0; height: 2700px; transform-origin: 0 0; transition: transform var(--ad-t), width var(--ad-t); }
+.ad-bg, .ad-block { position: absolute; transition: left var(--ad-t), top var(--ad-t), width var(--ad-t), height var(--ad-t); }
+.ad-bg { max-width: none; }
+.ad-block { overflow: hidden; border-radius: 8px; }
+.ad-block img { position: absolute; left: 0; top: 0; display: block; max-width: none; height: auto; user-select: none; -webkit-user-drag: none; transition: opacity .5s var(--ease-out) .15s; }
+.ad-m, .ad-screen.is-mobile .ad-d { opacity: 0; }
+.ad-screen.is-mobile .ad-m { opacity: 1; }
+.ad-screen.is-instant, .ad-screen.is-instant * { transition: none !important; }
+@media (prefers-reduced-motion: reduce) { .ad-screen, .ad-screen * { transition: none !important; } }
 .rs-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
 .seg { display: inline-flex; padding: 3px; border-radius: 99px; border: 1px solid var(--line); }
 .seg button { border: 0; background: transparent; padding: 7px 14px; border-radius: 99px; font-size: 13px; color: var(--muted); transition: background-color .3s var(--ease-out), color .3s var(--ease-out); }
@@ -935,17 +935,6 @@ button { cursor: var(--cur-pointer); }
 
 
 /* Responsive demo: Safari-style window bar on desktop, folds away on the phone */
-.rs-chrome { display: flex; align-items: center; gap: 12px; height: 38px; margin: -16px -16px 14px; padding: 0 14px; background: #e9e9e9; border-bottom: 1px solid #dcdcdc; overflow: hidden; opacity: 1; transition: height .65s cubic-bezier(.22, 1, .36, 1), margin .65s cubic-bezier(.22, 1, .36, 1), opacity .3s var(--ease-out); }
-.rs-lights { display: flex; gap: 6px; flex: none; }
-.rs-lights i { width: 10px; height: 10px; border-radius: 50%; background: #ff5f57; box-shadow: inset 0 0 0 .5px rgba(0, 0, 0, .12); }
-.rs-lights i:nth-child(2) { background: #febc2e; }
-.rs-lights i:nth-child(3) { background: #28c840; }
-.rs-nav { flex: none; font-size: 15px; line-height: 1; color: #a3a3a3; letter-spacing: .2em; }
-.rs-nav-end { letter-spacing: 0; font-size: 12px; }
-.rs-url { flex: 1; min-width: 0; max-width: 260px; margin: 0 auto; display: flex; align-items: center; justify-content: center; gap: 6px; height: 24px; border-radius: 7px; background: #fff; color: #5b5b5b; font-size: 11px; white-space: nowrap; overflow: hidden; }
-.rs-url svg { flex: none; color: #8b8b8b; }
-.rs-frame.is-mobile .rs-chrome { height: 0; margin: 0; opacity: 0; border-bottom-width: 0; }
-@media (max-width: 600px) { .rs-chrome { gap: 8px; padding: 0 10px; height: 32px; } .rs-nav { display: none; } .rs-lights i { width: 8px; height: 8px; } }
 @media (max-width: 600px) { .wui-kpis b { font-size: 16px; white-space: nowrap; } }
 
 /* ---------- Film grain ---------- */
@@ -1132,18 +1121,18 @@ html::-webkit-scrollbar { display: none; }
             <h3>Адаптировать сценарий под экран</h3>
             <p>Сохраняю логику продукта при переходе между устройствами. Адаптирую навигацию, плотность информации и поведение компонентов под доступное пространство.</p>
             <span class="problem-hint">Переключите устройство</span>
-            <p class="problem-note">Компоненты из коммерческого проекта, название не раскрывается. На десктопе показатели идут в три колонки, на телефоне в одну, порядок и смысл блоков сохраняются.</p>
+            <p class="problem-note">Компоненты из коммерческого проекта, название не раскрывается. На десктопе показатели стоят в ряд, а графики рядом друг с другом. На телефоне показатели собираются в сетку 2 × 2, блоки встают в колонку, порядок и смысл сохраняются.</p>
           </div>
           <div class="problem-demo demo-responsive" data-demo="responsive">
-            <div class="rs-stage" id="rs-stage">
-              <div class="rs-frame" id="rs-frame">
-                <div class="rs-chrome" aria-hidden="true"><span class="rs-lights"><i></i><i></i><i></i></span><span class="rs-nav">‹ ›</span><span class="rs-url"><svg viewBox="0 0 10 12" width="8" height="10"><path d="M2 5V3.5a3 3 0 0 1 6 0V5" fill="none" stroke="currentColor" stroke-width="1.4"/><rect x="1" y="5" width="8" height="6.5" rx="1.5" fill="currentColor"/></svg><i class="rs-url-blank"></i></span><span class="rs-nav rs-nav-end">⟳</span></div>
-                <div class="rs-grid is-real" id="rs-grid"><img class="rs-tile" src="../assets/e90ca495b0642deb.svg" alt=""><img class="rs-tile" src="../assets/ef55c9a90693866d.svg" alt=""><img class="rs-tile" src="../assets/8062aff9e0beabd4.svg" alt=""><img class="rs-tile rs-wide" src="../assets/6f95931b758ebbbc.svg" alt=""><img class="rs-tile" src="../assets/5fa8dd70b1b4157d.svg" alt=""></div>
+            <div class="ad-stage" id="ad-stage">
+              <div class="ad-screen is-instant" id="ad-screen">
+                <div class="ad-bar" aria-hidden="true"><span class="ad-browser"><i></i><i></i><i></i><b></b></span><span class="ad-status"><em>9:41</em><em>●●●</em></span></div>
+                <div class="ad-view"><div class="ad-page" id="ad-page"><img class="ad-bg" src="../assets/a25068908b63b13a.webp" alt=""><div class="ad-block" data-b="i1"><img class="ad-d" src="../assets/ae73eb39d9a6b87e.webp" width="333" height="124" alt=""><img class="ad-m" src="../assets/ef1c6152ac9da42a.webp" width="167.5" height="130" alt=""></div><div class="ad-block" data-b="i2"><img class="ad-d" src="../assets/061e399290768a10.webp" width="333" height="124" alt=""><img class="ad-m" src="../assets/59894b14631b3824.webp" width="167.5" height="130" alt=""></div><div class="ad-block" data-b="i3"><img class="ad-d" src="../assets/175243fc4409edbf.webp" width="333" height="124" alt=""><img class="ad-m" src="../assets/8f5c9376c99ee238.webp" width="167.5" height="130" alt=""></div><div class="ad-block" data-b="i4"><img class="ad-d" src="../assets/44baafa3d5a89835.webp" width="333" height="124" alt=""><img class="ad-m" src="../assets/944b84d7668d160c.webp" width="167.5" height="130" alt=""></div><div class="ad-block" data-b="assets"><img class="ad-d" src="../assets/6fe963cb25afb792.webp" width="1356" height="358" alt=""><img class="ad-m" src="../assets/a83c2c43a37766b1.webp" width="343" height="348" alt=""></div><div class="ad-block" data-b="wallet"><img class="ad-d" src="../assets/92d33663ccde0c5a.webp" width="666" height="439" alt=""><img class="ad-m" src="../assets/43a0da842d65f789.webp" width="343" height="429" alt=""></div><div class="ad-block" data-b="health"><img class="ad-d" src="../assets/449f2c9e5f1fa205.webp" width="666" height="439" alt=""><img class="ad-m" src="../assets/14552fd237efc259.webp" width="343" height="298" alt=""></div><div class="ad-block" data-b="activity"><img class="ad-d" src="../assets/1708df48504dc606.webp" width="1356" height="520" alt=""><img class="ad-m" src="../assets/10e278dc9de3b4dc.webp" width="343" height="588" alt=""></div></div></div>
               </div>
             </div>
             <div class="rs-bar">
               <div class="seg" role="group" aria-label="Устройство"><button type="button" aria-pressed="true" data-rs="desktop">Десктоп</button><button type="button" aria-pressed="false" data-rs="mobile">Мобильный</button></div>
-              <span class="rs-label" id="rs-label">3 колонки</span>
+              <span class="rs-label" id="rs-label">Показатели в один ряд</span>
             </div>
           </div>
         </article>
@@ -2335,55 +2324,49 @@ window.PRODUCT_PROJECTS = [
     $('.ab-screen', ab).classList.toggle('is-after', b.dataset.ab === 'after');
   }));
 
-  // Demo: one layout on desktop and mobile. The frame resizes and the grid drops a column;
-  // every tile glides from its old place to the new one (FLIP), so nothing jumps.
-  const rsFrame = $('#rs-frame'), rsLabel = $('#rs-label');
-  if (rsFrame) {
-    const rsTiles = $$('.rs-tile', rsFrame);
-    let rsAnims = [];
-    // The stage keeps one fixed height for both devices (the desktop layout, at least a phone-friendly minimum),
-    // so switching only changes the frame width inside it and the card never jumps.
-    const rsStage = $('#rs-stage');
-    const measureStage = () => {
-      rsAnims.forEach(a => a.cancel()); rsAnims = [];
-      const wasMobile = rsFrame.classList.contains('is-mobile');
-      rsStage.classList.add('is-measuring');
-      rsFrame.classList.remove('is-mobile'); const hDesk = rsFrame.offsetHeight;
-      rsFrame.classList.toggle('is-mobile', wasMobile);
-      // Phone keeps real smartphone proportions (iPhone 17: 1206 x 2622 px, about 9 : 19.5)
-      const h = Math.ceil(Math.max(hDesk, Math.min(440, rsStage.clientWidth * 1.6)));
-      const phoneW = Math.min(Math.round(h * 1206 / 2622), rsStage.clientWidth);
-      rsStage.style.setProperty('--rs-h', h + 'px');
-      rsStage.style.setProperty('--rs-phone-w', phoneW + 'px');
-      rsStage.classList.remove('is-measuring');
+  // Demo: one dashboard on desktop and mobile, cut from the real screens of both versions.
+  // Each block knows its rect in design pixels for either device; the page is scaled to the screen,
+  // and CSS transitions carry the blocks, the screen size and the picture swap together.
+  const adScreen = $('#ad-screen'), rsLabel = $('#rs-label');
+  if (adScreen) {
+    const adStage = $('#ad-stage'), adPage = $('#ad-page'), adBg = $('.ad-bg', adPage), adBlocks = $$('.ad-block', adPage);
+    const LAYOUT = {
+      desktop: { w: 1440, x: 32, y: 30.5, bg: [0, -94, 1440, 2015], label: 'Показатели в один ряд',
+        blocks: { i1: [0, 0, 333, 124], i2: [341, 0, 333, 124], i3: [682, 0, 333, 124], i4: [1023, 0, 333, 124],
+          assets: [0, 148, 1356, 358], wallet: [0, 530, 666, 439], health: [690, 530, 666, 439], activity: [0, 993, 1356, 520] } },
+      mobile: { w: 375, x: 16, y: 21, bg: [0, -69, 444, 2748], label: 'Сетка 2 × 2 и одна колонка',
+        blocks: { i1: [0, 0, 167.5, 130], i2: [175.5, 0, 167.5, 130], i3: [0, 138, 167.5, 130], i4: [175.5, 138, 167.5, 130],
+          assets: [0, 292, 343, 348], wallet: [0, 664, 343, 429], health: [0, 1117, 343, 298], activity: [0, 1439, 343, 588] } }
     };
-    measureStage();
-    // the tiles are pictures: measure again once each one knows its height
-    rsTiles.forEach(t => { if (t.tagName === 'IMG' && !t.complete) t.addEventListener('load', measureStage, { once: true }); });
-    let rsW = innerWidth;
-    addEventListener('resize', () => { if (innerWidth !== rsW) { rsW = innerWidth; measureStage(); } });
-    document.fonts?.ready.then(measureStage);
-    const setDevice = device => {
-      const mobile = device === 'mobile';
-      if (rsFrame.classList.contains('is-mobile') === mobile) return;
-      $$('[data-rs]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.rs === device)));
-      rsAnims.forEach(a => a.cancel()); rsAnims = [];
-      const frameFirst = rsFrame.getBoundingClientRect();
-      const first = rsTiles.map(t => t.getBoundingClientRect());
-      rsFrame.classList.toggle('is-mobile', mobile);
-      const frameLast = rsFrame.getBoundingClientRect();
-      const last = rsTiles.map(t => t.getBoundingClientRect());
-      rsLabel.textContent = mobile ? '1 колонка' : '3 колонки';
-      if (reduced) return;
-      const timing = { duration: 650, easing: 'cubic-bezier(.22,1,.36,1)' };
-      rsAnims.push(rsFrame.animate([{ width: frameFirst.width + 'px' }, { width: frameLast.width + 'px' }], timing));
-      rsTiles.forEach((t, i) => {
-        const f = first[i], l = last[i];
-        const dx = (f.left - frameFirst.left) - (l.left - frameLast.left), dy = (f.top - frameFirst.top) - (l.top - frameLast.top);
-        rsAnims.push(t.animate([{ transform: `translate(${dx}px, ${dy}px) scale(${f.width / l.width}, ${f.height / l.height})` }, { transform: 'none' }], { ...timing, delay: i * 18, fill: 'backwards' }));
-      });
+    const BAR = 26, px = v => v + 'px';
+    const place = (el, [x, y, w, h]) => Object.assign(el.style, { left: px(x), top: px(y), width: px(w), height: px(h) });
+    let device = 'desktop';
+    const layout = () => {
+      const L = LAYOUT[device], mobile = device === 'mobile';
+      // the desktop window shows a real 1440 px page; the phone keeps the same height at about 9 : 19.5
+      const sw = adStage.clientWidth, k = sw / 1440;
+      const h = Math.round(Math.min(Math.max(BAR + 1100 * k, 340), BAR + 1580 * k));
+      const w = mobile ? Math.round(h * .462) : sw;
+      adStage.style.height = px(h);
+      Object.assign(adScreen.style, { width: px(w), height: px(h) });
+      adPage.style.width = px(L.w);
+      adPage.style.transform = `scale(${w / L.w})`;
+      place(adBg, L.bg);
+      adBlocks.forEach(b => { const [x, y, bw, bh] = L.blocks[b.dataset.b]; place(b, [L.x + x, L.y + y, bw, bh]); });
+      adScreen.classList.toggle('is-mobile', mobile);
+      rsLabel.textContent = L.label;
     };
-    $$('[data-rs]').forEach(b => b.addEventListener('click', () => setDevice(b.dataset.rs)));
+    const instant = () => { adScreen.classList.add('is-instant'); layout(); adScreen.offsetWidth; adScreen.classList.remove('is-instant'); };
+    instant();
+    // follow the card's width (window resizes, font swaps), not just the window
+    let adW = adStage.clientWidth;
+    new ResizeObserver(() => { if (adStage.clientWidth !== adW) { adW = adStage.clientWidth; instant(); } }).observe(adStage);
+    $$('[data-rs]').forEach(b => b.addEventListener('click', () => {
+      if (device === b.dataset.rs) return;
+      device = b.dataset.rs;
+      $$('[data-rs]').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+      layout();
+    }));
   }
 
   // Demo: CJM. Each stage sits exactly on the curve: y is read from the path itself.
