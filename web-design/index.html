@@ -799,34 +799,34 @@ button { cursor: var(--cur-pointer); }
 .demo-responsive { display: flex; flex-direction: column; gap: 14px; justify-content: center; }
 /* One dashboard, two real layouts. Blocks sit in design pixels of either screen; the page scales to fit,
    so switching moves the blocks, resizes the screen and swaps each block's picture in one transition. */
-.ad-stage { display: flex; justify-content: center; align-items: center; min-width: 0; }
-.ad-screen { max-width: 100%; }
-.ad-screen { --ad-t: .8s cubic-bezier(.65, 0, .35, 1); position: relative; display: flex; flex-direction: column; overflow: hidden; border-radius: 12px; background: #01051c; box-shadow: 0 30px 80px rgba(0, 0, 0, .45), 0 0 0 1px rgba(255, 255, 255, .07); transition: width var(--ad-t), height var(--ad-t), border-radius var(--ad-t); }
-.ad-screen.is-mobile { border-radius: 30px; }
-.ad-bar { position: relative; flex: none; height: 26px; background: #151a2b; transition: background-color var(--ad-t); }
-.ad-screen.is-mobile .ad-bar { background: #01051c; }
-.ad-browser, .ad-status { position: absolute; inset: 0; display: flex; align-items: center; transition: opacity .35s var(--ease-out); }
-.ad-browser { gap: 5px; padding: 0 10px; }
-.ad-browser i { width: 7px; height: 7px; border-radius: 50%; background: #ff5f57; }
-.ad-browser i:nth-child(2) { background: #febc2e; }
-.ad-browser i:nth-child(3) { background: #28c840; }
-.ad-browser b { position: absolute; left: 50%; width: 38%; height: 13px; border-radius: 5px; background: rgba(255, 255, 255, .08); transform: translateX(-50%); }
-.ad-status { justify-content: space-between; padding: 2px 20px 0; opacity: 0; color: #fff; }
-.ad-status em { font: 600 9px/1 var(--display); font-style: normal; letter-spacing: .02em; }
-.ad-status em + em { font-size: 5px; letter-spacing: .1em; }
-.ad-status::before { content: ''; position: absolute; left: 50%; top: 6px; width: 42px; height: 13px; border-radius: 99px; background: #000; transform: translateX(-50%); }
-.ad-screen.is-mobile .ad-browser { opacity: 0; }
-.ad-screen.is-mobile .ad-status { opacity: 1; transition-delay: .35s; }
-.ad-view { position: relative; flex: 1; overflow: hidden; }
-.ad-page { position: absolute; inset: 0; }
-.ad-bg, .ad-block { position: absolute; transition: left var(--ad-t), top var(--ad-t), width var(--ad-t), height var(--ad-t); }
-.ad-bg { max-width: none; }
-.ad-block { overflow: hidden; border-radius: 4px; }
-.ad-block img { position: absolute; left: 0; top: 0; display: block; max-width: none; height: auto; user-select: none; -webkit-user-drag: none; transition: opacity .5s var(--ease-out) .15s; }
-.ad-m, .ad-screen.is-mobile .ad-d { opacity: 0; }
-.ad-screen.is-mobile .ad-m { opacity: 1; }
-.ad-screen.is-instant, .ad-screen.is-instant * { transition: none !important; }
-@media (prefers-reduced-motion: reduce) { .ad-screen, .ad-screen * { transition: none !important; } }
+.fit-stage { display: flex; justify-content: center; align-items: center; min-width: 0; }
+.fit-screen { max-width: 100%; }
+.fit-screen { --fit-t: .8s cubic-bezier(.65, 0, .35, 1); position: relative; display: flex; flex-direction: column; overflow: hidden; border-radius: 12px; background: #01051c; box-shadow: 0 30px 80px rgba(0, 0, 0, .45), 0 0 0 1px rgba(255, 255, 255, .07); transition: width var(--fit-t), height var(--fit-t), border-radius var(--fit-t); }
+.fit-screen.is-mobile { border-radius: 30px; }
+.fit-bar { position: relative; flex: none; height: 26px; background: #151a2b; transition: background-color var(--fit-t); }
+.fit-screen.is-mobile .fit-bar { background: #01051c; }
+.fit-browser, .fit-status { position: absolute; inset: 0; display: flex; align-items: center; transition: opacity .35s var(--ease-out); }
+.fit-browser { gap: 5px; padding: 0 10px; }
+.fit-browser i { width: 7px; height: 7px; border-radius: 50%; background: #ff5f57; }
+.fit-browser i:nth-child(2) { background: #febc2e; }
+.fit-browser i:nth-child(3) { background: #28c840; }
+.fit-browser b { position: absolute; left: 50%; width: 38%; height: 13px; border-radius: 5px; background: rgba(255, 255, 255, .08); transform: translateX(-50%); }
+.fit-status { justify-content: space-between; padding: 2px 20px 0; opacity: 0; color: #fff; }
+.fit-status em { font: 600 9px/1 var(--display); font-style: normal; letter-spacing: .02em; }
+.fit-status em + em { font-size: 5px; letter-spacing: .1em; }
+.fit-status::before { content: ''; position: absolute; left: 50%; top: 6px; width: 42px; height: 13px; border-radius: 99px; background: #000; transform: translateX(-50%); }
+.fit-screen.is-mobile .fit-browser { opacity: 0; }
+.fit-screen.is-mobile .fit-status { opacity: 1; transition-delay: .35s; }
+.fit-view { position: relative; flex: 1; overflow: hidden; }
+.fit-page { position: absolute; inset: 0; }
+.fit-bg, .fit-block { position: absolute; transition: left var(--fit-t), top var(--fit-t), width var(--fit-t), height var(--fit-t); }
+.fit-bg { max-width: none; }
+.fit-block { overflow: hidden; border-radius: 4px; }
+.fit-block img { position: absolute; left: 0; top: 0; display: block; max-width: none; height: auto; user-select: none; -webkit-user-drag: none; transition: opacity .5s var(--ease-out) .15s; }
+.fit-m, .fit-screen.is-mobile .fit-d { opacity: 0; }
+.fit-screen.is-mobile .fit-m { opacity: 1; }
+.fit-screen.is-instant, .fit-screen.is-instant * { transition: none !important; }
+@media (prefers-reduced-motion: reduce) { .fit-screen, .fit-screen * { transition: none !important; } }
 .rs-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
 .seg { display: inline-flex; padding: 3px; border-radius: 99px; border: 1px solid var(--line); }
 .seg button { border: 0; background: transparent; padding: 7px 14px; border-radius: 99px; font-size: 13px; color: var(--muted); transition: background-color .3s var(--ease-out), color .3s var(--ease-out); }
@@ -1125,10 +1125,10 @@ html::-webkit-scrollbar { display: none; }
             <p class="problem-note">Компоненты из коммерческого проекта, название не раскрывается. На десктопе показатели стоят в ряд, а графики рядом друг с другом. На телефоне показатели собираются в сетку 2 × 2, блоки встают в колонку, порядок и смысл сохраняются.</p>
           </div>
           <div class="problem-demo demo-responsive" data-demo="responsive">
-            <div class="ad-stage" id="ad-stage">
-              <div class="ad-screen is-instant" id="ad-screen">
-                <div class="ad-bar" aria-hidden="true"><span class="ad-browser"><i></i><i></i><i></i><b></b></span><span class="ad-status"><em>9:41</em><em>●●●</em></span></div>
-                <div class="ad-view"><div class="ad-page" id="ad-page"><img class="ad-bg" src="../assets/a25068908b63b13a.webp" alt=""><div class="ad-block" data-b="i1"><img class="ad-d" src="../assets/ae73eb39d9a6b87e.webp" width="333" height="124" alt=""><img class="ad-m" src="../assets/ef1c6152ac9da42a.webp" width="167.5" height="130" alt=""></div><div class="ad-block" data-b="i2"><img class="ad-d" src="../assets/061e399290768a10.webp" width="333" height="124" alt=""><img class="ad-m" src="../assets/59894b14631b3824.webp" width="167.5" height="130" alt=""></div><div class="ad-block" data-b="i3"><img class="ad-d" src="../assets/175243fc4409edbf.webp" width="333" height="124" alt=""><img class="ad-m" src="../assets/8f5c9376c99ee238.webp" width="167.5" height="130" alt=""></div><div class="ad-block" data-b="i4"><img class="ad-d" src="../assets/0711e2156986f92d.webp" width="333" height="124" alt=""><img class="ad-m" src="../assets/28b5108e50f64e43.webp" width="167.5" height="130" alt=""></div><div class="ad-block" data-b="assets"><img class="ad-d" src="../assets/6fe963cb25afb792.webp" width="1356" height="358" alt=""><img class="ad-m" src="../assets/a83c2c43a37766b1.webp" width="343" height="348" alt=""></div><div class="ad-block" data-b="wallet"><img class="ad-d" src="../assets/92d33663ccde0c5a.webp" width="666" height="439" alt=""><img class="ad-m" src="../assets/43a0da842d65f789.webp" width="343" height="429" alt=""></div><div class="ad-block" data-b="health"><img class="ad-d" src="../assets/449f2c9e5f1fa205.webp" width="666" height="439" alt=""><img class="ad-m" src="../assets/14552fd237efc259.webp" width="343" height="298" alt=""></div><div class="ad-block" data-b="activity"><img class="ad-d" src="../assets/ad753261764ecc78.webp" width="1356" height="520" alt=""><img class="ad-m" src="../assets/44bdff1e87ca1f01.webp" width="343" height="588" alt=""></div></div></div>
+            <div class="fit-stage" id="fit-stage">
+              <div class="fit-screen is-instant" id="fit-screen">
+                <div class="fit-bar" aria-hidden="true"><span class="fit-browser"><i></i><i></i><i></i><b></b></span><span class="fit-status"><em>9:41</em><em>●●●</em></span></div>
+                <div class="fit-view"><div class="fit-page" id="fit-page"><img class="fit-bg" src="../assets/a25068908b63b13a.webp" alt=""><div class="fit-block" data-b="i1"><img class="fit-d" src="../assets/ae73eb39d9a6b87e.webp" width="333" height="124" alt=""><img class="fit-m" src="../assets/ef1c6152ac9da42a.webp" width="167.5" height="130" alt=""></div><div class="fit-block" data-b="i2"><img class="fit-d" src="../assets/061e399290768a10.webp" width="333" height="124" alt=""><img class="fit-m" src="../assets/59894b14631b3824.webp" width="167.5" height="130" alt=""></div><div class="fit-block" data-b="i3"><img class="fit-d" src="../assets/175243fc4409edbf.webp" width="333" height="124" alt=""><img class="fit-m" src="../assets/8f5c9376c99ee238.webp" width="167.5" height="130" alt=""></div><div class="fit-block" data-b="i4"><img class="fit-d" src="../assets/0711e2156986f92d.webp" width="333" height="124" alt=""><img class="fit-m" src="../assets/28b5108e50f64e43.webp" width="167.5" height="130" alt=""></div><div class="fit-block" data-b="assets"><img class="fit-d" src="../assets/6fe963cb25afb792.webp" width="1356" height="358" alt=""><img class="fit-m" src="../assets/a83c2c43a37766b1.webp" width="343" height="348" alt=""></div><div class="fit-block" data-b="wallet"><img class="fit-d" src="../assets/92d33663ccde0c5a.webp" width="666" height="439" alt=""><img class="fit-m" src="../assets/43a0da842d65f789.webp" width="343" height="429" alt=""></div><div class="fit-block" data-b="health"><img class="fit-d" src="../assets/449f2c9e5f1fa205.webp" width="666" height="439" alt=""><img class="fit-m" src="../assets/14552fd237efc259.webp" width="343" height="298" alt=""></div><div class="fit-block" data-b="activity"><img class="fit-d" src="../assets/ad753261764ecc78.webp" width="1356" height="520" alt=""><img class="fit-m" src="../assets/44bdff1e87ca1f01.webp" width="343" height="588" alt=""></div></div></div>
               </div>
             </div>
             <div class="rs-bar">
@@ -2335,9 +2335,9 @@ window.PRODUCT_PROJECTS = [
   // Demo: one dashboard on desktop and mobile, cut from the real screens of both versions.
   // Each block knows its rect in design pixels for either device; the page is scaled to the screen,
   // and CSS transitions carry the blocks, the screen size and the picture swap together.
-  const adScreen = $('#ad-screen'), rsLabel = $('#rs-label');
+  const adScreen = $('#fit-screen'), rsLabel = $('#rs-label');
   if (adScreen) {
-    const adStage = $('#ad-stage'), adPage = $('#ad-page'), adBg = $('.ad-bg', adPage), adBlocks = $$('.ad-block', adPage);
+    const adStage = $('#fit-stage'), adPage = $('#fit-page'), adBg = $('.fit-bg', adPage), adBlocks = $$('.fit-block', adPage);
     const LAYOUT = {
       desktop: { w: 1440, x: 32, y: 30.5, bg: [0, -94, 1440, 2015], label: 'Показатели в один ряд',
         blocks: { i1: [0, 0, 333, 124], i2: [341, 0, 333, 124], i3: [682, 0, 333, 124], i4: [1023, 0, 333, 124],
@@ -2363,8 +2363,8 @@ window.PRODUCT_PROJECTS = [
         const [x, y, bw, bh] = L.blocks[b.dataset.b];
         place(b, [L.x + x, L.y + y, bw, bh], s);
         // each picture keeps the size it has on its own device, the block around it does the moving
-        b.querySelector('.ad-d').style.width = px(LAYOUT.desktop.blocks[b.dataset.b][2] * k);
-        b.querySelector('.ad-m').style.width = px(LAYOUT.mobile.blocks[b.dataset.b][2] * phone / 375);
+        b.querySelector('.fit-d').style.width = px(LAYOUT.desktop.blocks[b.dataset.b][2] * k);
+        b.querySelector('.fit-m').style.width = px(LAYOUT.mobile.blocks[b.dataset.b][2] * phone / 375);
       });
       adScreen.classList.toggle('is-mobile', mobile);
       rsLabel.textContent = L.label;
