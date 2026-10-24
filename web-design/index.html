@@ -523,7 +523,8 @@ button { cursor: var(--cur-pointer); }
 .wire-compare { position: relative; height: 340px; }
 /* the real screen and the wireframe built from the same layout, inside a phone outline */
 .demo-wire.problem-demo { display: grid; place-items: center; padding: clamp(16px, 2vw, 28px); background: rgba(255, 255, 255, .02); }
-.wire-compare.wire-phone { height: clamp(440px, 40vw, 590px); aspect-ratio: 402 / 874; border-radius: clamp(26px, 2.4vw, 38px); overflow: hidden; box-shadow: 0 30px 80px rgba(0, 0, 0, .45); }
+.wire-compare.wire-phone { --wr: clamp(26px, 2.4vw, 38px); height: clamp(440px, 40vw, 590px); aspect-ratio: 402 / 874; border-radius: var(--wr); overflow: hidden; clip-path: inset(0 round var(--wr)); isolation: isolate; box-shadow: 0 30px 80px rgba(0, 0, 0, .45); }
+.wire-compare.wire-phone::after { content: ''; position: absolute; inset: 0; z-index: 4; border-radius: inherit; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .14); pointer-events: none; }
 .wire-shot { position: absolute; inset: 0; display: block; width: 100%; height: 100%; user-select: none; -webkit-user-drag: none; }
 .wire-phone .wire-ui, .wire-phone .wire-sketch { background: none; padding: 0; }
 .wire-phone .wire-tag { bottom: 18px; }
@@ -817,10 +818,10 @@ button { cursor: var(--cur-pointer); }
 .ad-screen.is-mobile .ad-browser { opacity: 0; }
 .ad-screen.is-mobile .ad-status { opacity: 1; transition-delay: .35s; }
 .ad-view { position: relative; flex: 1; overflow: hidden; }
-.ad-page { position: absolute; left: 0; top: 0; height: 2700px; transform-origin: 0 0; transition: transform var(--ad-t), width var(--ad-t); }
+.ad-page { position: absolute; inset: 0; }
 .ad-bg, .ad-block { position: absolute; transition: left var(--ad-t), top var(--ad-t), width var(--ad-t), height var(--ad-t); }
 .ad-bg { max-width: none; }
-.ad-block { overflow: hidden; border-radius: 8px; }
+.ad-block { overflow: hidden; border-radius: 4px; }
 .ad-block img { position: absolute; left: 0; top: 0; display: block; max-width: none; height: auto; user-select: none; -webkit-user-drag: none; transition: opacity .5s var(--ease-out) .15s; }
 .ad-m, .ad-screen.is-mobile .ad-d { opacity: 0; }
 .ad-screen.is-mobile .ad-m { opacity: 1; }
@@ -2339,20 +2340,25 @@ window.PRODUCT_PROJECTS = [
           assets: [0, 292, 343, 348], wallet: [0, 664, 343, 429], health: [0, 1117, 343, 298], activity: [0, 1439, 343, 588] } }
     };
     const BAR = 26, px = v => v + 'px';
-    const place = (el, [x, y, w, h]) => Object.assign(el.style, { left: px(x), top: px(y), width: px(w), height: px(h) });
+    // design px times the screen's scale: everything is placed in plain screen pixels, nothing is transformed
+    const place = (el, [x, y, w, h], s) => Object.assign(el.style, { left: px(x * s), top: px(y * s), width: px(w * s), height: px(h * s) });
     let device = 'desktop';
     const layout = () => {
       const L = LAYOUT[device], mobile = device === 'mobile';
       // the desktop window shows a real 1440 px page; the phone keeps the same height at about 9 : 19.5
       const sw = adStage.clientWidth, k = sw / 1440;
       const h = Math.round(Math.min(Math.max(BAR + 1100 * k, 340), BAR + 1580 * k));
-      const w = mobile ? Math.round(h * .462) : sw;
+      const phone = Math.round(h * .462), w = mobile ? phone : sw, s = w / L.w;
       adStage.style.height = px(h);
       Object.assign(adScreen.style, { width: px(w), height: px(h) });
-      adPage.style.width = px(L.w);
-      adPage.style.transform = `scale(${w / L.w})`;
-      place(adBg, L.bg);
-      adBlocks.forEach(b => { const [x, y, bw, bh] = L.blocks[b.dataset.b]; place(b, [L.x + x, L.y + y, bw, bh]); });
+      place(adBg, L.bg, s);
+      adBlocks.forEach(b => {
+        const [x, y, bw, bh] = L.blocks[b.dataset.b];
+        place(b, [L.x + x, L.y + y, bw, bh], s);
+        // each picture keeps the size it has on its own device, the block around it does the moving
+        b.querySelector('.ad-d').style.width = px(LAYOUT.desktop.blocks[b.dataset.b][2] * k);
+        b.querySelector('.ad-m').style.width = px(LAYOUT.mobile.blocks[b.dataset.b][2] * phone / 375);
+      });
       adScreen.classList.toggle('is-mobile', mobile);
       rsLabel.textContent = L.label;
     };
