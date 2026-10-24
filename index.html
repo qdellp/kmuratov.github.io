@@ -208,8 +208,8 @@ a { color: inherit; }
 .w-bar span { margin: 0 auto; width: 34%; height: 9px; border-radius: 4px; background: rgba(255, 255, 255, .08); }
 .w-poster img { display: block; width: 100%; height: 100%; user-select: none; -webkit-user-drag: none; }
 .w-shot { display: block; width: 100%; height: calc(100% - 22px); object-fit: cover; object-position: 0 0; user-select: none; -webkit-user-drag: none; }
-.w-phone .w-shot { height: 100%; object-position: 50% 0; }
-.w-phone { right: 4%; top: 28%; width: 30%; aspect-ratio: 9 / 19; overflow: hidden; min-height: 0; border-radius: 26px; padding: 0; background: #fdf8ee; border: 5px solid #23253f; color: var(--d-fg); box-shadow: 0 30px 80px rgba(255, 120, 70, .22); transform: translateZ(60px) rotate(calc(-4deg - 4deg * var(--spread))) rotateY(var(--ry, 0deg)) translate3d(calc(26px * var(--spread)), calc(14px * var(--spread)), 0); }
+.w-device { display: block; width: 100%; height: 100%; overflow: visible; }
+.w-phone { right: 4%; top: 24%; width: 30%; aspect-ratio: 438 / 886; min-height: 0; padding: 0; filter: drop-shadow(0 30px 40px rgba(0, 0, 0, .45)); transform: translateZ(60px) rotate(calc(-4deg - 4deg * var(--spread))) rotateY(var(--ry, 0deg)) translate3d(calc(26px * var(--spread)), calc(14px * var(--spread)), 0); }
 .w-poster { left: -4%; top: 64%; width: 40%; aspect-ratio: 370 / 163; border-radius: 12px; overflow: hidden; box-shadow: 0 24px 60px rgba(0, 0, 0, .35); transform: translateZ(-40px) rotate(calc(6deg + 6deg * var(--spread))) translate3d(calc(-22px * var(--spread)), calc(18px * var(--spread)), 0); }
 
 /* ----- Byline on the seam ----- */
@@ -331,7 +331,23 @@ a { color: inherit; }
         <div class="w-bar"><i></i><i></i><i></i><span></span></div>
         <img class="w-shot" src="assets/b3cb0600ce48fdba.webp" alt="" draggable="false">
       </div>
-      <div class="w-phone"><img class="w-shot" src="assets/00833a59e7cebf7e.webp" alt="" draggable="false"></div>
+      <!-- iPhone 14 to scale, in points: body 432 x 886, display 390 x 844 with 47.33 corners, notch 162 x 33 -->
+      <div class="w-phone"><svg class="w-device" viewBox="-3 0 438 886" aria-hidden="true">
+        <defs>
+          <clipPath id="w14-display"><rect x="21" y="21" width="390" height="844" rx="47.33"/></clipPath>
+          <linearGradient id="w14-metal" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4a4e57"/><stop offset=".5" stop-color="#26292f"/><stop offset="1" stop-color="#3c4048"/></linearGradient>
+        </defs>
+        <rect x="-2.5" y="150" width="4" height="28" rx="1.5" fill="#30333a"/>
+        <rect x="-2.5" y="222" width="4" height="56" rx="1.5" fill="#30333a"/>
+        <rect x="-2.5" y="292" width="4" height="56" rx="1.5" fill="#30333a"/>
+        <rect x="430.5" y="250" width="4" height="90" rx="1.5" fill="#30333a"/>
+        <rect width="432" height="886" rx="68" fill="url(#w14-metal)"/>
+        <rect x="4" y="4" width="424" height="878" rx="64.5" fill="#070708"/>
+        <image href="assets/f5940e0d6c56ecd4.webp" x="21" y="21" width="390" height="844" preserveAspectRatio="xMidYMin slice" clip-path="url(#w14-display)"/>
+        <path d="M129 21Q135 21 135 27V34Q135 54 155 54H277Q297 54 297 34V27Q297 21 303 21Z" fill="#070708"/>
+        <rect x="193" y="29" width="46" height="5" rx="2.5" fill="#1b1c20"/>
+        <circle cx="253" cy="31.5" r="5" fill="#101218"/>
+      </svg></div>
       <div class="w-poster"><img src="assets/ea16bd14f9dc436a.webp" alt="" draggable="false"></div>
     </div>
     <div class="half-copy">
