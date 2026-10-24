@@ -401,7 +401,7 @@ button { cursor: var(--cur-pointer); }
 @keyframes sheet-fade { from { opacity: 0; } }
 .project-sheet.is-flying .sheet-cover { visibility: hidden; }
 .sheet-fly { position: fixed; inset: 0; z-index: 10; perspective: 2000px; pointer-events: none; }
-.sheet-fly-card { position: absolute; left: 0; top: 0; overflow: hidden; transform-origin: 0 0; background: var(--ink-3); box-shadow: 0 40px 90px rgba(0, 0, 0, .55); will-change: transform; }
+.sheet-fly-card { position: absolute; left: 0; top: 0; overflow: hidden; transform-origin: 0 0; background: var(--ink-3); will-change: transform; }
 .sheet-fly-card .cover { width: 100%; height: 100%; }
 .sheet-cover { min-height: 420px; }
 .sheet-body { position: relative; padding: 40px 34px; display: flex; flex-direction: column; overflow: auto; }
@@ -2145,6 +2145,9 @@ window.PRODUCT_PROJECTS = [
   // Opening from a gallery card: a copy of the cover starts exactly where the card stands in the 3D row
   // (same perspective, same transform), straightens and grows into the popup's cover while the rest
   // of the popup fades in. The copy lives inside the dialog, since an open dialog covers everything else.
+  // The copy changes its real width and height (not a scale), so the cover inside re-crops the way the
+  // popup's own cover does and is pixel for pixel the same picture when it lands; the shadow fades on the way.
+  const FLY_MS = 760;
   function flyFromCard(plane) {
     const li = plane.closest('.gallery-card'), stageEl = li.closest('.gallery-stage'), track = li.parentElement;
     const cover = $('#sheet-cover'), to = cover.getBoundingClientRect();
@@ -2153,28 +2156,32 @@ window.PRODUCT_PROJECTS = [
     const w = li.offsetWidth, ox = w / 2, oy = li.offsetHeight / 2, top = plane.offsetTop, ph = plane.offsetHeight;
     const layer = document.createElement('div'); layer.className = 'sheet-fly';
     layer.style.perspectiveOrigin = `${sr.left + sr.width / 2}px ${sr.top + sr.height / 2}px`;
-    const fly = document.createElement('div'); fly.className = 'sheet-fly-card'; fly.innerHTML = plane.innerHTML;
-    Object.assign(fly.style, { width: w + 'px', height: ph + 'px' });
+    const fly = document.createElement('div'); fly.className = 'sheet-fly-card'; fly.innerHTML = cover.innerHTML;
     layer.append(fly); sheet.append(layer);
     const wideCover = to.left < innerWidth / 2 && to.height > to.width * .8;
     const from = `translate(${tp.left + ox}px, ${tp.top + oy}px) ${li.style.transform} translate(${-ox}px, ${top - oy}px)`;
-    const end = `translate(${to.left}px, ${to.top}px) scale(${to.width / w}, ${to.height / ph})`;
+    const end = `translate(${to.left}px, ${to.top}px)`;
     sheet.classList.add('is-flying'); plane.style.visibility = 'hidden';
     const anim = fly.animate([
-      { transform: from, borderRadius: '14px' },
-      { transform: end, borderRadius: wideCover ? `${26 * w / to.width}px 0 0 ${26 * w / to.width}px` : `${26 * w / to.width}px ${26 * w / to.width}px 0 0` }
-    ], { duration: 720, easing: 'cubic-bezier(.22, 1, .36, 1)' });
-    const land = () => { sheet.classList.remove('is-flying'); layer.remove(); plane.style.visibility = ''; };
+      { transform: from, width: w + 'px', height: ph + 'px', borderRadius: '14px', boxShadow: '0 40px 90px rgba(0, 0, 0, .55)' },
+      { transform: end, width: to.width + 'px', height: to.height + 'px', borderRadius: wideCover ? '26px 0 0 26px' : '26px 26px 0 0', boxShadow: '0 0 0 rgba(0, 0, 0, 0)' }
+    ], { duration: FLY_MS, easing: 'cubic-bezier(.22, 1, .36, 1)', fill: 'forwards' });
+    // the popup's cover takes over first, then the copy goes, so no frame shows neither
+    const land = () => { sheet.classList.remove('is-flying'); requestAnimationFrame(() => { layer.remove(); plane.style.visibility = ''; }); };
     anim.finished.then(land, land);
   }
-  function openSheet(i, trigger) {
+  async function openSheet(i, trigger) {
     sheetTrigger = trigger; fillSheet(i);
     const plane = !reduced && trigger?.closest?.('.gallery-card')?.querySelector('.gallery-plane');
     sheet.classList.toggle('from-card', !!plane);
+    // the cover must be decoded and at its final size before the flight measures where to land
+    const coverImg = plane && sheet.querySelector('#sheet-cover img');
+    if (coverImg && !coverImg.complete) await Promise.race([coverImg.decode().catch(() => {}), new Promise(r => setTimeout(r, 160))]);
     sheet.showModal(); fitCover(); raiseCursor();
     if (plane && sheet.querySelector('#sheet-cover img, #sheet-cover .cover')) flyFromCard(plane);
     if (!swipeHinted && !reduced && matchMedia('(max-width: 900px)').matches) {
       swipeHinted = true;
+      // after the flight has landed, so the two moves never overlap
       setTimeout(() => {
         if (!sheet.open || sliding) return;
         $('#sheet-frame').animate([
@@ -2182,7 +2189,7 @@ window.PRODUCT_PROJECTS = [
           { transform: 'translateX(-64px)', offset: .4, easing: 'cubic-bezier(.45,0,.25,1)' },
           { transform: 'translateX(0)' }
         ], { duration: 1150 });
-      }, 700);
+      }, plane ? FLY_MS + 250 : 700);
     }
   }
   $('#sheet-close').addEventListener('click', () => sheet.close());
