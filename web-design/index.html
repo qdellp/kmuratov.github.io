@@ -1011,6 +1011,11 @@ html::-webkit-scrollbar { display: none; }
 /* Card -> popup: while the preview flies to the centre the rest of the popup waits hidden */
 .project-sheet.is-flying.is-staging .sheet-card { visibility: hidden; }
 .project-sheet.is-staging .sheet-body, .project-sheet.is-staging .sheet-close, .project-sheet.is-staging .sheet-nav { opacity: 0; }
+
+/* Closing: popup and backdrop fade out together */
+.project-sheet.is-closing[open], .project-sheet.is-closing[open] > * { animation: none; }
+.project-sheet.is-closing[open] { opacity: 0; transform: scale(.98); transition: opacity .34s ease, transform .34s var(--ease-out); }
+.project-sheet.is-closing[open]::backdrop { opacity: 0; transition: opacity .34s ease; }
   </style>
 </head>
 <body>
@@ -2223,7 +2228,16 @@ window.PRODUCT_PROJECTS = [
       }, plane ? FLY_MS + 250 : 700);
     }
   }
-  $('#sheet-close').addEventListener('click', () => sheet.close());
+  // Closing fades the popup and its backdrop out before the dialog actually closes
+  let closing = false;
+  function closeSheet() {
+    if (!sheet.open || closing) return;
+    if (reduced) { sheet.close(); return; }
+    closing = true; sheet.classList.add('is-closing');
+    setTimeout(() => { sheet.close(); sheet.classList.remove('is-closing'); closing = false; }, 340);
+  }
+  sheet.addEventListener('cancel', e => { e.preventDefault(); closeSheet(); });
+  $('#sheet-close').addEventListener('click', closeSheet);
   // Prev / next: the card slides out and the next project slides in from the other side
   const card = $('#sheet-card'), mover = $('#sheet-frame');
   let sliding = false, queued = 0;
@@ -2265,7 +2279,7 @@ window.PRODUCT_PROJECTS = [
     mover.style.transform = ''; back.onfinish = () => {};
   };
   card.addEventListener('pointerup', endSwipe); card.addEventListener('pointercancel', endSwipe);
-  sheet.addEventListener('click', e => { if (e.target === sheet) sheet.close(); });
+  sheet.addEventListener('click', e => { if (e.target === sheet) closeSheet(); });
   sheet.addEventListener('close', () => sheetTrigger?.focus({ preventScroll: true }));
   const sheetBars = [attachScrollbar(sheet.querySelector('.sheet-body'), $('#sheet-frame'), 'sheet-scroll'), attachScrollbar($('#sheet-card'), $('#sheet-frame'), 'sheet-scroll')];
 
