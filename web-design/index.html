@@ -2178,7 +2178,11 @@ window.PRODUCT_PROJECTS = [
     // the popup's cover takes over first, then the copy goes, so no frame shows neither
     const land = () => {
       sheet.classList.remove('is-flying');
-      requestAnimationFrame(() => { layer.remove(); plane.style.visibility = ''; });
+      requestAnimationFrame(() => {
+        layer.remove(); plane.style.visibility = '';
+        // the gallery card behind the popup comes back gently while the text block unfolds
+        if (staged && !reduced) plane.animate([{ opacity: 0 }, { opacity: 1 }], { duration: UNFOLD_MS, easing: 'ease' });
+      });
       if (staged && sheet.open) unfold(shift, clipR);
     };
     anim.finished.then(land, land);
