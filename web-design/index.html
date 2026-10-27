@@ -1007,6 +1007,10 @@ html::-webkit-scrollbar { display: none; }
   .demo-ease .ease-options { justify-content: center; }
   .ease-stage { height: 96px; }
 }
+
+/* Card -> popup: while the preview flies to the centre the rest of the popup waits hidden */
+.project-sheet.is-flying.is-staging .sheet-card { visibility: hidden; }
+.project-sheet.is-staging .sheet-body, .project-sheet.is-staging .sheet-close, .project-sheet.is-staging .sheet-nav { opacity: 0; }
   </style>
 </head>
 <body>
@@ -2160,15 +2164,38 @@ window.PRODUCT_PROJECTS = [
     layer.append(fly); sheet.append(layer);
     const wideCover = to.left < innerWidth / 2 && to.height > to.width * .8;
     const from = `translate(${tp.left + ox}px, ${tp.top + oy}px) ${li.style.transform} translate(${-ox}px, ${top - oy}px)`;
-    const end = `translate(${to.left}px, ${to.top}px)`;
+    // Desktop: the preview first lands alone in the middle of the popup; then the text block slides out
+    // from under it to the right while the preview moves left into its usual place.
+    const staged = wideCover && wideSheet.matches;
+    const cr = card.getBoundingClientRect(), shift = staged ? (cr.width - to.width) / 2 : 0, clipR = staged ? cr.right - to.right : 0;
+    const end = `translate(${to.left + shift}px, ${to.top}px)`;
+    if (staged) { sheet.classList.add('is-staging'); mover.style.transform = `translateX(${shift}px)`; card.style.clipPath = `inset(0 ${clipR}px 0 0 round 26px)`; }
     sheet.classList.add('is-flying'); plane.style.visibility = 'hidden';
     const anim = fly.animate([
       { transform: from, width: w + 'px', height: ph + 'px', borderRadius: '14px', boxShadow: '0 40px 90px rgba(0, 0, 0, .55)' },
-      { transform: end, width: to.width + 'px', height: to.height + 'px', borderRadius: wideCover ? '26px 0 0 26px' : '26px 26px 0 0', boxShadow: '0 0 0 rgba(0, 0, 0, 0)' }
+      { transform: end, width: to.width + 'px', height: to.height + 'px', borderRadius: staged ? '26px' : wideCover ? '26px 0 0 26px' : '26px 26px 0 0', boxShadow: '0 0 0 rgba(0, 0, 0, 0)' }
     ], { duration: FLY_MS, easing: 'cubic-bezier(.22, 1, .36, 1)', fill: 'forwards' });
     // the popup's cover takes over first, then the copy goes, so no frame shows neither
-    const land = () => { sheet.classList.remove('is-flying'); requestAnimationFrame(() => { layer.remove(); plane.style.visibility = ''; }); };
+    const land = () => {
+      sheet.classList.remove('is-flying');
+      requestAnimationFrame(() => { layer.remove(); plane.style.visibility = ''; });
+      if (staged && sheet.open) unfold(shift, clipR);
+    };
     anim.finished.then(land, land);
+  }
+  const UNFOLD_MS = 780;
+  function unfold(shift, clipR) {
+    const ease = 'cubic-bezier(.65, 0, .25, 1)', o = { duration: UNFOLD_MS, easing: ease };
+    const body = sheet.querySelector('.sheet-body'), close = $('#sheet-close'), nav = sheet.querySelector('.sheet-nav');
+    const anims = [
+      mover.animate([{ transform: `translateX(${shift}px)` }, { transform: 'translateX(0)' }], o),
+      card.animate([{ clipPath: `inset(0 ${clipR}px 0 0 round 26px)` }, { clipPath: 'inset(0 0px 0 0 round 26px)' }], o),
+      body.animate([{ transform: 'translateX(-70px)', opacity: 0 }, { transform: 'none', opacity: 1 }], { duration: UNFOLD_MS, easing: 'cubic-bezier(.22, 1, .36, 1)', delay: 80, fill: 'backwards' }),
+      ...[close, nav].filter(Boolean).map(el => el.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 420, easing: 'ease', delay: UNFOLD_MS - 220, fill: 'backwards' }))
+    ];
+    // the animations hold the starting state, so the inline staging styles can go now
+    mover.style.transform = ''; card.style.clipPath = ''; sheet.classList.remove('is-staging');
+    sheet.addEventListener('close', () => anims.forEach(a => a.cancel()), { once: true });
   }
   async function openSheet(i, trigger) {
     sheetTrigger = trigger; fillSheet(i);
