@@ -1016,6 +1016,9 @@ html::-webkit-scrollbar { display: none; }
 .project-sheet.is-closing[open], .project-sheet.is-closing[open] > * { animation: none; }
 .project-sheet.is-closing[open] { opacity: 0; transform: scale(.98); transition: opacity .34s ease, transform .34s var(--ease-out); }
 .project-sheet.is-closing[open]::backdrop { opacity: 0; transition: opacity .34s ease; }
+
+/* No page scrolling while a project popup is open */
+html:has(.project-sheet[open]) { overflow: hidden; overscroll-behavior: none; }
   </style>
 </head>
 <body>
