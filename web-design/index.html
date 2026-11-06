@@ -458,28 +458,121 @@ button { cursor: var(--cur-pointer); }
 .problem-demo { position: relative; align-self: center; border-radius: 20px; background: rgba(6, 6, 6, .55); border: 1px solid var(--line); padding: 22px; min-height: 340px; }
 
 /* Demo: a designer revises a form with an AI agent. */
-.problem-demo.demo-agent { align-self: center; overflow: hidden; min-width: 0; width: 100%; max-width: 620px; margin-inline: auto; padding: 0; background: #15141b; }
-.agent-head { display: flex; align-items: center; gap: 10px; padding: 14px 18px; border-bottom: 1px solid var(--line); font-size: 14px; line-height: 1.25; }
-.agent-mark { display: grid; place-items: center; flex: 0 0 30px; height: 30px; border-radius: 10px; color: white; background: var(--violet); font-size: 22px; }
-.agent-control { flex-shrink: 0; margin-left: auto; padding: 7px 11px; border: 1px solid var(--line-strong); border-radius: 99px; color: var(--paper); background: transparent; font: inherit; font-size: 12px; }
-.agent-control:focus-visible { outline-color: var(--violet); }
-.agent-control:hover { background: rgba(255, 255, 255, .08); }
-.agent-scroll { height: clamp(320px, 48vh, 430px); overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-color: #696479 transparent; overflow-anchor: none; }
+.problem-demo.demo-agent {
+  align-self: center;
+  isolation: isolate;
+  overflow: hidden;
+  min-width: 0;
+  width: 100%;
+  max-width: 620px;
+  margin-inline: auto;
+  padding: 0;
+  border-radius: 28px;
+  background: linear-gradient(145deg, rgba(52, 46, 82, .72), rgba(20, 19, 30, .86));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .38), inset 1px 0 0 rgba(255, 255, 255, .16),
+    inset -1px -1px 0 rgba(255, 255, 255, .08), 0 22px 56px rgba(0, 0, 0, .3);
+  -webkit-backdrop-filter: blur(24px) saturate(1.35);
+  backdrop-filter: blur(24px) saturate(1.35);
+}
+.demo-agent::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(ellipse at 95% 28%, rgba(111, 92, 255, .42), transparent 58%),
+    radial-gradient(ellipse at 5% 90%, rgba(111, 92, 255, .2), transparent 55%),
+    linear-gradient(125deg, rgba(255, 255, 255, .08), transparent 35%, rgba(255, 255, 255, .035) 70%, transparent);
+}
+.agent-head {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 18px;
+  border-bottom: 1px solid rgba(255, 255, 255, .12);
+  background: linear-gradient(110deg, rgba(255, 255, 255, .08), rgba(255, 255, 255, .02));
+  font-size: 14px;
+  line-height: 1.25;
+}
+.agent-mark {
+  display: grid;
+  place-items: center;
+  flex: 0 0 32px;
+  height: 32px;
+  border-radius: 11px;
+  color: white;
+  background: linear-gradient(145deg, rgba(255, 255, 255, .24), transparent 55%), var(--violet);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .6), 0 4px 16px rgba(111, 92, 255, .28);
+  font-size: 22px;
+}
+.agent-control {
+  flex-shrink: 0;
+  margin-left: auto;
+  padding: 8px 12px;
+  border: 1px solid rgba(255, 255, 255, .2);
+  border-radius: 99px;
+  color: #faf9ff;
+  background: linear-gradient(rgba(255, 255, 255, .1), rgba(255, 255, 255, .035));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .18), 0 3px 8px rgba(0, 0, 0, .1);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  font: inherit;
+  font-size: 12px;
+  transition: background-color .2s, box-shadow .2s;
+}
+.agent-control:focus-visible { outline: 2px solid var(--violet); outline-offset: 3px; }
+.agent-control:hover { background-color: rgba(111, 92, 255, .28); box-shadow: inset 0 1px 0 rgba(255, 255, 255, .3), 0 3px 12px rgba(0, 0, 0, .15); }
+.agent-scroll { height: clamp(320px, 48vh, 430px); overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-color: #827897 transparent; overflow-anchor: none; }
 .agent-scroll:focus-visible { outline: 2px solid var(--violet); outline-offset: -3px; }
 .agent-thread { display: grid; gap: 18px; list-style: none; margin: 0; padding: 20px clamp(14px, 2vw, 26px) 24px; }
 .agent-message { justify-self: start; width: fit-content; max-width: 89%; }
 .agent-message.from-user { justify-self: end; }
-.agent-author { display: block; margin: 0 4px 4px; color: #bdb9cd; font-size: 11px; }
+.agent-author { display: block; margin: 0 6px 6px; color: #d4d0e2; font-size: 11px; }
 .from-user .agent-author { text-align: right; }
-.problem .agent-message p { max-width: 40ch; margin: 0; padding: 10px 13px; border-radius: 3px 15px 15px; background: #282630; color: #faf9ff; font-size: 14px; line-height: 1.45; }
-.problem .agent-message.from-user p { border-radius: 15px 3px 15px 15px; background: color-mix(in srgb, var(--violet) 34%, #15141b); }
-.agent-result { display: grid; gap: 6px; margin-top: 8px; padding: 14px; max-width: 290px; border: 1px solid #4b465d; border-radius: 12px; background: #211e2e; }
-.agent-result small { color: #c9c0ff; font-size: 11px; }
+.problem .agent-message p {
+  max-width: 40ch;
+  margin: 0;
+  padding: 12px 15px;
+  border: 1px solid rgba(255, 255, 255, .14);
+  border-radius: 6px 20px 20px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, .1), rgba(255, 255, 255, .025)), rgba(25, 23, 40, .52);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .15), 0 4px 12px rgba(0, 0, 0, .1);
+  -webkit-backdrop-filter: blur(18px) saturate(1.25);
+  backdrop-filter: blur(18px) saturate(1.25);
+  color: #faf9ff;
+  font-size: 14px;
+  line-height: 1.45;
+}
+.problem .agent-message.from-user p {
+  border-radius: 20px 6px 20px 20px;
+  border-color: rgba(196, 187, 255, .3);
+  background: linear-gradient(135deg, rgba(255, 255, 255, .12), transparent 65%), rgba(111, 92, 255, .42);
+}
+.agent-result {
+  display: grid;
+  gap: 8px;
+  margin-top: 10px;
+  padding: 16px;
+  max-width: 290px;
+  border: 1px solid rgba(255, 255, 255, .22);
+  border-radius: 20px;
+  background: linear-gradient(140deg, rgba(255, 255, 255, .1), rgba(255, 255, 255, .025)), rgba(23, 20, 39, .65);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .2), 0 8px 22px rgba(0, 0, 0, .16);
+  -webkit-backdrop-filter: blur(20px) saturate(1.35);
+  backdrop-filter: blur(20px) saturate(1.35);
+}
+.agent-result small { color: #d6ceff; font-size: 11px; }
 .agent-result strong { font-size: 16px; }
-.agent-meta { color: #c6c2d2; font-size: 12px; }
-.agent-field, .agent-action { padding: 7px 10px; border-radius: 6px; font-size: 12px; }
-.agent-field { background: #16141d; border: 1px solid #4b465d; color: #c9c6d3; }
-.agent-action { text-align: center; background: var(--violet); color: white; font-weight: 600; }
+.agent-meta { color: #d6d1e4; font-size: 12px; }
+.agent-field, .agent-action { padding: 9px 12px; border-radius: 11px; font-size: 12px; }
+.agent-field { background: rgba(12, 10, 25, .35); border: 1px solid rgba(255, 255, 255, .16); box-shadow: inset 0 1px 3px rgba(0, 0, 0, .12); color: #dcd8e8; }
+.agent-action { text-align: center; background: linear-gradient(rgba(255, 255, 255, .1), transparent), var(--violet); box-shadow: inset 0 1px 0 rgba(255, 255, 255, .35), 0 4px 12px rgba(111, 92, 255, .22); color: white; font-weight: 600; }
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .problem-demo.demo-agent { background: #252038; }
+  .problem .agent-message p, .agent-result { background: #302b40; }
+  .problem .agent-message.from-user p { background: #493d86; }
+}
 .agent-message.is-new { animation: agent-message-in .32s var(--ease-out) both; }
 @keyframes agent-message-in { from { opacity: 0; transform: translateY(7px); } }
 .agent-thinking { display: flex; align-items: center; gap: 8px; margin-left: 4px; color: var(--paper); font-size: 12px; }
