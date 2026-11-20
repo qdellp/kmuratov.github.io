@@ -284,32 +284,6 @@ a { color: inherit; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
 }
-
-/* Repeat the Web & App caption rule at the entrance to both portfolios. */
-.half .eyebrow {
-  display: flex; align-items: center; gap: 10px; margin-bottom: 12px;
-  font: 500 .875rem/1.4 'Inter V', Arial, sans-serif; letter-spacing: 0;
-}
-.half .eyebrow::before { content: ''; width: 26px; height: 2px; background: #7563a2; }
-.half-web .eyebrow::before { background: #c5bafa; }
-.half .half-cta {
-  opacity: 1; transform: none; min-height: 44px; border-radius: 4px;
-  font-weight: 550; box-shadow: none; border: 1px solid currentColor;
-}
-.half .half-cta::after { display: none; }
-.half:focus-visible { outline: 3px solid #9c83ee; outline-offset: -6px; }
-.half p { font-size: clamp(1rem, 1.15vw, 1.1875rem); line-height: 1.5; }
-@media (max-width: 760px) {
-  html, body { height: auto; overflow: auto; }
-  .split { min-height: max(100svh, 760px); }
-  .half .eyebrow { margin-bottom: 6px; font-size: .8125rem; }
-  .half p { display: block; margin-top: 8px; font-size: 1rem; }
-  .half .half-cta { margin-top: 10px; }
-  .half-art { width: min(32vw, 13svh); }
-  .art-web { width: min(48vw, 20svh); }
-  .header-byline { white-space: normal; text-align: right; font-size: .8125rem; line-height: 1.23; }
-  .byline-name { display: block; }
-}
   </style>
 </head>
 <body data-mode="split">
