@@ -432,9 +432,8 @@ button { cursor: var(--cur-pointer); }
 .problem-copy { display: flex; flex-direction: column; justify-content: center; }
 .problem h3 { margin: 0 0 18px; font: 600 clamp(24px, 2.5vw, 40px)/1.08 var(--display); letter-spacing: -.022em; }
 .problem p { margin: 0; color: #c5c5c5; max-width: 44ch; }
-.problem-hint { margin-top: 26px; display: inline-flex; align-items: center; gap: 10px; font-size: 13px; color: var(--tone); }
-.problem-hint::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--tone); box-shadow: 0 0 0 0 var(--tone); animation: ping 2s ease-out infinite; }
-@keyframes ping { 70%, 100% { box-shadow: 0 0 0 10px transparent; } }
+.problem-hint { margin-top: 12px; display: inline-flex; align-items: center; gap: 8px; font-size: 13px; color: color-mix(in srgb, var(--tone) 65%, var(--paper)); }
+.problem-hint::before { content: ''; flex: none; width: 5px; height: 5px; border-radius: 50%; background: var(--tone); }
 /* Component swirl: a full-width card, the copy in the middle, interface pieces spiral out around it */
 .problem { min-height: clamp(560px, 52vw, 760px); } /* every card about as tall as the swirl */
 .problem-swirl { grid-template-columns: minmax(0, 1fr); place-items: center; min-height: clamp(560px, 62vw, 760px); overflow: hidden; }
@@ -732,15 +731,15 @@ button { cursor: var(--cur-pointer); }
 .demo-order { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; }
 .ord-phone { container-type: inline-size; position: relative; height: clamp(440px, 40vw, 590px); aspect-ratio: 402 / 874; border-radius: clamp(26px, 2.4vw, 38px); overflow: hidden; box-shadow: 0 30px 80px rgba(0, 0, 0, .45); }
 .ord-shot { position: absolute; inset: 0; display: block; width: 100%; height: 100%; user-select: none; -webkit-user-drag: none; }
-.ord-add { position: absolute; left: calc(340 / 402 * 100%); top: calc((var(--y) - 22) / 874 * 100%); width: calc(44 / 402 * 100%); aspect-ratio: 1; padding: 0; border: 0; border-radius: 50%; background: transparent; cursor: var(--cur-pointer); }
+.ord-add { position: absolute; left: calc(362 / 402 * 100%); top: calc(var(--y) / 874 * 100%); width: max(26px, calc(44 / 402 * 100%)); aspect-ratio: 1; transform: translate(-50%, -50%); padding: 0; border: 0; border-radius: 50%; background: transparent; cursor: var(--cur-pointer); }
 .ord-add:focus-visible { outline: 2px solid #a3e4ba; outline-offset: 1px; }
 .ord-add.is-tap { animation: ord-tap .35s var(--ease-out); }
 @keyframes ord-tap { 0% { box-shadow: 0 0 0 0 rgba(145, 220, 176, .55); } 100% { box-shadow: 0 0 0 14px rgba(145, 220, 176, 0); } }
-.ord-pill { position: absolute; left: 50%; top: calc(731 / 874 * 100%); height: clamp(20px, 8.5cqw, 32px); display: flex; align-items: center; gap: 2cqw; padding: 0 1.4cqw 0 3cqw; box-sizing: border-box; border-radius: 99px; background: #91dcb0; color: #10281e; font: 600 clamp(10px, 3.4cqw, 14px)/1 var(--text); white-space: nowrap; opacity: 0; transform: translateX(-50%) scale(.94); pointer-events: none; transition: opacity .25s var(--ease-out), transform .35s var(--ease-spring); }
-.ord-pill.is-on { opacity: 1; transform: translateX(-50%) scale(1); }
+.ord-pill { position: absolute; left: 50%; top: calc(750.5 / 874 * 100%); height: clamp(15px, 8.5cqw, 32px); display: flex; align-items: center; gap: 2cqw; padding: 0 1.4cqw 0 3cqw; box-sizing: border-box; border-radius: 99px; background: #91dcb0; color: #10281e; font: 600 clamp(10px, 3.4cqw, 14px)/1 var(--text); white-space: nowrap; opacity: 0; transform: translate(-50%, -50%) scale(.94); pointer-events: none; transition: opacity .25s var(--ease-out), transform .35s var(--ease-spring); }
+.ord-pill.is-on { opacity: 1; transform: translate(-50%, -50%) scale(1); }
 .ord-pill.no-anim { transition: none; }
 .ord-pill b { font-weight: 700; }
-.ord-pill em { display: grid; place-items: center; min-width: max(15px, 6cqw); height: max(15px, 6cqw); padding-inline: 1cqw; box-sizing: border-box; border-radius: 99px; background: #143323; color: #eaf5ed; font-style: normal; }
+.ord-pill em { display: grid; place-items: center; min-width: max(11px, 6cqw); height: max(11px, 6cqw); padding-inline: 1cqw; box-sizing: border-box; border-radius: 99px; background: #143323; color: #eaf5ed; font-style: normal; }
 .ord-pill em.is-bump { animation: bump .5s var(--ease-spring); }
 .ord-fly { border-radius: 14px; background-repeat: no-repeat; transform-origin: 50% 50%; box-shadow: 0 12px 28px rgba(0, 0, 0, .35); }
 @media (max-width: 900px) { .ord-phone { height: min(560px, 120vw); } }
@@ -1051,7 +1050,6 @@ button { cursor: var(--cur-pointer); }
 .gen-poster text { transition: fill .9s var(--ease-out), opacity .35s var(--ease-out); }
 
 /* ---------- Approach in action: notes and links ---------- */
-.problem-note { margin-top: 18px !important; font-size: 13px; color: var(--dim) !important; max-width: 46ch; }
 
 
 /* ---------- How I work ---------- */
@@ -1137,7 +1135,6 @@ html::-webkit-scrollbar { display: none; }
 .problem-ease { background: radial-gradient(ellipse at 72% 50%, #241f3e, #100f1d 64%, #0b0b12); }
 .problem-ease::after { content: none; }
 .problem-ease > .ease-shader { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
-.problem-ease .problem-note { color: #b6b2ca !important; }
 #problems .demo-ease { position: relative; padding: 0; display: block; min-height: 0; background: transparent; }
 .ease-ui { position: relative; z-index: 1; display: grid; gap: 16px; padding: 22px 22px 32px; }
 .ease-stage { position: relative; height: 118px; }
@@ -1195,6 +1192,47 @@ html:has(.project-sheet[open]) { overflow: hidden; overscroll-behavior: none; }
 @media(prefers-reduced-motion:reduce){.study-frame{animation:none}.study-frame:first-child{opacity:1}}
 
 .fit-view { background: #0e211c; }
+
+
+/* Compact the stacked demos while keeping a readable description and room for controls. */
+@media (max-width: 900px) {
+  .problem:not(.problem-swirl) {
+    --demo-phone-height: clamp(274px, calc(100svh - 318px), 410px);
+    grid-template-rows: auto auto;
+    align-content: center;
+    justify-items: center;
+    min-height: min(600px, calc(100svh - 64px));
+    gap: 16px;
+    padding: 20px clamp(16px, 4vw, 36px);
+  }
+  .problem:not(.problem-swirl) > .problem-copy { text-align: center; align-items: center; }
+  .problem:not(.problem-swirl) h3 { max-width: 24ch; margin-bottom: 10px; text-wrap: balance; }
+  .problem:not(.problem-swirl) > .problem-copy > p { font-size: 15px; line-height: 1.5; }
+  .problem .demo-wire.problem-demo, .problem .demo-order { gap: 10px; }
+  .problem :is(.wire-compare.wire-phone, .ord-phone, .video-phone) { height: var(--demo-phone-height); }
+  .problem-demo.demo-agent { max-width: 480px; }
+  .agent-scroll { height: clamp(215px, calc(100svh - 394px), 285px); }
+  .agent-head { padding-block: 12px; }
+  .agent-thread { padding-block: 16px; gap: 14px; }
+  .problem .demo-responsive { width: min(100%, 440px); padding: 10px; gap: 8px; }
+  .fit-stage { max-height: clamp(269px, calc(100svh - 359px), 376px); }
+  .rs-bar { justify-content: center; gap: 6px 14px; }
+  #problems .demo-ease { width: min(100%, 480px); }
+  .ease-ui { padding: 0; gap: 10px; }
+  .ease-stage { height: 72px; }
+}
+@media (max-width: 600px) {
+  .ease-panel { grid-template-columns: minmax(104px, .85fr) minmax(0, 1fr); gap: 10px; padding: 12px; align-items: center; }
+  .demo-ease .ease-curve { width: 100%; height: auto; aspect-ratio: 1; }
+  .ease-side { justify-items: start; text-align: left; gap: 8px; }
+  .demo-ease .ease-options { justify-content: flex-start; }
+  .demo-ease .ease-options button { padding: 6px 9px; }
+  .demo-ease .ease-code { font-size: 11px; }
+}
+
+@media (max-width: 360px) {
+  .problem:not(.problem-swirl) { padding-block: 16px; gap: 14px; }
+}
   </style>
 </head>
 <body>
@@ -1280,13 +1318,13 @@ html:has(.project-sheet[open]) { overflow: hidden; overscroll-behavior: none; }
   <section class="problems section" id="problems" aria-labelledby="problems-title">
     <div class="section-head">
       <h2 id="problems-title" data-split-title>Подход в действии</h2>
-      <p>Интерактивные демонстрации проектных решений. Интерфейсы и данные в примерах условные.</p>
+      <p>Интерактивные примеры проектных решений на условных данных.</p>
     </div>
     <div class="problems-track" id="problems-track">
         <article class="problem" style="--tone:var(--violet)">
           <div class="problem-copy">
             <h3>Показать, как работать с AI-агентом</h3>
-            <p>Показываю, как агент уточняет задачу, предлагает решение и учитывает обратную связь. Пользователь видит результат прямо в переписке и может попросить изменить его.</p>
+            <p>Агент уточняет задачу, показывает черновик и вносит правки.</p>
           </div>
           <div class="problem-demo demo-agent" data-demo="agent">
             <div class="agent-head">
@@ -1342,9 +1380,7 @@ html:has(.project-sheet[open]) { overflow: hidden; overscroll-behavior: none; }
         <article class="problem" style="--tone:#6f5cff">
           <div class="problem-copy">
             <h3>Адаптировать сценарий под экран</h3>
-            <p>Сохраняю логику продукта при переходе между устройствами. Адаптирую навигацию, плотность информации и поведение компонентов под доступное пространство.</p>
-            <span class="problem-hint">Переключите устройство</span>
-            <p class="problem-note">Самостоятельный демонстрационный концепт. На десктопе показатели стоят в ряд, а графики рядом друг с другом. На телефоне показатели собираются в сетку 2 × 2, блоки встают в колонку, порядок и смысл сохраняются.</p>
+            <p>Перестраиваю дашборд под размер экрана, сохраняя порядок и смысл данных.</p>
           </div>
           <div class="problem-demo demo-responsive" data-demo="responsive">
             <div class="fit-stage" id="fit-stage">
@@ -1371,9 +1407,8 @@ html:has(.project-sheet[open]) { overflow: hidden; overscroll-behavior: none; }
         <article class="problem" style="--tone:#7be0a6">
           <div class="problem-copy">
             <h3>Объяснить результат действия</h3>
-            <p>Использую анимацию, чтобы показать изменение состояния и связь между действием пользователя и результатом. Готовлю демонстрации поведения интерфейса для обсуждения с командой.</p>
-            <span class="problem-hint">Нажмите «+» у напитка с анимацией и без неё</span>
-            <p class="problem-note">Самостоятельный демонстрационный концепт. Сравнивается обратная связь с анимацией и без неё.</p>
+            <p>Показываю, как интерфейс подтверждает добавление напитка в заказ.</p>
+            <span class="problem-hint">Нажмите «+» и сравните два режима</span>
           </div>
           <div class="problem-demo demo-motion demo-order" data-demo="motion">
             <div class="ord-phone" id="ord-phone">
@@ -1391,8 +1426,7 @@ html:has(.project-sheet[open]) { overflow: hidden; overscroll-behavior: none; }
         <article class="problem" style="--tone:#4fb3ad">
           <div class="problem-copy">
             <h3>Показать сценарий в движении</h3>
-            <p>Собираю анимированные прототипы ключевых переходов: как пользователь находит место на карте, открывает карточку и попадает в подробности. Ролик отвечает на вопросы разработки о поведении экранов раньше, чем они появятся.</p>
-            <p class="problem-note">Самостоятельный демонстрационный концепт.</p>
+            <p>Прототип показывает путь от точки на карте до программы мероприятия.</p>
           </div>
           <div class="problem-demo demo-video">
             <div class="video-phone">
@@ -1404,9 +1438,8 @@ html:has(.project-sheet[open]) { overflow: hidden; overscroll-behavior: none; }
         <article class="problem" style="--tone:#ffd36e">
           <div class="problem-copy">
             <h3>От вайрфрейма к интерфейсу</h3>
-            <p>Сначала проверяю структуру и сценарий на вайрфрейме, затем переношу решение в визуальную систему. Каждый блок интерфейса стоит там же, где его место на вайрфрейме.</p>
-            <span class="problem-hint">Двигайте разделитель и листайте экраны</span>
-            <p class="problem-note">Самостоятельный демонстрационный концепт.</p>
+            <p>Проверяю структуру на вайрфрейме и переношу её в готовый интерфейс.</p>
+            <span class="problem-hint">Потяните разделитель для сравнения</span>
           </div>
           <div class="problem-demo demo-wire" data-demo="wire">
             <div class="wire-compare wire-phone" id="wire-compare" style="--split:52%">
@@ -1431,9 +1464,8 @@ html:has(.project-sheet[open]) { overflow: hidden; overscroll-behavior: none; }
           <canvas class="ease-shader" id="ease-shader" aria-hidden="true"></canvas>
           <div class="problem-copy">
             <h3>Настроить характер движения</h3>
-            <p>Подбираю кривые и длительность анимации, чтобы движение подчёркивало характер интерфейса. Передаю в разработку конкретные значения easing и длительности.</p>
+            <p>Подбираю кривую движения и передаю её параметры в разработку.</p>
             <span class="problem-hint">Выберите кривую или потяните точки</span>
-            <p class="problem-note">Условный пример.</p>
           </div>
           <div class="problem-demo demo-ease ease-demo" data-demo="ease">
             <div class="ease-ui">
@@ -1596,6 +1628,24 @@ window.PRODUCT_PROJECTS = [
     colors: ['#b3a9ff', '#3b5bff'],
     logo: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAyOCIgaGVpZ2h0PSIyMDEiIHZpZXdCb3g9IjAgMCAxMDI4IDIwMSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTgyNC40NCAxODQuMTRIODQ4LjIwOVYxMzcuOTU2Qzg0OC4yMDkgMTE1Ljg0IDg1Ny40ODEgODUuMDA2OSA4ODIuNTU2IDg1LjAwNjlDODk3LjA1MyA4NS4wMDY5IDkwMy4zMjIgOTUuOTM1IDkwMy4zMjIgMTIwLjUyM1YxODQuMjcxSDkyNy4wOTFWMTM4LjA4NkM5MjcuMDkxIDEwNy41MTQgOTM5LjEwNiA4NS4xMzcgOTYwLjAwMiA4NS4xMzdDOTczLjQ1MyA4NS4xMzcgOTgyLjIwMyA5My44NTM0IDk4Mi4yMDMgMTE0LjQwOVYxODQuMjcxSDEwMDUuOTdWMTExLjkzN0MxMDA1Ljk3IDgxLjIzNCA5OTUuMzk0IDYxLjE5OTIgOTcwLjMxOSA2MS4xOTkyQzk1MC4wNzYgNjEuMTk5MiA5MzIuNDQ1IDc2LjAzMDIgOTIyLjkxMSAxMDQuNzgyTDkxOC42MDIgMTAyLjk2QzkyNC42MDkgODUuNzg3NCA5MTcuOTQ5IDYxLjMyOTMgODkyLjc0MyA2MS4zMjkzQzg3MS44NDcgNjEuMzI5MyA4NTcuMDkgNzcuNTkxMyA4NDUuNzI3IDEwNC45MTJMODQxLjAyNiAxMDMuMDlDODQ3LjY4NiA4Ny40Nzg3IDg0OC4yMDkgODIuMjc0OCA4NDguMjA5IDc1LjYzOTlWNjMuNDEwOEg4MjQuNDRWMTg0LjE0Wk02ODYuOTE5IDEzNC45NjRDNjg2LjkxOSAxNjkuMTc5IDcwNC41NSAxODYuMDkyIDczMS4xOTIgMTg2LjA5MkM3NTcuNzA0IDE4Ni4wOTIgNzc0LjAyOSAxNjkuOTYgNzg0LjYwNyAxNDIuNzdMNzg5LjE3OCAxNDQuNTkxQzc4My40MzIgMTU5LjQyMiA3ODEuOTk1IDE2NC4yMzYgNzgxLjk5NSAxNzEuNzgxVjE4NC4wMUg4MDUuNzY0VjYyLjg5MDRINzgxLjk5NVYxMDguNDI0Qzc4MS45OTUgMTQwLjAzOCA3NjIuNzk3IDE2My4wNjUgNzM4LjI0NCAxNjMuMDY1QzcxOS4xNzcgMTYzLjA2NSA3MTAuNjg4IDE1My45NTggNzEwLjY4OCAxMjcuOTM5VjYyLjc2MDNINjg2LjkxOVYxMzQuOTY0Wk01ODYuNDg4IDg0LjQ4NjVINjE0LjA0NVYxNDYuMTUyQzYxNC4wNDUgMTcxLjEzMSA2MjMuMzE3IDE4NC4xNCA2NTIuMzEgMTg0LjE0SDY3Ni45OTNWMTYyLjY3NEg2NTEuMjY1QzY0Mi43NzYgMTYyLjY3NCA2MzcuODE0IDE1Ny43MzEgNjM3LjgxNCAxNDguODg0Vjg0LjQ4NjVINjcxLjExNlY2My4wMjA1SDYzNi4zNzdDNjI2LjE5IDYzLjAyMDUgNjIyLjI3MiA2NC4wNjEzIDYwOC42OSA3MC4xNzU4TDYwNi44NjIgNjUuNDkyNEM2MjQuODg0IDU4LjMzNzEgNjQzLjAzOCA1Mi4zNTI2IDY0My4wMzggMjIuNTYwNUg2MTkuMjY5QzYxOS4yNjkgNDIuMjA1MSA2MDMuMDc0IDYwLjkzOSA1ODYuNjE5IDYwLjkzOVY4NC40ODY1SDU4Ni40ODhaTTQ2Mi45NDEgMTg0LjE0SDQ4Ni43MTFWMTM4LjczN0M0ODYuNzExIDEwNi45OTMgNTA1Ljc3OCA4NC4wOTYyIDUzMC40NjEgODQuMDk2MkM1NDkuNjU5IDg0LjA5NjIgNTU4LjAxOCA5Mi45NDI4IDU1OC4wMTggMTE4Ljk2MlYxODQuMTRINTgxLjc4N1YxMTIuMTk3QzU4MS43ODcgNzguMTExNyA1NjQuNDE3IDYxLjA2OTEgNTM3LjUxNCA2MS4wNjkxQzUxMS4yNjMgNjEuMDY5MSA0OTQuNjc3IDc3LjMzMTIgNDg0LjM2IDEwNC42NTFMNDc5LjY1OCAxMDIuODNDNDg1LjY2NiA4Ny45OTkxIDQ4Ni44NDEgODMuMTg1NSA0ODYuODQxIDc1LjM3OTdWNjMuMTUwNkg0NjIuOTQxVjE4NC4xNFpNMzQyLjEzNyAxMTQuNDA5QzM0NS40MDIgOTUuNDE0NiAzNjAuNTUyIDgxLjYyNDMgMzgzLjUzNyA4MS42MjQzQzQwNS40NzggODEuNjI0MyA0MTkuNzEzIDk2LjA2NTEgNDIyLjQ1NiAxMTQuNDA5SDM0Mi4xMzdaTTMxNy45NzYgMTI0LjAzNkMzMTcuOTc2IDE1NS43NzkgMzM3LjQzNiAxODUuOTYyIDM4My4xNDUgMTg1Ljk2MkM0MjUuOTgyIDE4NS45NjIgNDQ0LjAwNSAxNTUuMzg5IDQ0NC4wMDUgMTQyLjlINDIyLjQ1NkM0MTkuNTgzIDE1My4xNzcgNDA1Ljg3IDE2NS43OTcgMzgzLjI3NiAxNjUuNzk3QzM2MS4wNzQgMTY1Ljc5NyAzNDUuMDEgMTUzLjgyOCAzNDEuODc2IDEzMS45NzJINDQ1LjE4QzQ0NS41NzIgMTI5LjI0IDQ0NS41NzIgMTI2Ljc2OCA0NDUuNTcyIDEyNC4xNjZDNDQ1LjU3MiA4OS42OTAzIDQyMi41ODYgNjEuMTk5MiAzODMuNjY4IDYxLjE5OTJDMzQyLjUyOSA2MS4xOTkyIDMxNy45NzYgODguMzg5NCAzMTcuOTc2IDEyNC4wMzZaTTE1OC43NzYgMTQ5LjAxNEMxNTguNzc2IDEzOC4wODYgMTY3LjUyNiAxMzEuMDYxIDE5MC45MDQgMTI5Ljg5QzIwNS4wMDggMTI5LjExIDIyMC4yODggMTI4LjE5OSAyMjkuMDM4IDEyNC4xNjZMMjI4Ljc3NyAxMzIuMjMyQzIyOC4zODUgMTQ5Ljc5NSAyMDcuODgxIDE2NS43OTcgMTgzLjg1MSAxNjUuNzk3QzE2Ny42NTcgMTY1Ljc5NyAxNTguNzc2IDE1OC45MDIgMTU4Ljc3NiAxNDkuMDE0Wk0xMzQuMzU0IDE1MS4wOTZDMTM0LjM1NCAxNzIuNTYyIDE1MS45ODUgMTg2LjIyMiAxODAuMzI1IDE4Ni4yMjJDMjA1LjEzOSAxODYuMjIyIDIyMy40MjMgMTc1LjAzNCAyMzEuOTEyIDE1NS45MUwyMzcuNTI3IDE0My4yOUwyNDEuODM3IDE0NC45ODFDMjM3LjI2NiAxNTMuMTc3IDIzNS4wNDYgMTYwLjU5MyAyMzUuMDQ2IDE2Ni41NzdDMjM1LjA0NiAxNzcuMTE1IDI0Mi4wOTggMTg0LjE0IDI1Ni4yMDMgMTg0LjE0SDI2OS4zOTRWMTYyLjY3NEgyNjMuMzg2QzI1NS4xNTggMTYyLjY3NCAyNTIuODA4IDE1Ny43MzEgMjUyLjgwOCAxNDkuMDE0VjEwOS44NTVDMjUyLjgwOCA4MC41ODM2IDIzMS42NSA2MC45MzkgMTk2LjEyOCA2MC45MzlDMTYxLjM4OCA2MC45MzkgMTM2LjcwNSA3OS42NzI5IDEzNi43MDUgMTA1LjA0MkgxNjAuNzM1QzE2MC45OTYgOTAuOTkxMyAxNzIuMDk3IDgxLjM2NDEgMTk0LjI5OSA4MS4zNjQxQzIxOC43MjEgODEuMzY0MSAyMjkuMDM4IDkwLjQ3MDkgMjI5LjAzOCAxMDYuNDczVjEwOC45NDVDMjIxLjk4NiAxMTMuMTA4IDIwNS4wMDggMTEyLjg0OCAxODUuMTU3IDExMy44ODhDMTQ5LjYzNCAxMTUuODQgMTM0LjM1NCAxMjkuNjMgMTM0LjM1NCAxNTEuMDk2Wk0zNC43MDcgODQuNDg2NUg2Mi4wMDIyVjE0Ni4xNTJDNjIuMDAyMiAxNzEuMTMxIDcxLjUzNiAxODQuMTQgMTAwLjI2OCAxODQuMTRIMTI1LjA4MlYxNjIuNjc0SDk5LjQ4NDJDOTAuNjAzNCAxNjIuNjc0IDg1Ljc3MTMgMTU4LjEyMSA4NS43NzEzIDE0OC44ODRWODQuNDg2NUgxMTkuMDc0VjYzLjAyMDVIODQuMzM0N0M3NC4xNDggNjMuMDIwNSA3MC40OTEyIDY0LjA2MTMgNTYuNjQ3NyA3MC4xNzU4TDU0LjgxOTMgNjUuNDkyNEM3Mi41ODA4IDU4LjMzNzEgOTAuOTk1MiA1Mi4zNTI2IDkwLjk5NTIgMjIuNTYwNUg2Ny4yMjYyQzY3LjIyNjIgNDIuMjA1MSA1MS4yOTMxIDYwLjkzOSAzNC43MDcgNjAuOTM5Vjg0LjQ4NjVaTTI3OS44NDIgMTg0LjE0SDMwMy42MTFWMTEuMjQyMUgyNzkuODQyVjE4NC4xNFoiIGZpbGw9IndoaXRlIi8+Cjwvc3ZnPgo=', cover: '../assets/a4927037b8f23ff1.webp',
     url: 'https://www.behance.net/gallery/218668069/Talentum-Graphic-Design-WEB3', site: 'https://talentum.id/'
+  },
+  {
+    name: 'Orbt',
+    caption: 'Разделы обмена, накоплений и портфеля для пользователей без опыта в криптопродуктах.',
+    kind: 'Интерфейс криптоплатформы',
+    summary: 'Веб-приложение для обмена криптоактивов, накоплений и управления портфелем.',
+    contribution: [
+      'Спроектировал с нуля разделы обмена активов, накоплений и портфеля пользователя.',
+      'Проработал структуру и визуальную подачу этих разделов с учётом пользователей без опыта работы с криптопродуктами.'
+    ],
+    decisionLabel: 'Особенность проекта',
+    decision: 'Основная задача - сделать операции с криптоактивами понятными человеку, который впервые сталкивается с обменом и накоплениями. При проектировании уделял внимание последовательности действий и понятности представленной информации.',
+    tags: ['Интерфейсы'],
+    status: 'В разработке',
+    year: '2025', role: 'UX/UI-дизайнер',
+    colors: ['#1fd1b2', '#2d6bff'],
+    logo: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIyIiBoZWlnaHQ9IjMxIiB2aWV3Qm94PSIwIDAgMTIyIDMxIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8cGF0aCBkPSJNNzEuMjI0MSAyMi43NzY0VjEwLjAwNjFINjYuNzQ3MVY3LjcyNDk4SDc4LjM0NDhWMTAuMDA2MUg3My44ODlWMjIuNzc2NEg3MS4yMjQxWiIgZmlsbD0iI0ZDRkNGQyIvPgo8cGF0aCBkPSJNNTkuNDU5OCAxNi44NDk2QzU5LjY3MyAxNy4zNjEzIDU5Ljc3OTYgMTcuOTE1NiA1OS43Nzk2IDE4LjYxOTJDNTkuNzc5NiAxOS4zMjI3IDU5LjY3MyAxOS44OTgzIDU5LjQzODUgMjAuMzg4N0M1OC42OTIzIDIyLjA1MTYgNTYuNzUyMiAyMi43NzY0IDU0LjMwMDUgMjIuNzc2NEg0Ny4yNjUxVjcuNzI0OThINTQuMjE1MkM1Ni40NTM4IDcuNzI0OTggNTguMTE2NyA4LjQwNzE5IDU4Ljc3NzYgOS44NzgyM0M1OS4wMTIxIDEwLjM2ODYgNTkuMTE4NyAxMC44ODAyIDU5LjExODcgMTEuNDk4NUM1OS4xMTg3IDEyLjEzODEgNTkuMDEyMSAxMi43MTM3IDU4Ljc5ODkgMTMuMTgyN0M1OC40MTUxIDE0LjAxNDIgNTcuNjY5IDE0LjU4OTggNTYuNjI0MyAxNC44ODgzQzU4LjAzMTQgMTUuMTY1NCA1OC45Njk0IDE1LjgwNSA1OS40NTk4IDE2Ljg0OTZaTTQ5LjkzMDEgOS43OTI5NVYxNC4wNTY4SDUzLjE3MDZDNTQuNjYyOSAxNC4wNTY4IDU1Ljc1MDIgMTMuNzM3IDU2LjE1NTMgMTIuODYyOUM1Ni4yODMyIDEyLjU4NTggNTYuMzQ3MiAxMi4yODczIDU2LjM0NzIgMTEuODgyMkM1Ni4zNDcyIDExLjQ5ODUgNTYuMjYxOSAxMS4yMjEzIDU2LjE1NTMgMTAuOTY1NUM1NS43Mjg5IDEwLjA3MDEgNTQuNTc3NyA5Ljc5Mjk1IDUzLjEyOCA5Ljc5Mjk1SDQ5LjkzMDFaTTU2LjczMDkgMTkuNDUwNkM1Ni44NTg4IDE5LjE3MzUgNTYuOTQ0MSAxOC44MzIzIDU2Ljk0NDEgMTguNDQ4NkM1Ni45NDQxIDE4LjA0MzUgNTYuODgwMiAxNy43NDUxIDU2Ljc1MjIgMTcuNDY3OUM1Ni4yODMyIDE2LjQ2NTkgNTUuMDg5MyAxNi4xNDYxIDUzLjUzMyAxNi4xNDYxSDQ5LjkzMDFWMjAuNzA4NEg1My40OTA0QzU1LjA4OTMgMjAuNzA4NCA1Ni4zMjU4IDIwLjM4ODcgNTYuNzMwOSAxOS40NTA2WiIgZmlsbD0iI0ZDRkNGQyIvPgo8cGF0aCBkPSJNMzUuOTA1MyAyMi43NzY0TDMwLjM0MSAxNi42NzkxSDI4LjI5NDNWMjIuNzc2NEgyNS42Mjk0VjcuNzI0OThIMzIuOTIwNkMzNS40MTUgNy43MjQ5OCAzNy4xNjMxIDguNDkyNDcgMzcuODY2NyAxMC4xMTI3QzM4LjEyMjUgMTAuNjY3IDM4LjI1MDQgMTEuMzI3OSAzOC4yNTA0IDEyLjA3NDFDMzguMjUwNCAxMi44ODQzIDM4LjEyMjUgMTMuNjA5MSAzNy44NDU0IDE0LjIwNjFDMzcuMTYzMSAxNS43NDEgMzUuNzEzNCAxNi41NzI1IDMzLjYwMjggMTYuNjU3OEwzOS4zMTY0IDIyLjc3NjRIMzUuOTA1M1pNMjguMjk0MyA5Ljg5OTU1VjE0LjUwNDVIMzIuMjU5N0MzMy45MDEzIDE0LjUwNDUgMzQuOTQ1OSAxNC4yMDYxIDM1LjMyOTcgMTMuMzEwNkMzNS40Nzg5IDEyLjk5MDggMzUuNTQyOSAxMi42Mjg0IDM1LjU0MjkgMTIuMTM4MUMzNS41NDI5IDExLjczMyAzNS40Nzg5IDExLjM5MTkgMzUuMzUxIDExLjExNDdDMzQuOTQ1OSAxMC4xNzY3IDMzLjgzNzMgOS44OTk1NSAzMi4yNTk3IDkuODk5NTVIMjguMjk0M1oiIGZpbGw9IiNGQ0ZDRkMiLz4KPHBhdGggZD0iTTguNDg1NTggMjMuMTYwOUM0LjU2MjgyIDIzLjE2MDkgMS44OTc5MSAyMS42MjU5IDAuNzQ2NjY0IDE5LjAwMzZDMC4yNTYzMiAxNy45MTYzIDAuMDAwNDg4MjgxIDE2LjYzNzEgMC4wMDA0ODgyODEgMTUuMjUxNEMwLjAwMDQ4ODI4MSAxMy44ODcgMC4yNTYzMiAxMi42MDc4IDAuNzI1MzQ1IDExLjU0MThDMS44OTc5MSA4LjkxOTU1IDQuNTYyODIgNy4zNDE5MiA4LjUwNjkgNy4zNDE5MkMxMi40NTEgNy4zNDE5MiAxNS4wOTQ2IDguODk4MjMgMTYuMjQ1OCAxMS40Nzc5QzE2LjczNjIgMTIuNTg2NSAxNi45OTIgMTMuODY1NiAxNi45OTIgMTUuMjUxNEMxNi45OTIgMTYuNjU4NSAxNi43MzYyIDE3Ljk1ODkgMTYuMjI0NSAxOS4wNjc1QzE1LjA1MTkgMjEuNjI1OSAxMi40MDgzIDIzLjE2MDkgOC40ODU1OCAyMy4xNjA5Wk04LjUwNjkgMjAuODE1N0MxMS4wNjUyIDIwLjgxNTcgMTIuODM0NyAxOS43OTI0IDEzLjYyMzUgMTguMDY1NUMxMy45ODYgMTcuMjM0MSAxNC4xNTY1IDE2LjMzODcgMTQuMTU2NSAxNS4yNTE0QzE0LjE1NjUgMTQuMTY0MSAxMy45ODYgMTMuMjY4NyAxMy42MjM1IDEyLjQzNzJDMTIuODM0NyAxMC43MTA0IDExLjA2NTIgOS42ODcwNCA4LjUwNjkgOS42ODcwNEM1LjkyNzI2IDkuNjg3MDQgNC4xNTc3NiAxMC43MTA0IDMuMzkwMjYgMTIuNDM3MkMzLjAyNzgzIDEzLjI2ODcgMi44NTcyOCAxNC4xNjQxIDIuODU3MjggMTUuMjUxNEMyLjg1NzI4IDE2LjMzODcgMy4wMjc4MyAxNy4yMzQxIDMuMzkwMjYgMTguMDY1NUM0LjE1Nzc2IDE5Ljc5MjQgNS45MjcyNiAyMC44MTU3IDguNTA2OSAyMC44MTU3WiIgZmlsbD0iI0ZDRkNGQyIvPgo8cGF0aCBkPSJNMTEyLjM2NSAwQzExNy4xNzUgMCAxMjEuMDc2IDMuOTEwMjIgMTIxLjA3NiA4LjcwODk4VjIxLjcwNDFDMTIxLjA3NSAyNi41MTI2IDExNy4xNjUgMzAuNDEyMSAxMTIuMzY1IDMwLjQxMjFIOTkuNDMxMkM5OS40MDg1IDMwLjQxOCA5OS4zODQyIDMwLjQyMTkgOTkuMzU5OSAzMC40MjE5Qzk0LjU1MjYgMzAuNDE4OCA5MC42NTQxIDI2LjUxMDUgOTAuNjUzOCAyMS43MTM5VjguNzE3NzdDOTAuNjU0IDMuOTA5ODggOTQuNTY0NyAwLjAwMDQwNjMwNSA5OS4zNjQ3IDBIMTEyLjM2NVpNMTEzLjIxMyAzMC4wOTQ3QzExMi45MzQgMzAuMTIyNyAxMTIuNjUxIDMwLjEzNzcgMTEyLjM2NSAzMC4xMzc3VjMwLjEzODdDMTEyLjUxIDMwLjEzODcgMTEyLjY1NSAzMC4xMzQyIDExMi43OTggMzAuMTI3QzExMi45MzcgMzAuMTE5OSAxMTMuMDc2IDMwLjEwODUgMTEzLjIxMyAzMC4wOTQ3Wk0xMTcuNzE3IDMuMzUyNTRDMTEzLjc0NyAtMC42MTc3MTIgMTA1LjIxNSAxLjQ3NjY4IDk4LjY2MTYgOC4wMzAyN0M5Mi4xMDc5IDE0LjU4NCA5MC4wMTM2IDIzLjExNTMgOTMuOTgzOSAyNy4wODU5Qzk3Ljk1NDQgMzEuMDU2NCAxMDYuNDg2IDI4Ljk2MjcgMTEzLjA0IDIyLjQwOTJDMTE5LjU5MyAxNS44NTU0IDEyMS42ODggNy4zMjMwOCAxMTcuNzE3IDMuMzUyNTRaIiBmaWxsPSIjRkNGQ0ZDIi8+Cjwvc3ZnPgo=', coverMode: 'logo', coverBg: 'linear-gradient(120deg, #02061d 0%, #0d3b84 30%, #5d86b4 56%, #a2c1d5 78%, #d6e3ee 100%)', cover: null,
+    url: null, site: 'https://www.orbt.xyz/'
   },
   {
     name: 'Суперприложение для путешествий',
@@ -2685,7 +2735,8 @@ window.PRODUCT_PROJECTS = [
       const L = LAYOUT[device], mobile = device === 'mobile';
       // the desktop window shows a real 1440 px page; the phone keeps the same height at about 9 : 19.5
       const sw = adStage.clientWidth, k = sw / 1440;
-      const h = Math.round(Math.min(Math.max(BAR + 1100 * k, 340), BAR + 1580 * k));
+      const heightLimit = parseFloat(getComputedStyle(adStage).maxHeight) || Infinity;
+      const h = Math.round(Math.min(Math.max(BAR + 1100 * k, 340), BAR + 1580 * k, heightLimit));
       const phone = Math.round(h * .462), w = mobile ? phone : sw, s = w / L.w;
       adStage.style.height = px(h);
       Object.assign(adScreen.style, { width: px(w), height: px(h) });
@@ -2705,6 +2756,7 @@ window.PRODUCT_PROJECTS = [
     // follow the card's width (window resizes, font swaps), not just the window
     let adW = adStage.clientWidth;
     new ResizeObserver(() => { if (adStage.clientWidth !== adW) { adW = adStage.clientWidth; instant(); } }).observe(adStage);
+    window.addEventListener('resize', instant);
     $$('[data-rs]').forEach(b => b.addEventListener('click', () => {
       if (device === b.dataset.rs) return;
       device = b.dataset.rs;
