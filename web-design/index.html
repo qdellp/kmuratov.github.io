@@ -280,7 +280,7 @@ button { cursor: var(--cur-pointer); }
 .is-intro .hero-sub { animation-delay: .55s; } .is-intro .hero-copy { animation-delay: .75s; }
 /* Intro animates the sphere layers themselves: a transform on the stage would make it the orbit's containing block and shrink the sphere until the animation ends */
 .is-intro .glass-sphere { animation: sphere-in 1.6s var(--ease-out) .35s backwards; }
-.is-intro .orbit-cards, .is-intro .orbit-threads { animation: orbit-fade 1.2s var(--ease-out) .9s backwards; }
+.is-intro .orbit-cards { animation: orbit-fade 1.2s var(--ease-out) .9s backwards; }
 @keyframes sphere-in { from { opacity: 0; scale: .86; filter: blur(12px); } }
 @keyframes orbit-fade { from { opacity: 0; } }
 .is-intro .site-header { animation: rise .9s var(--ease-out) .9s backwards; }
@@ -1098,11 +1098,8 @@ button { cursor: var(--cur-pointer); }
 .hero-stage { position: static; }
 .orbit { position: absolute; inset: 0; z-index: 1; pointer-events: none; will-change: transform; }
 .glass-sphere { position: absolute; left: 50%; top: 50%; z-index: 2; transform: translate(-50%, -50%); pointer-events: none; }
-.orbit-threads { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
-.orbit-threads path { fill: none; stroke-width: 1; }
-.orbit-threads circle { fill: #8ce9e5; }
-.orbit-threads-back { z-index: 1; } .orbit-cards-back { z-index: 1; }
-.orbit-threads-front { z-index: 3; } .orbit-cards-front { z-index: 4; }
+.orbit-cards-back { z-index: 1; }
+.orbit-cards-front { z-index: 4; }
 .orbit-cards { position: absolute; inset: 0; pointer-events: none; }
 .orbit-card { position: absolute; left: 0; top: 0; padding: 0; border: 0; border-radius: 10px; overflow: hidden; background: transparent; box-shadow: 0 18px 40px rgba(0, 0, 0, .45); pointer-events: auto; will-change: transform, opacity; transition: border-color .35s var(--ease-out), box-shadow .35s var(--ease-out); }
 .orbit-cards-back .orbit-card { pointer-events: none; }
@@ -1281,10 +1278,8 @@ html:has(.project-sheet[open]) { overflow: hidden; overscroll-behavior: none; }
 
     <div class="hero-stage" id="hero-stage" aria-hidden="true">
       <div class="orbit" id="hero-orbit">
-        <svg class="orbit-threads orbit-threads-back" id="orbit-threads-back"></svg>
         <div class="orbit-cards orbit-cards-back" id="orbit-cards-back"></div>
         <canvas class="glass-sphere" id="glass-sphere"></canvas>
-        <svg class="orbit-threads orbit-threads-front" id="orbit-threads-front"></svg>
         <div class="orbit-cards orbit-cards-front" id="orbit-cards-front"></div>
       </div>
     </div>
@@ -1988,11 +1983,7 @@ window.PRODUCT_PROJECTS = [
     ];
     // interleave, so the unnamed screens spread evenly around the sphere
     studyExamples.forEach((wk, i) => works.splice(Math.min(works.length, 1 + i * 2), 0, wk));
-    const NS = 'http://www.w3.org/2000/svg';
     const backCards = $('#orbit-cards-back'), frontCards = $('#orbit-cards-front');
-    const backLines = $('#orbit-threads-back'), frontLines = $('#orbit-threads-front');
-    const defs = '<defs><linearGradient id="orbit-thread" x1="0" x2="1"><stop stop-color="#8ce9e5" stop-opacity=".9"/><stop offset="1" stop-color="#6f5cff" stop-opacity=".35"/></linearGradient></defs>';
-    backLines.innerHTML = frontLines.innerHTML = defs;
     // Golden-angle spread, squeezed toward the equator so cards stay inside the stage
     const items = works.map((wk, i) => {
       const y = (1 - (i + .5) * 2 / works.length) * .78, r = Math.sqrt(1 - y * y), a = i * Math.PI * (3 - Math.sqrt(5));
@@ -2003,9 +1994,7 @@ window.PRODUCT_PROJECTS = [
       if (wk.project) card.addEventListener('click', () => { const i = projects.findIndex(p => p.name === wk.project); if (i >= 0) openSheet(i, card); });
       card.addEventListener('pointerenter', () => { hoverPause = true; });
       card.addEventListener('pointerleave', () => { hoverPause = false; });
-      const line = document.createElementNS(NS, 'path'), dot = document.createElementNS(NS, 'circle');
-      dot.setAttribute('r', '2.2'); line.setAttribute('stroke', 'url(#orbit-thread)');
-      return { ...wk, base: [Math.cos(a) * r, y, Math.sin(a) * r], card, line, dot, side: null };
+      return { ...wk, base: [Math.cos(a) * r, y, Math.sin(a) * r], card, side: null };
     });
     const sphere = createGlassSphere(canvas, { maxDpr: 1.5 });
     let W = 0, H = 0, R = 0, unit = 0, hoverPause = false;
@@ -2023,7 +2012,6 @@ window.PRODUCT_PROJECTS = [
       const size = Math.round(R * 2 / .8);
       canvas.style.width = canvas.style.height = size + 'px';
       canvas.style.left = CX + 'px'; canvas.style.top = CY + 'px';
-      [backLines, frontLines].forEach(svg => svg.setAttribute('viewBox', `0 0 ${W} ${H}`));
       items.forEach(it => { it.card.style.width = Math.round(R * (mobile ? .55 : .42) * it.w) + 'px'; });
       sphere && sphere.resize();
     }
@@ -2039,10 +2027,8 @@ window.PRODUCT_PROJECTS = [
         if (it.side !== front) {
           it.side = front;
           (front ? frontCards : backCards).append(it.card);
-          (front ? frontLines : backLines).append(it.line, it.dot);
         }
         const k = RING, depth = (v[2] + 1) / 2;
-        const sx = cx + v[0] * R, sy = cy - v[1] * R;
         const px = cx + v[0] * R * k * 1.05, py = cy - v[1] * R * k * YS / .78;
         const scale = .66 + depth * .34;
         // the card turns with the sphere's surface under it: right of centre it faces right, above it
@@ -2051,9 +2037,6 @@ window.PRODUCT_PROJECTS = [
         it.card.style.transform = `translate(${px.toFixed(1)}px, ${py.toFixed(1)}px) translate(-50%, -50%) perspective(700px) rotateY(${ry.toFixed(1)}deg) rotateX(${rx.toFixed(1)}deg) scale(${scale.toFixed(3)})`;
         it.card.style.opacity = (.35 + depth * .65).toFixed(3);
         it.card.style.zIndex = Math.round(depth * 100);
-        it.line.setAttribute('d', `M${sx.toFixed(1)} ${sy.toFixed(1)} L${px.toFixed(1)} ${py.toFixed(1)}`);
-        it.line.style.opacity = it.dot.style.opacity = (.25 + depth * .75).toFixed(3);
-        it.dot.setAttribute('cx', sx.toFixed(1)); it.dot.setAttribute('cy', sy.toFixed(1));
       });
     }
     measure();
