@@ -1876,7 +1876,7 @@ window.PRODUCT_PROJECTS = [
   new IntersectionObserver(([e]) => { heroVisible = e.isIntersecting; }).observe(hero);
 
   /* ---------- Hero orbit: glass sphere with work previews pinned around it ---------- */
-  // Smoked optical glass. The rear surface carries a curved ribbon; the front reflects a studio strip.
+  // Smoked optical glass. Dichroic folds sit at different depths behind the moving surface reflections.
   function createGlassSphere (canvas, opts = {}) {
     const gl = canvas.getContext('webgl', { premultipliedAlpha: true, alpha: true, antialias: true });
     if (!gl) return null;
@@ -1885,6 +1885,28 @@ window.PRODUCT_PROJECTS = [
   uniform vec2 res;uniform float t;uniform float rot;uniform float tilt;
   vec3 rotY(vec3 p,float a){float c=cos(a),s=sin(a);return vec3(c*p.x+s*p.z,p.y,-s*p.x+c*p.z);}
   vec3 rotX(vec3 p,float a){float c=cos(a),s=sin(a);return vec3(p.x,c*p.y-s*p.z,s*p.y+c*p.z);}
+  vec3 filmColor(float phase) {
+    vec3 color = mix(vec3(.34,.16,.86), vec3(.08,.80,.91), .5 + .5 * cos(phase));
+    return mix(color, vec3(1.,.56,.69), smoothstep(.02,.94,sin(phase)));
+  }
+
+  // Each folded sheet has a translucent body, a narrow lit lip and a softer return reflection.
+  vec4 glassFold(vec3 p, float phase) {
+    float curl = sin(3.4*p.z + 1.7*p.y - phase);
+    float arc = p.y + .33 * p.x + .43 * sin(2.8*p.x - 1.7*p.z + phase)
+                + .16 * sin(4.5*p.z + 1.4*p.x - phase) + .08 * sin(7.5*p.x + 2.1*curl);
+    float width = .22 + .08 * cos(3.*p.x + phase);
+    float body = exp(-3.8 * abs(arc + .3*width));
+    float face = smoothstep(-.48,-.12,arc) * (1. - smoothstep(.02,width,arc));
+    float lip = exp(-40. * abs(arc - width));
+    float echo = exp(-24. * abs(arc - width - .08));
+    float fringe = .5 + .5 * cos(56.*arc + 3.*p.x + 2.*curl);
+    float filament = fringe*fringe * face * (.5 + .5*curl);
+    vec3 tint = filmColor(3.6*p.x + 2.9*p.z + 6.*arc + phase + .6*curl);
+    vec3 color = tint * (.34 + .52*body + .26*face)
+                 + mix(tint, vec3(1.,.96,.91), .65) * (.77*lip + .28*echo + .34*filament);
+    return vec4(color, clamp(.70*body + .25*face + .72*lip + .21*echo, 0., .95));
+  }
   void main(){
     vec2 uv=(gl_FragCoord.xy*2.-res)/min(res.x,res.y);
     vec2 disc = uv / .8;
@@ -1896,27 +1918,33 @@ window.PRODUCT_PROJECTS = [
     vec3 normal = normalize(vec3(disc, sqrt(max(0., 1. - dot(disc, disc)))));
     vec3 incident = vec3(0., 0., -1.);
     vec3 ray = refract(incident, normal, 1. / 1.49);
-    vec3 back = normal - 2. * dot(ray, normal) * ray;
-    vec3 surface = rotX(rotY(back, rot), tilt);
-    float fold = surface.y + .34 * surface.x + .26 * sin(3.4 * surface.x - 1.8 * surface.z + .12 * sin(t * .24));
-    float veil = smoothstep(-.26, -.035, fold) * (1. - smoothstep(.02, .30, fold));
-    float seam = exp(-34. * abs(fold + .045));
+    vec3 chord = -2. * dot(ray, normal) * ray;
+    vec3 front = rotX(rotY(normal, rot), tilt);
+    vec3 depth = rotX(rotY(chord, rot), tilt);
+    float drift = sin(.31*t);
+    vec4 farFold = glassFold((front + .93*depth).yzx, 1.35 + .38*drift);
+    vec4 midFold = glassFold(front + .58*depth, -.45 + .42*sin(.28*t + .9));
+    vec4 nearFold = glassFold((front + .19*depth).zxy, 2.1 + .32*sin(.36*t - .8));
+    vec3 glass = mix(vec3(.038,.048,.13), vec3(.15,.21,.39), .5 + .5*normal.y);
+    glass = mix(glass, farFold.rgb, .82*farFold.a);
+    glass = mix(glass, midFold.rgb, midFold.a);
+    glass = mix(glass, nearFold.rgb, .80*nearFold.a);
 
-    vec3 reflection = reflect(incident, normal);
-    float strip = reflection.y - .33 * reflection.x - .59;
-    float softbox = exp(-8. * abs(strip)) * smoothstep(-.45, .55, reflection.z);
-    float softboxEdge = exp(-54. * abs(strip - .07)) * smoothstep(-.05, .65, reflection.z);
-    float fresnel = pow(1. - normal.z, 2.7);
-    float edgeLight = .46 + .54 * abs(dot(normal.xy, vec2(-.57, .82)));
-    float innerRim = exp(-86. * abs(radius - .967)) * edgeLight;
+    vec3 reflection = rotY(reflect(incident, normal), .36*sin(.47*t));
+    float arcLight = reflection.y - (.32 + .20*drift)*reflection.x - .43 - .28*sin(.54*t);
+    float facing = smoothstep(-.65,.36,reflection.z);
+    float softbox = exp(-9.*abs(arcLight)) * facing;
+    float glint = exp(-52.*abs(arcLight - .056)) * facing;
+    float sideLight = reflection.x + .66 - .17*sin(.64*t + 1.) + .26*reflection.y*reflection.y;
+    float sideGlint = exp(-28.*abs(sideLight)) * smoothstep(-.55,.6,-reflection.y);
+    glass += vec3(.52,.65,.78)*softbox + vec3(.77,.80,.85)*glint + vec3(.70,.51,.78)*sideGlint;
 
-    vec3 glass = mix(vec3(.055, .067, .13), vec3(.20, .24, .40), .5 + .5 * normal.y);
-    glass += vec3(.22, .24, .40) * veil + vec3(.22, .28, .39) * seam;
-    glass += vec3(.32, .36, .46) * softbox + vec3(.22, .23, .26) * softboxEdge;
-    vec3 edgeTint = mix(vec3(.49, .61, .91), vec3(.87, .81, .98), .5 + .5 * normal.y);
-    glass = mix(glass, edgeTint, fresnel * edgeLight);
-    glass += vec3(.15, .18, .25) * innerRim;
-    float alpha = coverage * clamp(.55 + .22 * veil + .28 * softbox + .43 * fresnel, 0., 1.);
+    float fresnel = pow(1. - normal.z, 2.5);
+    float edgeLight = .46 + .54*abs(dot(normal.xy, vec2(-.57,.82)));
+    vec3 edgeTint = mix(filmColor(4.*normal.y + 1.4*normal.x + .45*t), vec3(.92,.93,1.), .45);
+    glass = mix(glass, edgeTint, fresnel*edgeLight);
+    glass += edgeTint * (.32 * exp(-78.*abs(radius - .968)) * edgeLight);
+    float alpha = coverage * clamp(.68 + .15*midFold.a + .14*nearFold.a + .28*softbox + .35*fresnel, 0., 1.);
     gl_FragColor = vec4(glass * alpha, alpha);
   }`;
     const sh = (type, src) => { const s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s); if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) console.error(gl.getShaderInfoLog(s)); return s; };
